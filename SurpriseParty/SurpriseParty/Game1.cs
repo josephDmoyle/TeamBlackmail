@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -22,6 +23,8 @@ namespace SurpriseParty
         // Player Input - Keyboard
         KeyboardState currentKeyboardState;
         KeyboardState previousKeyboardState;
+
+        private SoundEffect backGroundMusic;
 
         // Player Input - Mouse
         MouseState currentMouseState;
@@ -61,7 +64,9 @@ namespace SurpriseParty
             hornPosition = new Point(5, 5);
             hornSize = new Point(50, 50);
             IsMouseVisible = true;
-
+            graphics.PreferredBackBufferWidth = 1280;  // set this value to the desired width of your window
+            graphics.PreferredBackBufferHeight = 960;   // set this value to the desired height of your window
+            graphics.ApplyChanges();
             base.Initialize();
         }
 
@@ -84,6 +89,8 @@ namespace SurpriseParty
             theHorn = Content.Load<Texture2D>("Graphics/partyHorn");
             room = Content.Load<Texture2D>("Graphics/room");
 
+            backGroundMusic = Content.Load<SoundEffect>("Leopard Print Elevator");
+            backGroundMusic.Play();
             // UIs
 
             var boxButton = new Button(Content.Load<Texture2D>("Graphics/box1"), Content.Load<SpriteFont>("Font/font"))
@@ -93,7 +100,7 @@ namespace SurpriseParty
             };
             var exitButton = new Button(Content.Load<Texture2D>("Graphics/drink"), Content.Load<SpriteFont>("Font/font"))
             {
-                Position = new Vector2(350, 300),
+                Position = new Vector2(GraphicsDevice.Viewport.Width/2, GraphicsDevice.Viewport.Height/2),
                 Text = "Quit",
             };
 
@@ -207,9 +214,7 @@ namespace SurpriseParty
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            graphics.PreferredBackBufferWidth = 1280;  // set this value to the desired width of your window
-            graphics.PreferredBackBufferHeight = 960;   // set this value to the desired height of your window
-            graphics.ApplyChanges();
+
 
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
