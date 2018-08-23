@@ -40,8 +40,9 @@ namespace SurpriseParty
         Texture2D room;
 
         // UI
+        Dragable dragItem;
         List<Component> components;
-
+        List<HideSpot> hideSpots;
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -96,7 +97,10 @@ namespace SurpriseParty
                 Text = "Quit",
             };
 
-            var dragItem = new Dragable(Content.Load<Texture2D>("Graphics/ballons"), new Vector2(500, 300));
+            var spotPoint = new HideSpot(Content.Load<Texture2D>("Graphics/TempUI"), new Point(250, 250));
+
+            dragItem = new Dragable(Content.Load<Texture2D>("Graphics/box2"), new Vector2(500, 300));
+
             dragItem.Press += DragItem_Press;
             dragItem.Release += DragItem_Release;
 
@@ -106,15 +110,46 @@ namespace SurpriseParty
             {
                 boxButton,
                 exitButton,
+                spotPoint,
                 dragItem
+            };
+
+            hideSpots = new List<HideSpot>()
+            {
+                spotPoint
             };
             boxButton.Click += OnButton_Click;
             exitButton.Click += ExitButton_Click;
         }
 
+        #region EventMethods
         private void DragItem_Release(object sender, EventArgs e)
         {
+            bool inSpot = false;
+            HideSpot theSpot = null;
+            foreach (var item in hideSpots)
+            {
+                if (dragItem.CollidedWithHideSpot(item))
+                {
+                    inSpot = true;
+                    theSpot = item;
+                }
 
+            }
+            if (inSpot)
+            {
+                if(theSpot!=null)
+                theSpot.isPutDown = true;
+
+
+                dragItem.MoveToCenterOfSpotPoint(theSpot);
+
+            }
+            else
+            {
+                // go back to UI bar
+                dragItem.GoBacktToOrigin();
+            }
         }
 
         private void DragItem_Press(object sender, EventArgs e)
@@ -127,6 +162,7 @@ namespace SurpriseParty
             Exit();
         }
 
+        #endregion
         /// <summary>
         /// UnloadContent will be called once per game and is the place to unload
         /// game-specific content.
@@ -171,12 +207,16 @@ namespace SurpriseParty
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
+            graphics.PreferredBackBufferWidth = 1280;  // set this value to the desired width of your window
+            graphics.PreferredBackBufferHeight = 960;   // set this value to the desired height of your window
+            graphics.ApplyChanges();
+
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
 
             spriteBatch.Begin();
-            spriteBatch.Draw(theHorn, new Rectangle(hornPosition, new Point(50, 50)), Color.White);
+
             spriteBatch.Draw(room, new Rectangle(0, 0, room.Width, room.Height), Color.White);
             foreach (var item in components)
             {

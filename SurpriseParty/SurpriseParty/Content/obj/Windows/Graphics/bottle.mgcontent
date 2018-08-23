@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <SourceFile>C:/Users/u1218984/source/repos/SurpriseParty/SurpriseParty/Content/Graphics/bottle.png</SourceFile>
+  <SourceFile>C:/Users/u1218984/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/Graphics/bottle.png</SourceFile>
   <SourceTime>2018-08-22T14:53:40-06:00</SourceTime>
-  <DestFile>C:/Users/u1218984/source/repos/SurpriseParty/SurpriseParty/Content/bin/Windows/Graphics/bottle.xnb</DestFile>
-  <DestTime>2018-08-22T15:58:08.4910527-06:00</DestTime>
+  <DestFile>C:/Users/u1218984/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/bin/Windows/Graphics/bottle.xnb</DestFile>
+  <DestTime>2018-08-23T10:47:32.8062553-06:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2017-03-01T08:05:36-07:00</ImporterTime>
   <Processor>TextureProcessor</Processor>

@@ -90,9 +90,19 @@ namespace SurpriseParty
 
         }
 
+        public bool CollidedWithHideSpot(HideSpot hide)
+        {
+            return Rectangle.Contains(hide.Rectangle);
+        }
+
         public void GoBacktToOrigin()
         {
             Rectangle = new Rectangle((int)_defaultPosition.X, (int)_defaultPosition.Y, _texture.Width, _texture.Height);
+        }
+
+        public void MoveToCenterOfSpotPoint(HideSpot spot)
+        {
+            _rectangle = new Rectangle(spot.CenterPoint.X - _texture.Width/2, spot.CenterPoint.Y - _texture.Height/2, _texture.Width, _texture.Height);
         }
 
         #endregion

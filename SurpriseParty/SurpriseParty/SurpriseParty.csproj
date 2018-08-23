@@ -45,6 +45,8 @@
     <Compile Include="Content\Button.cs" />
     <Compile Include="Content\Componet.cs" />
     <Compile Include="Content\Dragable.cs" />
+    <Compile Include="Content\HideSpot.cs" />
+    <Compile Include="Content\UI.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
