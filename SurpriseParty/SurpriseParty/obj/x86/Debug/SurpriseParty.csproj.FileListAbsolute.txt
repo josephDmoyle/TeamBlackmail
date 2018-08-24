@@ -116,3 +116,9 @@ C:\Users\u0929730\Documents\GitHub\TeamBlackmail\SurpriseParty\SurpriseParty\obj
 C:\Users\u0929730\Documents\GitHub\TeamBlackmail\SurpriseParty\SurpriseParty\obj\x86\Debug\SurpriseParty.pdb
 C:\Users\u0929730\Documents\GitHub\TeamBlackmail\SurpriseParty\SurpriseParty\bin\Windows\x86\Debug\Content\SFX\Leopard Print Elevator.xnb
 C:\Users\u0929730\Documents\GitHub\TeamBlackmail\SurpriseParty\SurpriseParty\bin\Windows\x86\Debug\Content\SFX\scream.xnb
+C:\Users\u1218984\Documents\GitHub\TeamBlackmail\SurpriseParty\SurpriseParty\bin\Windows\x86\Debug\Content\SFX\Leopard Print Elevator.xnb
+C:\Users\u1218984\Documents\GitHub\TeamBlackmail\SurpriseParty\SurpriseParty\bin\Windows\x86\Debug\Content\SFX\scream.xnb
+C:\Users\u1218984\Documents\GitHub\TeamBlackmail\SurpriseParty\SurpriseParty\bin\Windows\x86\Debug\Content\Graphics\Dulcy_small.xnb
+C:\Users\u1218984\Documents\GitHub\TeamBlackmail\SurpriseParty\SurpriseParty\bin\Windows\x86\Debug\Content\Graphics\fox small.xnb
+C:\Users\u1218984\Documents\GitHub\TeamBlackmail\SurpriseParty\SurpriseParty\bin\Windows\x86\Debug\Content\Graphics\Down_UI.xnb
+C:\Users\u1218984\Documents\GitHub\TeamBlackmail\SurpriseParty\SurpriseParty\bin\Windows\x86\Debug\Content\Graphics\Side_UI.xnb

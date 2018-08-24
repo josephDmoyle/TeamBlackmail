@@ -17,7 +17,7 @@ namespace SurpriseParty
         private bool _isPressed;
         private MouseState _prevousState;
         private Texture2D _texture;
-        private Vector2 _defaultPosition;
+        private Rectangle _defaultPosition;
         private Vector2 _currentPosition;
         private Rectangle _rectangle;
         #endregion
@@ -44,11 +44,11 @@ namespace SurpriseParty
         #endregion
 
         #region Methods
-        public Dragable(Texture2D texture, Vector2 defaultPos)
+        public Dragable(Texture2D texture, Rectangle defaultPos)
         {
             _texture = texture;
             _defaultPosition = defaultPos;
-            _rectangle = new Rectangle((int)_defaultPosition.X, (int)_defaultPosition.Y, _texture.Width, _texture.Height);
+            _rectangle = _defaultPosition;
         }
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
@@ -97,7 +97,7 @@ namespace SurpriseParty
 
         public void GoBacktToOrigin()
         {
-            Rectangle = new Rectangle((int)_defaultPosition.X, (int)_defaultPosition.Y, _texture.Width, _texture.Height);
+            Rectangle = _defaultPosition;
         }
 
         public void MoveToCenterOfSpotPoint(HideSpot spot)

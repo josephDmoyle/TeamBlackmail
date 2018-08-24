@@ -17,6 +17,10 @@ namespace SurpriseParty
     /// </summary>
     public class Game1 : Game
     {
+        const int ScreenWidth = 1280    ;
+        const int ScreenHeight = 720;
+
+
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
@@ -43,7 +47,8 @@ namespace SurpriseParty
         Texture2D room;
 
         // UI
-        Dragable dragItem;
+        Dragable dragFox;
+        UI downUI;
         List<Component> components;
         List<HideSpot> hideSpots;
         public Game1()
@@ -64,16 +69,13 @@ namespace SurpriseParty
             hornPosition = new Point(5, 5);
             hornSize = new Point(50, 50);
             IsMouseVisible = true;
-            graphics.PreferredBackBufferWidth = 1280;  // set this value to the desired width of your window
-            graphics.PreferredBackBufferHeight = 960;   // set this value to the desired height of your window
+            graphics.PreferredBackBufferWidth = ScreenWidth;  // set this value to the desired width of your window
+            graphics.PreferredBackBufferHeight = ScreenHeight;   // set this value to the desired height of your window
             graphics.ApplyChanges();
             base.Initialize();
         }
 
-        private void OnButton_Click(object sender, EventArgs e)
-        {
-            // do my stuff here
-        }
+
 
         /// <summary>
         /// LoadContent will be called once per game and is the place to load
@@ -100,25 +102,27 @@ namespace SurpriseParty
             };
             var exitButton = new Button(Content.Load<Texture2D>("Graphics/drink"), Content.Load<SpriteFont>("Font/font"))
             {
-                Position = new Vector2(GraphicsDevice.Viewport.Width/2, GraphicsDevice.Viewport.Height/2),
+                Position = new Vector2(GraphicsDevice.Viewport.Width / 2, GraphicsDevice.Viewport.Height / 2),
                 Text = "Quit",
             };
 
             var spotPoint = new HideSpot(Content.Load<Texture2D>("Graphics/TempUI"), new Point(250, 250));
 
-            dragItem = new Dragable(Content.Load<Texture2D>("Graphics/box2"), new Vector2(500, 300));
+            dragFox = new Dragable(Content.Load<Texture2D>("Graphics/fox small"), new Rectangle(485, 586, 112, 147));
 
-            dragItem.Press += DragItem_Press;
-            dragItem.Release += DragItem_Release;
+            dragFox.Press += DragItem_Press;
+            dragFox.Release += DragItem_Release;
 
-
+            // UI Elements
+            downUI = new UI(null, Content.Load<Texture2D>("Graphics/Down_UI"), new Point(535, 646));
 
             components = new List<Component>()
             {
                 boxButton,
                 exitButton,
                 spotPoint,
-                dragItem
+                downUI,
+                dragFox
             };
 
             hideSpots = new List<HideSpot>()
@@ -136,7 +140,7 @@ namespace SurpriseParty
             HideSpot theSpot = null;
             foreach (var item in hideSpots)
             {
-                if (dragItem.CollidedWithHideSpot(item))
+                if (dragFox.CollidedWithHideSpot(item))
                 {
                     inSpot = true;
                     theSpot = item;
@@ -145,17 +149,17 @@ namespace SurpriseParty
             }
             if (inSpot)
             {
-                if(theSpot!=null)
-                theSpot.isPutDown = true;
+                if (theSpot != null)
+                    theSpot.isPutDown = true;
 
 
-                dragItem.MoveToCenterOfSpotPoint(theSpot);
+                dragFox.MoveToCenterOfSpotPoint(theSpot);
 
             }
             else
             {
                 // go back to UI bar
-                dragItem.GoBacktToOrigin();
+                dragFox.GoBacktToOrigin();
             }
         }
 
@@ -163,7 +167,12 @@ namespace SurpriseParty
         {
 
         }
-
+        private void OnButton_Click(object sender, EventArgs e)
+        {
+            // do my stuff here
+            // testing for UI
+            downUI.MoveTo(new Point(0, 220));
+        }
         private void ExitButton_Click(object sender, EventArgs e)
         {
             Exit();
@@ -216,13 +225,13 @@ namespace SurpriseParty
         {
 
 
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Gray);
 
             // TODO: Add your drawing code here
 
             spriteBatch.Begin();
 
-            spriteBatch.Draw(room, new Rectangle(0, 0, room.Width, room.Height), Color.White);
+            spriteBatch.Draw(room, new Rectangle(0, 0, ScreenWidth, ScreenHeight), Color.White);
             foreach (var item in components)
             {
                 item.Draw(gameTime, spriteBatch);
