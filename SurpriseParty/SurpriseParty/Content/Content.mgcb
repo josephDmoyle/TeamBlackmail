@@ -176,9 +176,15 @@
 /processorParam:TextureFormat=Color
 /build:Graphics/TempUI.png
 
-#begin Leopard Print Elevator.wav
+#begin SFX/Leopard Print Elevator.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:Leopard Print Elevator.wav
+/build:SFX/Leopard Print Elevator.wav
+
+#begin SFX/scream.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SFX/scream.wav
 

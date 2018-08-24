@@ -89,7 +89,7 @@ namespace SurpriseParty
             theHorn = Content.Load<Texture2D>("Graphics/partyHorn");
             room = Content.Load<Texture2D>("Graphics/room");
 
-            backGroundMusic = Content.Load<SoundEffect>("Leopard Print Elevator");
+            backGroundMusic = Content.Load<SoundEffect>("SFX/Leopard Print Elevator");
             backGroundMusic.Play();
             // UIs
 
