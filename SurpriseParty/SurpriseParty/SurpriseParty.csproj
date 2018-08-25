@@ -42,6 +42,7 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Content\BGGraphic.cs" />
     <Compile Include="Content\Button.cs" />
     <Compile Include="Content\Componet.cs" />
     <Compile Include="Content\Dragable.cs" />

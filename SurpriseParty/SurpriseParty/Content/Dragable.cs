@@ -49,6 +49,7 @@ namespace SurpriseParty
             _texture = texture;
             _defaultPosition = defaultPos;
             _rectangle = _defaultPosition;
+            
         }
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {

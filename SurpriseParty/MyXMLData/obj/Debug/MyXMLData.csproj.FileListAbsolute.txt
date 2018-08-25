@@ -1,0 +1,6 @@
+C:\Users\u1218984\Documents\GitHub\TeamBlackmail\SurpriseParty\MyXMLData\bin\Debug\MyXMLData.dll
+C:\Users\u1218984\Documents\GitHub\TeamBlackmail\SurpriseParty\MyXMLData\bin\Debug\MyXMLData.pdb
+C:\Users\u1218984\Documents\GitHub\TeamBlackmail\SurpriseParty\MyXMLData\obj\Debug\MyXMLData.csprojAssemblyReference.cache
+C:\Users\u1218984\Documents\GitHub\TeamBlackmail\SurpriseParty\MyXMLData\obj\Debug\MyXMLData.csproj.CoreCompileInputs.cache
+C:\Users\u1218984\Documents\GitHub\TeamBlackmail\SurpriseParty\MyXMLData\obj\Debug\MyXMLData.dll
+C:\Users\u1218984\Documents\GitHub\TeamBlackmail\SurpriseParty\MyXMLData\obj\Debug\MyXMLData.pdb

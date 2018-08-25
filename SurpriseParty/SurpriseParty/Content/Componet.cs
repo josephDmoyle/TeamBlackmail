@@ -12,6 +12,8 @@ namespace SurpriseParty
     public abstract class Component
     {
 
+        // 0 is the bottom layer, the bigger, the later to render
+        public int RenderOrder { get; set; }
         public abstract void Draw(GameTime gameTime, SpriteBatch spriteBatch);
 
         public abstract void Update(GameTime gameTime);

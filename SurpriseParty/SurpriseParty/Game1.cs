@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Content;
 
 using System;
 using System.Collections.Generic;
@@ -20,7 +21,6 @@ namespace SurpriseParty
         const int ScreenWidth = 1280    ;
         const int ScreenHeight = 720;
 
-
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
@@ -34,17 +34,6 @@ namespace SurpriseParty
         MouseState currentMouseState;
         MouseState previousMouseState;
         Vector2 mousePosition;
-
-
-        // Horn parameter
-        Texture2D theHorn;
-        Point hornPosition;
-        Point hornSize;
-        int horiSpeed = 3;
-        int vertSpeed = 3;
-
-        // Images
-        Texture2D room;
 
         // UI
         Dragable dragFox;
@@ -66,8 +55,7 @@ namespace SurpriseParty
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            hornPosition = new Point(5, 5);
-            hornSize = new Point(50, 50);
+
             IsMouseVisible = true;
             graphics.PreferredBackBufferWidth = ScreenWidth;  // set this value to the desired width of your window
             graphics.PreferredBackBufferHeight = ScreenHeight;   // set this value to the desired height of your window
@@ -82,55 +70,77 @@ namespace SurpriseParty
         /// all of your content.
         /// </summary>
         protected override void LoadContent()
-        {
+        { 
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
 
-            theHorn = Content.Load<Texture2D>("Graphics/partyHorn");
-            room = Content.Load<Texture2D>("Graphics/room");
-
             backGroundMusic = Content.Load<SoundEffect>("SFX/Leopard Print Elevator");
             backGroundMusic.Play();
             // UIs
 
-            var boxButton = new Button(Content.Load<Texture2D>("Graphics/box1"), Content.Load<SpriteFont>("Font/font"))
+            /*    var boxButton = new Button(Content.Load<Texture2D>("Graphics/box1"), Content.Load<SpriteFont>("Font/font"))
+                {
+                    Position = new Vector2(100, 300),
+                    Text = "Box1",
+                };
+                var exitButton = new Button(Content.Load<Texture2D>("Graphics/drink"), Content.Load<SpriteFont>("Font/font"))
+                {
+                    Position = new Vector2(GraphicsDevice.Viewport.Width / 2, GraphicsDevice.Viewport.Height / 2),
+                    Text = "Quit",
+                };*/
+
+            var room = new BGGraphic(Content.Load<Texture2D>("Graphics/room"), new Rectangle(0, 0, 1280, 720))
             {
-                Position = new Vector2(100, 300),
-                Text = "Box1",
+                RenderOrder = 0
             };
-            var exitButton = new Button(Content.Load<Texture2D>("Graphics/drink"), Content.Load<SpriteFont>("Font/font"))
+            var draw = new BGGraphic(Content.Load<Texture2D>("Graphics/draw"), new Rectangle(542, 139, 97, 104))
             {
-                Position = new Vector2(GraphicsDevice.Viewport.Width / 2, GraphicsDevice.Viewport.Height / 2),
-                Text = "Quit",
+                RenderOrder = 1
+            };
+            var sofa = new BGGraphic(Content.Load<Texture2D>("Graphics/sofa"), new Rectangle(462, 260, 165, 165))
+            {
+                RenderOrder = 2
             };
 
-            var spotPoint = new HideSpot(Content.Load<Texture2D>("Graphics/TempUI"), new Point(250, 250));
+            var spotPoint = new HideSpot(Content.Load<Texture2D>("Graphics/TempUI"), new Point(529, 394))
+            {
+                RenderOrder = 4
+            };
 
-            dragFox = new Dragable(Content.Load<Texture2D>("Graphics/fox small"), new Rectangle(485, 586, 112, 147));
+            dragFox = new Dragable(Content.Load<Texture2D>("Graphics/fox_0"), new Rectangle(485, 586, 112, 147))
+            {
+                RenderOrder = 6
+            };
 
             dragFox.Press += DragItem_Press;
             dragFox.Release += DragItem_Release;
 
             // UI Elements
-            downUI = new UI(null, Content.Load<Texture2D>("Graphics/Down_UI"), new Point(535, 646));
-
+            downUI = new UI(null, Content.Load<Texture2D>("Graphics/Down_UI"), new Point(535, 646))
+            {
+                RenderOrder = 5
+            };
             components = new List<Component>()
             {
-                boxButton,
-                exitButton,
+                room,
+                draw,
+                sofa,
                 spotPoint,
                 downUI,
                 dragFox
             };
 
+            // sort the list by the render order
+            components.Sort((x, y) => x.RenderOrder.CompareTo(y.RenderOrder));
+
             hideSpots = new List<HideSpot>()
             {
                 spotPoint
             };
-            boxButton.Click += OnButton_Click;
-            exitButton.Click += ExitButton_Click;
+           // boxButton.Click += OnButton_Click;
+         //   exitButton.Click += ExitButton_Click;
         }
 
         #region EventMethods
@@ -206,7 +216,6 @@ namespace SurpriseParty
             // Keyboard staffs
             previousKeyboardState = currentKeyboardState;
             currentKeyboardState = Keyboard.GetState();
-            UpdateMovement();
 
             // mouse staffs
             previousMouseState = currentMouseState;
@@ -231,7 +240,7 @@ namespace SurpriseParty
 
             spriteBatch.Begin();
 
-            spriteBatch.Draw(room, new Rectangle(0, 0, ScreenWidth, ScreenHeight), Color.White);
+            //spriteBatch.Draw(room, new Rectangle(0, 0, ScreenWidth, ScreenHeight), Color.White);
             foreach (var item in components)
             {
                 item.Draw(gameTime, spriteBatch);
@@ -239,31 +248,6 @@ namespace SurpriseParty
             spriteBatch.End();
 
             base.Draw(gameTime);
-        }
-
-        void UpdateMovement()
-        {
-
-            // left
-            if (currentKeyboardState.IsKeyDown(Keys.A))
-            {
-                hornPosition.X -= horiSpeed;
-            }
-            // right
-            if (currentKeyboardState.IsKeyDown(Keys.D))
-            {
-                hornPosition.X += horiSpeed;
-            }
-            // up
-            if (currentKeyboardState.IsKeyDown(Keys.W))
-            {
-                hornPosition.Y -= vertSpeed;
-            }
-            // down
-            if (currentKeyboardState.IsKeyDown(Keys.S))
-            {
-                hornPosition.Y += vertSpeed;
-            }
         }
 
         void UpdateMouse()
