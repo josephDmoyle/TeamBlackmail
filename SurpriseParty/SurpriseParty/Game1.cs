@@ -35,11 +35,16 @@ namespace SurpriseParty
         MouseState previousMouseState;
         Vector2 mousePosition;
 
+        // graphic component
+        BGGraphic boxes;
+
         // UI
         Dragable dragFox;
         UI downUI;
         List<Component> components;
         List<HideSpot> hideSpots;
+
+        List<Component> interactObj;
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -70,36 +75,37 @@ namespace SurpriseParty
         /// all of your content.
         /// </summary>
         protected override void LoadContent()
-        { 
+        {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
 
             backGroundMusic = Content.Load<SoundEffect>("SFX/Leopard Print Elevator");
-            backGroundMusic.Play();
+            //backGroundMusic.Play();
             // UIs
 
-            /*    var boxButton = new Button(Content.Load<Texture2D>("Graphics/box1"), Content.Load<SpriteFont>("Font/font"))
-                {
-                    Position = new Vector2(100, 300),
-                    Text = "Box1",
-                };
-                var exitButton = new Button(Content.Load<Texture2D>("Graphics/drink"), Content.Load<SpriteFont>("Font/font"))
-                {
-                    Position = new Vector2(GraphicsDevice.Viewport.Width / 2, GraphicsDevice.Viewport.Height / 2),
-                    Text = "Quit",
-                };*/
+            var boxButton = new Button(Content.Load<Texture2D>("Graphics/box1"), Content.Load<SpriteFont>("Font/font"))
+            {
+                Position = new Vector2(100, 300),
+                Text = "Box1",
+                RenderOrder = 3
+            };
+            /*    var exitButton = new Button(Content.Load<Texture2D>("Graphics/drink"), Content.Load<SpriteFont>("Font/font"))
+               {
+                   Position = new Vector2(GraphicsDevice.Viewport.Width / 2, GraphicsDevice.Viewport.Height / 2),
+                   Text = "Quit",
+               };*/
 
-            var room = new BGGraphic(Content.Load<Texture2D>("Graphics/room"), new Rectangle(0, 0, 1280, 720))
+            var room = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/room") }, new Rectangle(0, 0, 1280, 720))
             {
                 RenderOrder = 0
             };
-            var draw = new BGGraphic(Content.Load<Texture2D>("Graphics/draw"), new Rectangle(542, 139, 97, 104))
+            boxes = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/box_0"), Content.Load<Texture2D>("Graphics/box_1"), Content.Load<Texture2D>("Graphics/box_2") }, new Rectangle(780, 339, 300, 300))
             {
                 RenderOrder = 1
             };
-            var sofa = new BGGraphic(Content.Load<Texture2D>("Graphics/sofa"), new Rectangle(462, 260, 165, 165))
+            var sofa = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/sofa") }, new Rectangle(462, 260, 165, 165))
             {
                 RenderOrder = 2
             };
@@ -125,11 +131,17 @@ namespace SurpriseParty
             components = new List<Component>()
             {
                 room,
-                draw,
+                boxes,
                 sofa,
                 spotPoint,
                 downUI,
-                dragFox
+                dragFox,
+                boxButton
+            };
+
+            interactObj = new List<Component>()
+            {
+                boxes
             };
 
             // sort the list by the render order
@@ -139,7 +151,7 @@ namespace SurpriseParty
             {
                 spotPoint
             };
-           // boxButton.Click += OnButton_Click;
+            boxButton.Click += OnButton_Click;
          //   exitButton.Click += ExitButton_Click;
         }
 
@@ -181,7 +193,8 @@ namespace SurpriseParty
         {
             // do my stuff here
             // testing for UI
-            downUI.MoveTo(new Point(0, 220));
+            //downUI.MoveTo(new Point(0, 220));
+            boxes.NextIMG();
         }
         private void ExitButton_Click(object sender, EventArgs e)
         {
@@ -222,6 +235,8 @@ namespace SurpriseParty
             currentMouseState = Mouse.GetState();
 
             UpdateMouse();
+
+            
 
             base.Update(gameTime);
         }

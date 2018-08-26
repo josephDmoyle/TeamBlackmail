@@ -9,26 +9,46 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace SurpriseParty
 {
-    class BGGraphic: Component
+    class BGGraphic : Component
     {
         // fields
         private Rectangle _rectangle;
-        private Texture2D _texture;
+        private Texture2D[] _texture;
 
-        
-        public BGGraphic(Texture2D texture, Rectangle rect)
+
+        public bool isVisible;
+        public int DisplayingID { get; set; }
+
+        public BGGraphic(Texture2D[] textures, Rectangle rect)
         {
-            _texture = texture;
+            _texture = textures;
             _rectangle = rect;
+            isVisible = true;
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_texture, _rectangle, Color.White);
+            if (isVisible)
+                spriteBatch.Draw(_texture[DisplayingID], _rectangle, Color.White);
         }
 
         public override void Update(GameTime gameTime)
         {
+        }
+
+        public void NextIMG()
+        {
+            if (DisplayingID < _texture.Length - 1)
+                DisplayingID++;
+            else
+                DisplayingID = 0;
+        }
+        public void PreviousIMG()
+        {
+            if (DisplayingID > 0)
+                DisplayingID--;
+            else
+                DisplayingID = _texture.Length - 1;
         }
     }
 }

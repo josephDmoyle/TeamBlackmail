@@ -80,7 +80,6 @@ C:\Users\u0929730\Documents\GitHub\TeamBlackmail\SurpriseParty\SurpriseParty\bin
 C:\Users\u1218984\Documents\GitHub\TeamBlackmail\SurpriseParty\SurpriseParty\bin\Windows\x86\Debug\Content\Graphics\ballons.xnb
 C:\Users\u1218984\Documents\GitHub\TeamBlackmail\SurpriseParty\SurpriseParty\bin\Windows\x86\Debug\Content\Graphics\bottle.xnb
 C:\Users\u1218984\Documents\GitHub\TeamBlackmail\SurpriseParty\SurpriseParty\bin\Windows\x86\Debug\Content\Graphics\box1.xnb
-C:\Users\u1218984\Documents\GitHub\TeamBlackmail\SurpriseParty\SurpriseParty\bin\Windows\x86\Debug\Content\Graphics\box2.xnb
 C:\Users\u1218984\Documents\GitHub\TeamBlackmail\SurpriseParty\SurpriseParty\bin\Windows\x86\Debug\Content\Graphics\box3.xnb
 C:\Users\u1218984\Documents\GitHub\TeamBlackmail\SurpriseParty\SurpriseParty\bin\Windows\x86\Debug\Content\Graphics\cat_0.xnb
 C:\Users\u1218984\Documents\GitHub\TeamBlackmail\SurpriseParty\SurpriseParty\bin\Windows\x86\Debug\Content\Graphics\cat_1.xnb
@@ -125,3 +124,7 @@ C:\Users\u1218984\Documents\GitHub\TeamBlackmail\SurpriseParty\SurpriseParty\obj
 C:\Users\u1218984\Documents\GitHub\TeamBlackmail\SurpriseParty\SurpriseParty\obj\x86\Debug\SurpriseParty.csproj.CopyComplete
 C:\Users\u1218984\Documents\GitHub\TeamBlackmail\SurpriseParty\SurpriseParty\obj\x86\Debug\SurpriseParty.exe
 C:\Users\u1218984\Documents\GitHub\TeamBlackmail\SurpriseParty\SurpriseParty\obj\x86\Debug\SurpriseParty.pdb
+C:\Users\u1218984\Documents\GitHub\TeamBlackmail\SurpriseParty\SurpriseParty\obj\x86\Debug\SurpriseParty.csprojAssemblyReference.cache
+C:\Users\u1218984\Documents\GitHub\TeamBlackmail\SurpriseParty\SurpriseParty\bin\Windows\x86\Debug\Content\Graphics\box_0.xnb
+C:\Users\u1218984\Documents\GitHub\TeamBlackmail\SurpriseParty\SurpriseParty\bin\Windows\x86\Debug\Content\Graphics\box_1.xnb
+C:\Users\u1218984\Documents\GitHub\TeamBlackmail\SurpriseParty\SurpriseParty\bin\Windows\x86\Debug\Content\Graphics\box_2.xnb
