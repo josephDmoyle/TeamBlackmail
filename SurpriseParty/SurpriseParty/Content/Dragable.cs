@@ -55,7 +55,7 @@ namespace SurpriseParty
         }
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            Color color = Color.White;
+            Color color = Game1.supriser;
             if (_isHovering)
                 color = Color.Gray;
             if(isVisible)

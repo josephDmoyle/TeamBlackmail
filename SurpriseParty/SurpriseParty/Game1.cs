@@ -19,12 +19,15 @@ namespace SurpriseParty
     /// </summary>
     public class Game1 : Game
     {
+        public static Color supriser = Color.White, suprisee = Color.White;
+
         const int ScreenWidth = 1280;
         const int ScreenHeight = 720;
 
+        private bool playMusic = true;
+
         private readonly TimeSpan DoorOpenToComeIn = TimeSpan.FromSeconds(2);
         private readonly TimeSpan PlaceObjectTime = TimeSpan.FromSeconds(10);
-
 
         private TimeSpan timeStartToOpenDoor;
 
@@ -105,7 +108,8 @@ namespace SurpriseParty
             // TODO: use this.Content to load your game content here
 
             backGroundMusic = Content.Load<SoundEffect>("SFX/Leopard Print Elevator");
-            //backGroundMusic.Play();
+            if(playMusic)
+                backGroundMusic.Play();
             // UIs
 
             var boxButton = new Button(Content.Load<Texture2D>("Graphics/box1"), Content.Load<SpriteFont>("Font/font"))
@@ -126,7 +130,8 @@ namespace SurpriseParty
             };
             cat = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/cat_0"), Content.Load<Texture2D>("Graphics/cat_1"), Content.Load<Texture2D>("Graphics/cat_2") }, new Rectangle(811, 125, 143, 230))
             {
-                RenderOrder = 2
+                RenderOrder = 2,
+                suprisee = true
 
             };
             cat.isVisible = false;
@@ -360,6 +365,8 @@ namespace SurpriseParty
                     // cout down finish
                     doorOpening = true;
                     OpenDoor(gameTime);
+                    Game1.supriser = Color.Black;
+                    Game1.suprisee = Color.Gray;
                 }
             }
 
@@ -373,7 +380,12 @@ namespace SurpriseParty
                 }
             }
 
-
+            if (doorOpened && doorOpening && Keyboard.GetState().IsKeyDown(Keys.Space))
+            {
+                Game1.supriser = Color.White;
+                Game1.suprisee = Color.White;
+                CheckResult();
+            }
 
             base.Update(gameTime);
         }
@@ -433,7 +445,7 @@ namespace SurpriseParty
         {
             cat.isVisible = true;
             // start counting the suprise value
-            CheckResult();
+
         }
 
         bool ShowResult;

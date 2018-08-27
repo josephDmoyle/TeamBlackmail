@@ -16,7 +16,7 @@ namespace SurpriseParty
         private Texture2D[] _texture;
 
 
-        public bool isVisible;
+        public bool isVisible, suprisee;
         public int DisplayingID { get; set; }
         public int ID { get; set; }
         public Rectangle Rectangle { get { return _rectangle; } }
@@ -33,7 +33,8 @@ namespace SurpriseParty
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             if (isVisible)
-                spriteBatch.Draw(_texture[DisplayingID], _rectangle, Color.White);
+
+                spriteBatch.Draw(_texture[DisplayingID], _rectangle, suprisee?Game1.suprisee:Game1.supriser);
         }
 
         public override void Update(GameTime gameTime)

@@ -35,7 +35,7 @@ namespace SurpriseParty
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch) {
             if(isVisible)
-            spriteBatch.Draw(_texture, _rectangle, Color.White);
+            spriteBatch.Draw(_texture, _rectangle, Game1.supriser);
         }
 
         public override void Update(GameTime gameTime)
