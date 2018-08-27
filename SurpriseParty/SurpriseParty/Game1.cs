@@ -65,6 +65,8 @@ namespace SurpriseParty
         bool doorOpened;
         bool doorOpening;
 
+        GameTime _gameTime;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -329,6 +331,8 @@ namespace SurpriseParty
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+            _gameTime = gameTime;
+
             foreach (var item in components)
             {
                 item.Update(gameTime);
@@ -368,6 +372,7 @@ namespace SurpriseParty
                     ShowNPC();
                 }
             }
+
 
 
             base.Update(gameTime);
@@ -428,11 +433,24 @@ namespace SurpriseParty
         {
             cat.isVisible = true;
             // start counting the suprise value
+            CheckResult();
         }
+
+        bool ShowResult;
 
         void CheckResult()
         {
             // according to the placement of objects and friends, to decide the suprise value
+            dragFox.isVisible = true;
+
+            if (tempSpot != null)
+            {
+                interactions[tempSpot.ID]._graphic.SetIMG(0);
+                dragFox.DisplayingID = 1;
+            }
+
+            ShowResult = true;
+
 
         }
     }
