@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace SurpriseParty
 {
-    class HideSpot : Component
+   public class HideSpot : Component
     {
         private Texture2D _texture;
         private int _rectLength;
@@ -18,6 +18,10 @@ namespace SurpriseParty
         private Rectangle _rectangle;
 
         public bool isPutDown;
+
+        public int ID { get; set; }
+
+      private  bool isVisible;
 
         public Rectangle Rectangle { get { return _rectangle; } }
         public Point CenterPoint { get {return _centerPoint; } }
@@ -30,6 +34,7 @@ namespace SurpriseParty
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch) {
+            if(isVisible)
             spriteBatch.Draw(_texture, _rectangle, Color.White);
         }
 

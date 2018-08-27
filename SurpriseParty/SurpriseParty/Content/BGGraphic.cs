@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace SurpriseParty
 {
-    class BGGraphic : Component
+   public class BGGraphic : Component
     {
         // fields
         private Rectangle _rectangle;
@@ -18,6 +18,8 @@ namespace SurpriseParty
 
         public bool isVisible;
         public int DisplayingID { get; set; }
+        public int ID { get; set; }
+        public Rectangle Rectangle { get { return _rectangle; } }
 
         public BGGraphic(Texture2D[] textures, Rectangle rect)
         {
@@ -25,6 +27,8 @@ namespace SurpriseParty
             _rectangle = rect;
             isVisible = true;
         }
+
+
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
@@ -49,6 +53,12 @@ namespace SurpriseParty
                 DisplayingID--;
             else
                 DisplayingID = _texture.Length - 1;
+        }
+        
+        public void SetIMG(int _idx)
+        {
+            if (_idx >= 0 && _idx < _texture.Length)
+                DisplayingID = _idx;
         }
     }
 }

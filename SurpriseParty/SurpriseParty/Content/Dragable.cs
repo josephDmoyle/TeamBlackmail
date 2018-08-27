@@ -9,14 +9,14 @@ using Microsoft.Xna.Framework.Input;
 
 namespace SurpriseParty
 {
-    class Dragable : Component
+    public  class Dragable : Component
     {
         #region Feilds
         private MouseState _currentState;
         private bool _isHovering;
         private bool _isPressed;
         private MouseState _prevousState;
-        private Texture2D _texture;
+        private Texture2D[] _textures;
         private Rectangle _defaultPosition;
         private Vector2 _currentPosition;
         private Rectangle _rectangle;
@@ -25,7 +25,8 @@ namespace SurpriseParty
         public event EventHandler Press;
         public event EventHandler Release;
 
-
+                public bool isVisible;
+        public int DisplayingID { get; set; }
         public bool canPut;
         public bool Clicked { get; set; }
 
@@ -44,11 +45,12 @@ namespace SurpriseParty
         #endregion
 
         #region Methods
-        public Dragable(Texture2D texture, Rectangle defaultPos)
+        public Dragable(Texture2D[] texture, Rectangle defaultPos)
         {
-            _texture = texture;
+            _textures = texture;
             _defaultPosition = defaultPos;
             _rectangle = _defaultPosition;
+            isVisible = true;
             
         }
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -56,7 +58,8 @@ namespace SurpriseParty
             Color color = Color.White;
             if (_isHovering)
                 color = Color.Gray;
-            spriteBatch.Draw(_texture, Rectangle, color);
+            if(isVisible)
+            spriteBatch.Draw(_textures[DisplayingID], Rectangle, color);
         }
 
         public override void Update(GameTime gameTime)
@@ -70,14 +73,15 @@ namespace SurpriseParty
             if (mouseRectangele.Intersects(Rectangle))
             {
                 _isHovering = true;
-                if (_currentState.LeftButton == ButtonState.Pressed )
+                if (_currentState.LeftButton == ButtonState.Pressed  && !_isPressed)
                 {
                     _isPressed = true;
+                    Press?.Invoke(this, new EventArgs());
                 }
                 if (_isPressed)
                 {
-                    _currentPosition = new Vector2(_currentState.X - _texture.Width/2, _currentState.Y - _texture.Height/2);
-                    Rectangle = new Rectangle((int)_currentPosition.X, (int)_currentPosition.Y, _texture.Width, _texture.Height);
+                    _currentPosition = new Vector2(_currentState.X - _textures[DisplayingID].Width/2, _currentState.Y - _textures[DisplayingID].Height/2);
+                    Rectangle = new Rectangle((int)_currentPosition.X, (int)_currentPosition.Y, _textures[DisplayingID].Width, _textures[DisplayingID].Height);
 
                 }
 
@@ -103,7 +107,7 @@ namespace SurpriseParty
 
         public void MoveToCenterOfSpotPoint(HideSpot spot)
         {
-            _rectangle = new Rectangle(spot.CenterPoint.X - _texture.Width/2, spot.CenterPoint.Y - _texture.Height/2, _texture.Width, _texture.Height);
+            _rectangle = new Rectangle(spot.CenterPoint.X - _textures[DisplayingID].Width/2, spot.CenterPoint.Y - _textures[DisplayingID].Height/2, _textures[DisplayingID].Width, _textures[DisplayingID].Height);
         }
 
         #endregion

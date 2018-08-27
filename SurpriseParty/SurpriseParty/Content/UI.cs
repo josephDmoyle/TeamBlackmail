@@ -10,7 +10,7 @@ namespace SurpriseParty
 {
     class UI : Component
     {
-        private int UIMoveSpeed = 3;
+        public int UIMoveSpeed { get; set; }
         private Texture2D _texture;
         private UI _parent;
         private List<UI> _children;
