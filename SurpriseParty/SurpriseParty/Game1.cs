@@ -53,8 +53,7 @@ namespace SurpriseParty
         BGGraphic door;
         BGGraphic cat;
         BGGraphic rug;
-        BGGraphic supriseBarBase;
-        BGGraphic supriseBar;
+
 
         // UI
         Dragable dragFox;
@@ -75,9 +74,6 @@ namespace SurpriseParty
         bool doorOpening;
 
         GameTime _gameTime;
-
-        private float SupriseValue = 0;
-        private float MaxiumValue = 100;
 
         public Game1()
         {
@@ -137,18 +133,7 @@ namespace SurpriseParty
                    Text = "Quit",
                };*/
 
-            supriseBarBase = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/valueBar_0"), Content.Load<Texture2D>("Graphics/valueBar_0"), Content.Load<Texture2D>("Graphics/valueBar_0") }, new Rectangle(1049, 61, 190, 545))
-            {
-                RenderOrder = 5,
-                alpha = 0.8f,
-                isVisible = false
-            };
-            supriseBar = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/valueBar_Top") }, new Rectangle(1182, 158, 44, 442))
-            {
-                RenderOrder = 6,
-                alpha = 0.9f,
-                isVisible = false
-            };
+         
 
             door = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/door_0"), Content.Load<Texture2D>("Graphics/door_1") }, new Rectangle(811, 125, 143, 230))
             {
@@ -250,8 +235,6 @@ namespace SurpriseParty
                 sideUI,
                 countDown[0],
                 countDown[1],
-                supriseBarBase,
-                supriseBar,
                 dragFox,
                 boxButton
             };
@@ -440,8 +423,6 @@ namespace SurpriseParty
 
             if(state == 2)
             {
-                // change color and suprise value
-                float currentSuprise = SupriseValue / MaxiumValue;
 
             }
 
@@ -494,10 +475,9 @@ namespace SurpriseParty
             door.SetIMG(1);
             timeStartToOpenDoor = gameTime.TotalGameTime;
             doorOpening = true;
-            supriseBarBase.isVisible = true;
-            supriseBar.isVisible = true;
 
-            supriseBar.ClipImage(0.5f,GraphicsDevice);
+
+            
 
             // disapear UI
             downUI.MoveTo(new Point(0, 220));

@@ -14,17 +14,21 @@ namespace SurpriseParty
         // fields
         private Rectangle _rectangle;
         private Texture2D[] _texture;
-
+        private Rectangle defaultRect;
+        private Texture2D defaultTexture;
 
         public bool isVisible, suprisee;
         public int DisplayingID { get; set; }
         public int ID { get; set; }
         public Rectangle Rectangle { get { return _rectangle; } }
 
+
         public BGGraphic(Texture2D[] textures, Rectangle rect)
         {
             _texture = textures;
             _rectangle = rect;
+            defaultRect = rect;
+            defaultTexture = textures[0];
             isVisible = true;
         }
 
@@ -86,11 +90,19 @@ namespace SurpriseParty
               _texture[DisplayingID].GetData(0, newBounds, data, 0, newBounds.Width * newBounds.Height);
               croppedTexture.SetData(data);
               */
-            Texture2D croppedData = new Texture2D(graphicsDevice, _rectangle.Width, (int)(_rectangle.Height * value));
 
+            _rectangle.Y = defaultRect.Y + (int)((1 - value) * defaultRect.Height - 1);
+            _rectangle.Height = (int)(defaultRect.Height * value);
 
+              Rectangle newBound = new Rectangle(0, (int)((1 - value) * defaultRect.Height), defaultRect.Width, (int)(defaultRect.Height * value));
 
-            _texture[DisplayingID] = croppedData;
+            Texture2D clipIMG = new Texture2D(graphicsDevice, newBound.Width, newBound.Height);
+            Color[] data = new Color[newBound.Width * newBound.Height];
+
+            defaultTexture.GetData(0, newBound, data, 0, newBound.Width * newBound.Height);
+            clipIMG.SetData(0, newBound, data, 0, newBound.Width * newBound.Height);
+
+            _texture[DisplayingID] = clipIMG;
 
 
         }
