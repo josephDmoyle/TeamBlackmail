@@ -20,6 +20,7 @@ namespace SurpriseParty
     public class Game1 : Game
     {
         public static Color supriser = Color.White, suprisee = Color.White;
+        public static int state = 0;
 
         const int ScreenWidth = 1280;
         const int ScreenHeight = 720;
@@ -38,7 +39,8 @@ namespace SurpriseParty
         KeyboardState currentKeyboardState;
         KeyboardState previousKeyboardState;
 
-        private SoundEffect backGroundMusic;
+        private SoundEffect beginningSong, waitSong, supriseSong, scream;
+        private SoundEffectInstance musicPlayer;
 
         // Player Input - Mouse
         MouseState currentMouseState;
@@ -107,9 +109,13 @@ namespace SurpriseParty
 
             // TODO: use this.Content to load your game content here
 
-            backGroundMusic = Content.Load<SoundEffect>("SFX/Leopard Print Elevator");
-            if(playMusic)
-                backGroundMusic.Play();
+            beginningSong = Content.Load<SoundEffect>("SFX/beginningSong");
+            waitSong = Content.Load<SoundEffect>("SFX/waitSong");
+            supriseSong = Content.Load<SoundEffect>("SFX/supriseSong");
+            scream = Content.Load<SoundEffect>("SFX/scream");
+            musicPlayer = beginningSong.CreateInstance();
+            if (playMusic)
+                musicPlayer.Play();
             // UIs
 
             var boxButton = new Button(Content.Load<Texture2D>("Graphics/box1"), Content.Load<SpriteFont>("Font/font"))
@@ -364,9 +370,13 @@ namespace SurpriseParty
                 {
                     // cout down finish
                     doorOpening = true;
+                    state = 1;
                     OpenDoor(gameTime);
                     Game1.supriser = Color.Black;
-                    Game1.suprisee = Color.Gray;
+                    Game1.suprisee = Color.DarkGray;
+                    musicPlayer.Pause();
+                    musicPlayer = waitSong.CreateInstance();
+                    musicPlayer.Play();
                 }
             }
 
@@ -380,10 +390,15 @@ namespace SurpriseParty
                 }
             }
 
-            if (doorOpened && doorOpening && Keyboard.GetState().IsKeyDown(Keys.Space))
+            if (doorOpened && doorOpening && Keyboard.GetState().IsKeyDown(Keys.Space) && (state == 1))
             {
+                state = 2;
                 Game1.supriser = Color.White;
                 Game1.suprisee = Color.White;
+                musicPlayer.Pause();
+                musicPlayer = supriseSong.CreateInstance();
+                musicPlayer.Play();
+                scream.Play();
                 CheckResult();
             }
 

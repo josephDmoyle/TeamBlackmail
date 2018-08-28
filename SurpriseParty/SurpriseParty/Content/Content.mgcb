@@ -164,12 +164,6 @@
 /processorParam:TextureFormat=Color
 /build:Graphics/TempUI.png
 
-#begin SFX/Leopard Print Elevator.wav
-/importer:WavImporter
-/processor:SoundEffectProcessor
-/processorParam:Quality=Best
-/build:SFX/Leopard Print Elevator.wav
-
 #begin SFX/scream.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
@@ -415,4 +409,22 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Graphics/rug_2.png
+
+#begin SFX/beginningSong.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SFX/beginningSong.wav
+
+#begin SFX/supriseSong.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SFX/supriseSong.wav
+
+#begin SFX/waitSong.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SFX/waitSong.wav
 

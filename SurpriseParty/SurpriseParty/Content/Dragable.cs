@@ -56,10 +56,10 @@ namespace SurpriseParty
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             Color color = Game1.supriser;
-            if (_isHovering)
+            if (_isHovering && (Game1.state == 0))
                 color = Color.Gray;
             if(isVisible)
-            spriteBatch.Draw(_textures[DisplayingID], Rectangle, color);
+                spriteBatch.Draw(_textures[DisplayingID], Rectangle, color);
         }
 
         public override void Update(GameTime gameTime)
@@ -70,7 +70,7 @@ namespace SurpriseParty
             Rectangle mouseRectangele = new Rectangle(_currentState.X, _currentState.Y, 1, 1);
 
             _isHovering = false;
-            if (mouseRectangele.Intersects(Rectangle))
+            if (mouseRectangele.Intersects(Rectangle) && Game1.state == 0)
             {
                 _isHovering = true;
                 if (_currentState.LeftButton == ButtonState.Pressed  && !_isPressed)
@@ -102,12 +102,14 @@ namespace SurpriseParty
 
         public void GoBacktToOrigin()
         {
-            Rectangle = _defaultPosition;
+            if (Game1.state == 0)
+                Rectangle = _defaultPosition;
         }
 
         public void MoveToCenterOfSpotPoint(HideSpot spot)
         {
-            _rectangle = new Rectangle(spot.CenterPoint.X - _textures[DisplayingID].Width/2, spot.CenterPoint.Y - _textures[DisplayingID].Height/2, _textures[DisplayingID].Width, _textures[DisplayingID].Height);
+            if (Game1.state == 0)
+                _rectangle = new Rectangle(spot.CenterPoint.X - _textures[DisplayingID].Width/2, spot.CenterPoint.Y - _textures[DisplayingID].Height/2, _textures[DisplayingID].Width, _textures[DisplayingID].Height);
         }
 
         #endregion
