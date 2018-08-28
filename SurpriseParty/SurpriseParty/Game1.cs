@@ -53,10 +53,14 @@ namespace SurpriseParty
         BGGraphic door;
         BGGraphic cat;
         BGGraphic rug;
+        BGGraphic supriseBarBase;
+        BGGraphic supriseBar;
 
         // UI
         Dragable dragFox;
         UI downUI;
+        UI sideUI;
+
         UI[] countDown;
         List<Component> components;
         List<HideSpot> hideSpots;
@@ -71,6 +75,9 @@ namespace SurpriseParty
         bool doorOpening;
 
         GameTime _gameTime;
+
+        private float SupriseValue = 0;
+        private float MaxiumValue = 100;
 
         public Game1()
         {
@@ -117,7 +124,7 @@ namespace SurpriseParty
             if (playMusic)
                 musicPlayer.Play();
             // UIs
-
+            #region Initialize parameters
             var boxButton = new Button(Content.Load<Texture2D>("Graphics/box1"), Content.Load<SpriteFont>("Font/font"))
             {
                 Position = new Vector2(100, 300),
@@ -129,6 +136,19 @@ namespace SurpriseParty
                    Position = new Vector2(GraphicsDevice.Viewport.Width / 2, GraphicsDevice.Viewport.Height / 2),
                    Text = "Quit",
                };*/
+
+            supriseBarBase = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/valueBar_0"), Content.Load<Texture2D>("Graphics/valueBar_0"), Content.Load<Texture2D>("Graphics/valueBar_0") }, new Rectangle(1049, 61, 190, 545))
+            {
+                RenderOrder = 5,
+                alpha = 0.8f,
+                isVisible = false
+            };
+            supriseBar = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/valueBar_Top") }, new Rectangle(1182, 158, 44, 442))
+            {
+                RenderOrder = 6,
+                alpha = 0.9f,
+                isVisible = false
+            };
 
             door = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/door_0"), Content.Load<Texture2D>("Graphics/door_1") }, new Rectangle(811, 125, 143, 230))
             {
@@ -193,6 +213,11 @@ namespace SurpriseParty
                 RenderOrder = 5,
                 UIMoveSpeed = 3
             };
+            sideUI = new UI(null, Content.Load<Texture2D>("Graphics/Side_UI"), new Point(1180, 300))
+            {
+                RenderOrder = 5,
+                UIMoveSpeed = 3
+            };
             countDown = new UI[] {
                 new UI(null,Content.Load<Texture2D>("Graphics/Back_coutdown_UI"), new Point(273, 27))
                 {
@@ -205,8 +230,9 @@ namespace SurpriseParty
                     UIMoveSpeed =1
                 },
             };
+            
 
-
+            #endregion
 
 
             components = new List<Component>()
@@ -221,8 +247,11 @@ namespace SurpriseParty
                 spotPoint_Sofa,
                 spotPoint_Rug,
                 downUI,
+                sideUI,
                 countDown[0],
                 countDown[1],
+                supriseBarBase,
+                supriseBar,
                 dragFox,
                 boxButton
             };
@@ -409,6 +438,13 @@ namespace SurpriseParty
                 CheckResult();
             }
 
+            if(state == 2)
+            {
+                // change color and suprise value
+                float currentSuprise = SupriseValue / MaxiumValue;
+
+            }
+
             base.Update(gameTime);
         }
 
@@ -458,8 +494,14 @@ namespace SurpriseParty
             door.SetIMG(1);
             timeStartToOpenDoor = gameTime.TotalGameTime;
             doorOpening = true;
+            supriseBarBase.isVisible = true;
+            supriseBar.isVisible = true;
+
+            supriseBar.ClipImage(0.5f,GraphicsDevice);
+
             // disapear UI
             downUI.MoveTo(new Point(0, 220));
+            sideUI.MoveTo(new Point(200, 0));
             countDown[0].MoveTo(new Point(0, -55));
         }
 

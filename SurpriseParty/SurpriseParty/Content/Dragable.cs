@@ -75,7 +75,7 @@ namespace SurpriseParty
                 {
                     _isHovering = true;
                 }
-                if (_currentState.LeftButton == ButtonState.Pressed && !_isPressed)
+                if (_currentState.LeftButton == ButtonState.Pressed && !_isPressed && _isHovering)
                 {
                     _isPressed = true;
                     Press?.Invoke(this, new EventArgs());

@@ -28,13 +28,18 @@ namespace SurpriseParty
             isVisible = true;
         }
 
+        public float alpha = 1;
+        public Color color;
+
 
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            if (isVisible)
+            color = suprisee ? Game1.suprisee : Game1.supriser;
+            color = new Color(color, alpha);
 
-                spriteBatch.Draw(_texture[DisplayingID], _rectangle, suprisee?Game1.suprisee:Game1.supriser);
+            if (isVisible)
+                spriteBatch.Draw(_texture[DisplayingID], _rectangle, color);
         }
 
         public override void Update(GameTime gameTime)
@@ -60,6 +65,34 @@ namespace SurpriseParty
         {
             if (_idx >= 0 && _idx < _texture.Length)
                 DisplayingID = _idx;
+        }
+
+        public void ClipImage(float value, GraphicsDevice graphicsDevice)
+        {
+            // Get your texture
+
+            // Calculate the cropped boundary
+            /*  Rectangle newBounds = _texture[DisplayingID].Bounds;
+
+             // newBounds.Y = (int)(value * _texture[DisplayingID].Bounds.Height);
+              newBounds.Height = (int)(value * _texture[DisplayingID].Bounds.Height);
+
+
+              // Create a new texture of the desired size
+              Texture2D croppedTexture = new Texture2D(graphicsDevice, newBounds.Width, newBounds.Height);
+
+              // Copy the data from the cropped region into a buffer, then into the new texture
+              Color[] data = new Color[newBounds.Width * newBounds.Height];
+              _texture[DisplayingID].GetData(0, newBounds, data, 0, newBounds.Width * newBounds.Height);
+              croppedTexture.SetData(data);
+              */
+            Texture2D croppedData = new Texture2D(graphicsDevice, _rectangle.Width, (int)(_rectangle.Height * value));
+
+
+
+            _texture[DisplayingID] = croppedData;
+
+
         }
     }
 }
