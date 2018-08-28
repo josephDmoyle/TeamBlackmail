@@ -374,9 +374,12 @@ namespace SurpriseParty
                     OpenDoor(gameTime);
                     Game1.supriser = Color.Black;
                     Game1.suprisee = Color.DarkGray;
-                    musicPlayer.Pause();
-                    musicPlayer = waitSong.CreateInstance();
-                    musicPlayer.Play();
+                    if (playMusic)
+                    {
+                        musicPlayer.Pause();
+                        musicPlayer = waitSong.CreateInstance();
+                        musicPlayer.Play();
+                    }
                 }
             }
 
@@ -395,9 +398,13 @@ namespace SurpriseParty
                 state = 2;
                 Game1.supriser = Color.White;
                 Game1.suprisee = Color.White;
-                musicPlayer.Pause();
-                musicPlayer = supriseSong.CreateInstance();
-                musicPlayer.Play();
+                if (playMusic)
+                {
+                    musicPlayer.Pause();
+                    musicPlayer = supriseSong.CreateInstance();
+                    musicPlayer.Play();
+                }
+                
                 scream.Play();
                 CheckResult();
             }

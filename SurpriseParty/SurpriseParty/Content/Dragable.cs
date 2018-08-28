@@ -11,7 +11,7 @@ namespace SurpriseParty
 {
     public  class Dragable : Component
     {
-        #region Feilds
+        #region Fields
         private MouseState _currentState;
         private bool _isHovering;
         private bool _isPressed;
@@ -68,31 +68,29 @@ namespace SurpriseParty
             _currentState = Mouse.GetState();
 
             Rectangle mouseRectangele = new Rectangle(_currentState.X, _currentState.Y, 1, 1);
-
-            _isHovering = false;
-            if (mouseRectangele.Intersects(Rectangle) && Game1.state == 0)
+            if (Game1.state == 0)
             {
-                _isHovering = true;
-                if (_currentState.LeftButton == ButtonState.Pressed  && !_isPressed)
+                _isHovering = false;
+                if (mouseRectangele.Intersects(Rectangle))
+                {
+                    _isHovering = true;
+                }
+                if (_currentState.LeftButton == ButtonState.Pressed && !_isPressed)
                 {
                     _isPressed = true;
                     Press?.Invoke(this, new EventArgs());
                 }
-                if (_isPressed)
-                {
-                    _currentPosition = new Vector2(_currentState.X - _textures[DisplayingID].Width/2, _currentState.Y - _textures[DisplayingID].Height/2);
-                    Rectangle = new Rectangle((int)_currentPosition.X, (int)_currentPosition.Y, _textures[DisplayingID].Width, _textures[DisplayingID].Height);
-
-                }
-
-                if (_currentState.LeftButton == ButtonState.Released && _prevousState.LeftButton == ButtonState.Pressed)
+                else if (_currentState.LeftButton == ButtonState.Released && _isPressed)
                 {
                     _isPressed = false;
                     Release?.Invoke(this, new EventArgs());
                 }
+                if (_isPressed)
+                {
+                    _currentPosition = new Vector2(_currentState.X - _textures[DisplayingID].Width / 2, _currentState.Y - _textures[DisplayingID].Height / 2);
+                    Rectangle = new Rectangle((int)_currentPosition.X, (int)_currentPosition.Y, _textures[DisplayingID].Width, _textures[DisplayingID].Height);
+                }
             }
-
-
         }
 
         public bool CollidedWithHideSpot(HideSpot hide)
