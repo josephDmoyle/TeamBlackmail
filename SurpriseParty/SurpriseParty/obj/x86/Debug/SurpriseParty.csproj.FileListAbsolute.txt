@@ -222,3 +222,6 @@ C:\Users\Hordeling\Documents\GitHub\TeamBlackmail\SurpriseParty\SurpriseParty\ob
 C:\Users\Hordeling\Documents\GitHub\TeamBlackmail\SurpriseParty\SurpriseParty\bin\Windows\x86\Debug\Content\SFX\beginningSong.xnb
 C:\Users\Hordeling\Documents\GitHub\TeamBlackmail\SurpriseParty\SurpriseParty\bin\Windows\x86\Debug\Content\SFX\supriseSong.xnb
 C:\Users\Hordeling\Documents\GitHub\TeamBlackmail\SurpriseParty\SurpriseParty\bin\Windows\x86\Debug\Content\SFX\waitSong.xnb
+C:\Users\u0929730\Documents\GitHub\TeamBlackmail\SurpriseParty\SurpriseParty\bin\Windows\x86\Debug\Content\SFX\beginningSong.xnb
+C:\Users\u0929730\Documents\GitHub\TeamBlackmail\SurpriseParty\SurpriseParty\bin\Windows\x86\Debug\Content\SFX\supriseSong.xnb
+C:\Users\u0929730\Documents\GitHub\TeamBlackmail\SurpriseParty\SurpriseParty\bin\Windows\x86\Debug\Content\SFX\waitSong.xnb
