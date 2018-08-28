@@ -34,6 +34,8 @@ namespace SurpriseParty
 
         private int _status= 0; // 0: not collided, 1: collided
 
+        public int ID;
+
 
         public Interaction(Dragable dragable, BGGraphic bGGraphic)
         {
@@ -49,13 +51,13 @@ namespace SurpriseParty
 
         public override void Update(GameTime gameTime)
         {
-            if (_graphic.Rectangle.Contains(_dragable.Rectangle))
+            if (_graphic.Rectangle.Contains(_dragable.CenterRect))
             {
                 if(_status == 0)
                 {
                     _status = 1;
                     // on dragable entered the graphic
-                    onEnter?.Invoke(this, new IntEventArgs(_graphic.ID));
+                    onEnter?.Invoke(this, new IntEventArgs(ID));
                 }
             }
             else
@@ -63,8 +65,9 @@ namespace SurpriseParty
                 if (_status == 1)
                 {
                     _status = 0;
+
                     // on dragable exit the graphic
-                    onExit?.Invoke(this, new IntEventArgs(_graphic.ID));
+                    onExit?.Invoke(this, new IntEventArgs(ID));
 
                 }
             }

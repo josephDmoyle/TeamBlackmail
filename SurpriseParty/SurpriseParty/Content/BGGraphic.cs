@@ -22,6 +22,8 @@ namespace SurpriseParty
         public int ID { get; set; }
         public Rectangle Rectangle { get { return _rectangle; } }
 
+        public Point PivotPoint;
+        public bool Interacted;
 
         public BGGraphic(Texture2D[] textures, Rectangle rect)
         {

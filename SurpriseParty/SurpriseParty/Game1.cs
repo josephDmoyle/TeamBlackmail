@@ -19,6 +19,7 @@ namespace SurpriseParty
     /// </summary>
     public class Game1 : Game
     {
+        public static int isDragging = -1;
         public static Color supriser = Color.White, suprisee = Color.White;
         public static int state = 0;
 
@@ -28,7 +29,7 @@ namespace SurpriseParty
         private bool playMusic = true;
 
         private readonly TimeSpan DoorOpenToComeIn = TimeSpan.FromSeconds(2);
-        private readonly TimeSpan PlaceObjectTime = TimeSpan.FromSeconds(10);
+        private readonly TimeSpan PlaceObjectTime = TimeSpan.FromSeconds(30);
 
         private TimeSpan timeStartToOpenDoor;
 
@@ -56,25 +57,23 @@ namespace SurpriseParty
 
 
         // UI
-        Dragable dragFox;
-        UI downUI;
-        UI sideUI;
+        Dragable[] animals;
+        int currentDragID;
 
-        UI[] countDown;
         List<Component> components;
-        List<HideSpot> hideSpots;
+        List<BGGraphic> hiddenObj;
 
 
 
         // interaction
         List<Interaction> interactions;
-        HideSpot tempSpot;
+        Interaction tempInteract;
 
         bool doorOpened;
         bool doorOpening;
 
         GameTime _gameTime;
-
+        Random rd;
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -95,6 +94,7 @@ namespace SurpriseParty
             graphics.PreferredBackBufferWidth = ScreenWidth;  // set this value to the desired width of your window
             graphics.PreferredBackBufferHeight = ScreenHeight;   // set this value to the desired height of your window
             graphics.ApplyChanges();
+            rd = new Random();
             base.Initialize();
 
         }
@@ -133,7 +133,7 @@ namespace SurpriseParty
                    Text = "Quit",
                };*/
 
-         
+
 
             door = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/door_0"), Content.Load<Texture2D>("Graphics/door_1") }, new Rectangle(811, 125, 143, 230))
             {
@@ -154,7 +154,8 @@ namespace SurpriseParty
             boxes = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/box_0"), Content.Load<Texture2D>("Graphics/box_1"), Content.Load<Texture2D>("Graphics/box_2") }, new Rectangle(780, 339, 300, 300))
             {
                 ID = 0,
-                RenderOrder = 1
+                RenderOrder = 1,
+                PivotPoint = new Point(780+150-20, 339+150)
             };
             var spotPoint_box = new HideSpot(Content.Load<Texture2D>("Graphics/TempUI"), new Point(900, 489))
             {
@@ -176,22 +177,44 @@ namespace SurpriseParty
             rug = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/rug_0"), Content.Load<Texture2D>("Graphics/rug_1"), Content.Load<Texture2D>("Graphics/rug_2") }, new Rectangle(320, 389, 300, 300))
             {
                 ID = 2,
-                RenderOrder = 1
+                RenderOrder = 1,
+                PivotPoint=  new Point(126+320,389+220)
             };
             var spotPoint_Rug = new HideSpot(Content.Load<Texture2D>("Graphics/TempUI"), new Point(450, 539))
             {
                 ID = 2,
                 RenderOrder = 4
             };
-
-            dragFox = new Dragable(new Texture2D[] { Content.Load<Texture2D>("Graphics/fox_0"), Content.Load<Texture2D>("Graphics/fox_1") }, new Rectangle(485, 486, 171, 216))
+            animals = new Dragable[]
             {
-                RenderOrder = 6
+                 new Dragable(new Texture2D[] { Content.Load<Texture2D>("Graphics/fox_0"), Content.Load<Texture2D>("Graphics/fox_1") }, new Rectangle(rd.Next(377,1213), rd.Next(273,546), 171, 216))
+                {
+                RenderOrder = 4,
+                ID = 0
+                },
+                                  new Dragable(new Texture2D[] { Content.Load<Texture2D>("Graphics/fox_0"), Content.Load<Texture2D>("Graphics/fox_1") }, new Rectangle(rd.Next(377,1213), rd.Next(273,546), 171, 216))
+                {
+                RenderOrder = 4,
+                ID = 1
+                },
+                                                   new Dragable(new Texture2D[] { Content.Load<Texture2D>("Graphics/fox_0"), Content.Load<Texture2D>("Graphics/fox_1") }, new Rectangle(rd.Next(377,1213), rd.Next(273,546), 171, 216))
+                {
+                RenderOrder = 4,
+                ID = 2
+                }
             };
+            
+            foreach (var item in animals)
+            {
+                item.Press += DragItem_Press;
+                item.Release += DragItem_Release;
 
-            dragFox.Press += DragItem_Press;
-            dragFox.Release += DragItem_Release;
+            }
 
+            //dragFox.Press += DragItem_Press;
+            // dragFox.Release += DragItem_Release;
+
+            /*
             // UI Elements
             downUI = new UI(null, Content.Load<Texture2D>("Graphics/Down_UI"), new Point(535, 646))
             {
@@ -214,8 +237,9 @@ namespace SurpriseParty
                     RenderOrder = 6,
                     UIMoveSpeed =1
                 },
+               
             };
-            
+            */
 
             #endregion
 
@@ -231,12 +255,9 @@ namespace SurpriseParty
                 spotPoint_box,
                 spotPoint_Sofa,
                 spotPoint_Rug,
-                downUI,
-                sideUI,
-                countDown[0],
-                countDown[1],
-                dragFox,
-                boxButton
+                animals[0],
+                animals[1],
+                animals[2]
             };
 
 
@@ -244,12 +265,24 @@ namespace SurpriseParty
             components.Sort((x, y) => x.RenderOrder.CompareTo(y.RenderOrder));
 
             #region interaction list and method
-            interactions = new List<Interaction>()
+
+            hiddenObj = new List<BGGraphic>()
             {
-                new Interaction(dragFox, boxes),
-                new Interaction(dragFox, sofa),
-                new Interaction(dragFox, rug)
+                boxes,
+                sofa,
+                rug
             };
+
+            interactions = new List<Interaction>();
+
+            for (int i = 0; i < animals.Length; i++)
+            {
+                for (int j = 0; j < hiddenObj.Count; j++)
+                {
+                    interactions.Add(new Interaction(animals[i], hiddenObj[j]) { ID = j + i*animals.Length});
+                }
+            }
+
             foreach (var item in interactions)
             {
                 item.onEnter += OnDrag_Enter;
@@ -257,69 +290,50 @@ namespace SurpriseParty
             }
             #endregion
 
-            hideSpots = new List<HideSpot>()
-            {
-                spotPoint_box,
-                spotPoint_Sofa,
-                spotPoint_Rug
-            };
-            boxButton.Click += OnButton_Click;
             //   exitButton.Click += ExitButton_Click;
 
-            countDown[1].MoveTo(new Point(-546, 0));
+          //  countDown[1].MoveTo(new Point(-546, 0));
         }
 
         #region EventMethods
-        private void DragItem_Release(object sender, EventArgs e)
+        private void DragItem_Release(object sender, IntEventArgs e)
         {
             bool inSpot = false;
-            HideSpot theSpot = null;
-            foreach (var item in hideSpots)
+            int interactionID = 0;
+            foreach (var item in interactions)
             {
-                if (dragFox.CollidedWithHideSpot(item))
+                if (animals[e.ID].Rectangle.Contains(item._graphic.PivotPoint) && !item._graphic.Interacted)
                 {
                     inSpot = true;
-                    theSpot = item;
-                    tempSpot = item;
+                    interactionID = item.ID;
+                    tempInteract = item;
+                    item._graphic.Interacted = true;
                 }
 
             }
             if (inSpot)
             {
-                if (theSpot != null)
-                    theSpot.isPutDown = true;
 
-
-                dragFox.MoveToCenterOfSpotPoint(theSpot);
-                interactions[theSpot.ID]._graphic.SetIMG(2);
-                dragFox.isVisible = false;
+                animals[e.ID].MoveToCenterOfSpotPoint(interactions[interactionID]._graphic.PivotPoint);
+                interactions[interactionID]._graphic.SetIMG(2);
+                animals[e.ID].isVisible = false;
             }
             else
             {
-                // go back to UI bar
-                dragFox.RenderOrder = downUI.RenderOrder + 1;
-                dragFox.GoBacktToOrigin();
-                dragFox.isVisible = true;
-                tempSpot = null;
+                // fox move again
+                tempInteract = null;
             }
 
+            
         }
 
-        private void DragItem_Press(object sender, EventArgs e)
+        private void DragItem_Press(object sender, IntEventArgs e)
         {
-            dragFox.RenderOrder = downUI.RenderOrder - 1;
-            dragFox.isVisible = true;
+          //  animals[e.ID].RenderOrder = downUI.RenderOrder - 1;
+            animals[e.ID].isVisible = true;
 
-            if (tempSpot != null)
-                interactions[tempSpot.ID]._graphic.SetIMG(1);
         }
-        private void OnButton_Click(object sender, EventArgs e)
-        {
-            // do my stuff here
-            // testing for UI
-            downUI.MoveTo(new Point(0, 220));
-            //  boxes.NextIMG();
-        }
+
         private void ExitButton_Click(object sender, EventArgs e)
         {
             Exit();
@@ -327,11 +341,14 @@ namespace SurpriseParty
 
         private void OnDrag_Enter(object sender, IntEventArgs e)
         {
+            if(!interactions[e.ID]._graphic.Interacted)
             interactions[e.ID]._graphic.SetIMG(1);
         }
         private void OnDrag_Exit(object sender, IntEventArgs e)
         {
-            interactions[e.ID]._graphic.SetIMG(0);
+            if (!interactions[e.ID]._graphic.Interacted)
+                interactions[e.ID]._graphic.SetIMG(0);
+
         }
 
         #endregion
@@ -416,12 +433,12 @@ namespace SurpriseParty
                     musicPlayer = supriseSong.CreateInstance();
                     musicPlayer.Play();
                 }
-                
+
                 scream.Play();
                 CheckResult();
             }
 
-            if(state == 2)
+            if (state == 2)
             {
 
             }
@@ -475,14 +492,6 @@ namespace SurpriseParty
             door.SetIMG(1);
             timeStartToOpenDoor = gameTime.TotalGameTime;
             doorOpening = true;
-
-
-            
-
-            // disapear UI
-            downUI.MoveTo(new Point(0, 220));
-            sideUI.MoveTo(new Point(200, 0));
-            countDown[0].MoveTo(new Point(0, -55));
         }
 
         void ShowNPC()
@@ -497,12 +506,15 @@ namespace SurpriseParty
         void CheckResult()
         {
             // according to the placement of objects and friends, to decide the suprise value
-            dragFox.isVisible = true;
 
-            if (tempSpot != null)
+            if (tempInteract != null)
             {
-                interactions[tempSpot.ID]._graphic.SetIMG(0);
-                dragFox.DisplayingID = 1;
+                tempInteract._graphic.SetIMG(0);
+
+                foreach (var item in animals)
+                {
+                    item.DisplayingID = 2;
+                }
             }
 
             ShowResult = true;
