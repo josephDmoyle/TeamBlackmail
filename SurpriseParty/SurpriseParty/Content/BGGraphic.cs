@@ -14,8 +14,7 @@ namespace SurpriseParty
         // fields
         private Rectangle _rectangle;
         private Texture2D[] _texture;
-        private Rectangle defaultRect;
-        private Texture2D defaultTexture;
+
 
         public bool isVisible, suprisee;
         public int DisplayingID { get; set; }
@@ -25,12 +24,12 @@ namespace SurpriseParty
         public Point PivotPoint;
         public bool Interacted;
 
+        public Interaction _interaction;
+
         public BGGraphic(Texture2D[] textures, Rectangle rect)
         {
             _texture = textures;
             _rectangle = rect;
-            defaultRect = rect;
-            defaultTexture = textures[0];
             isVisible = true;
         }
 
@@ -73,40 +72,6 @@ namespace SurpriseParty
                 DisplayingID = _idx;
         }
 
-        public void ClipImage(float value, GraphicsDevice graphicsDevice)
-        {
-            // Get your texture
-
-            // Calculate the cropped boundary
-            /*  Rectangle newBounds = _texture[DisplayingID].Bounds;
-
-             // newBounds.Y = (int)(value * _texture[DisplayingID].Bounds.Height);
-              newBounds.Height = (int)(value * _texture[DisplayingID].Bounds.Height);
-
-
-              // Create a new texture of the desired size
-              Texture2D croppedTexture = new Texture2D(graphicsDevice, newBounds.Width, newBounds.Height);
-
-              // Copy the data from the cropped region into a buffer, then into the new texture
-              Color[] data = new Color[newBounds.Width * newBounds.Height];
-              _texture[DisplayingID].GetData(0, newBounds, data, 0, newBounds.Width * newBounds.Height);
-              croppedTexture.SetData(data);
-              */
-
-            _rectangle.Y = defaultRect.Y + (int)((1 - value) * defaultRect.Height - 1);
-            _rectangle.Height = (int)(defaultRect.Height * value);
-
-              Rectangle newBound = new Rectangle(0, (int)((1 - value) * defaultRect.Height), defaultRect.Width, (int)(defaultRect.Height * value));
-
-            Texture2D clipIMG = new Texture2D(graphicsDevice, newBound.Width, newBound.Height);
-            Color[] data = new Color[newBound.Width * newBound.Height];
-
-            defaultTexture.GetData(0, newBound, data, 0, newBound.Width * newBound.Height);
-            clipIMG.SetData(0, newBound, data, 0, newBound.Width * newBound.Height);
-
-            _texture[DisplayingID] = clipIMG;
-
-
-        }
+    
     }
 }

@@ -22,6 +22,13 @@ namespace SurpriseParty
         public static int isDragging = -1;
         public static Color supriser = Color.White, suprisee = Color.White;
         public static int state = 0;
+        public static MouseState currentMouseState;
+        public static MouseState previousMouseState;
+        public static Rectangle[] ObjectMovingRestrictionList = new Rectangle[]
+        {
+            new Rectangle(247,219,893,286)
+        };
+
 
         const int ScreenWidth = 1280;
         const int ScreenHeight = 720;
@@ -37,23 +44,23 @@ namespace SurpriseParty
         SpriteBatch spriteBatch;
 
         // Player Input - Keyboard
-        KeyboardState currentKeyboardState;
-        KeyboardState previousKeyboardState;
+
+
 
         private SoundEffect beginningSong, waitSong, supriseSong, scream;
         private SoundEffectInstance musicPlayer;
 
         // Player Input - Mouse
-        MouseState currentMouseState;
-        MouseState previousMouseState;
+
         Vector2 mousePosition;
 
         // graphic component
-        BGGraphic boxes;
-        BGGraphic sofa;
+        InteractableObj boxes;
+        InteractableObj sofa;
+        InteractableObj rug;
         BGGraphic door;
         BGGraphic cat;
-        BGGraphic rug;
+
 
 
         // UI
@@ -61,7 +68,7 @@ namespace SurpriseParty
         int currentDragID;
 
         List<Component> components;
-        List<BGGraphic> hiddenObj;
+        List<InteractableObj> hiddenObj;
 
 
 
@@ -121,19 +128,28 @@ namespace SurpriseParty
                 musicPlayer.Play();
             // UIs
             #region Initialize parameters
-            var boxButton = new Button(Content.Load<Texture2D>("Graphics/box1"), Content.Load<SpriteFont>("Font/font"))
+            // dragable animals
+            animals = new Dragable[]
             {
-                Position = new Vector2(100, 300),
-                Text = "Box1",
-                RenderOrder = 3
+                 new Dragable(new Texture2D[] { Content.Load<Texture2D>("Graphics/fox_0"), Content.Load<Texture2D>("Graphics/fox_1") }, 
+                 new Rectangle(rd.Next(ObjectMovingRestrictionList[0].X,ObjectMovingRestrictionList[0].X+ObjectMovingRestrictionList[0].Width), rd.Next(ObjectMovingRestrictionList[0].X,ObjectMovingRestrictionList[0].Y+ObjectMovingRestrictionList[0].Height), 171, 216))
+                {
+                RenderOrder = 4,
+                ID = 0
+                },
+                new Dragable(new Texture2D[] { Content.Load<Texture2D>("Graphics/fox_0"), Content.Load<Texture2D>("Graphics/fox_1") },
+                 new Rectangle(rd.Next(ObjectMovingRestrictionList[0].X,ObjectMovingRestrictionList[0].X+ObjectMovingRestrictionList[0].Width), rd.Next(ObjectMovingRestrictionList[0].X,ObjectMovingRestrictionList[0].Y+ObjectMovingRestrictionList[0].Height), 171, 216))
+                {
+                RenderOrder = 4,
+                ID = 1
+                },
+                new Dragable(new Texture2D[] { Content.Load<Texture2D>("Graphics/fox_0"), Content.Load<Texture2D>("Graphics/fox_1") },
+                 new Rectangle(rd.Next(ObjectMovingRestrictionList[0].X,ObjectMovingRestrictionList[0].X+ObjectMovingRestrictionList[0].Width), rd.Next(ObjectMovingRestrictionList[0].X,ObjectMovingRestrictionList[0].Y+ObjectMovingRestrictionList[0].Height), 171, 216))
+                {
+                RenderOrder = 4,
+                ID = 2
+                }
             };
-            /*    var exitButton = new Button(Content.Load<Texture2D>("Graphics/drink"), Content.Load<SpriteFont>("Font/font"))
-               {
-                   Position = new Vector2(GraphicsDevice.Viewport.Width / 2, GraphicsDevice.Viewport.Height / 2),
-                   Text = "Quit",
-               };*/
-
-
 
             door = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/door_0"), Content.Load<Texture2D>("Graphics/door_1") }, new Rectangle(811, 125, 143, 230))
             {
@@ -151,95 +167,36 @@ namespace SurpriseParty
             {
                 RenderOrder = 0
             };
-            boxes = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/box_0"), Content.Load<Texture2D>("Graphics/box_1"), Content.Load<Texture2D>("Graphics/box_2") }, new Rectangle(780, 339, 300, 300))
+            boxes = new InteractableObj(new Texture2D[] { Content.Load<Texture2D>("Graphics/box_0"), Content.Load<Texture2D>("Graphics/box_1"), Content.Load<Texture2D>("Graphics/box_2") }, new Rectangle(780, 339, 300, 300), new Point(780 + 150 - 20, 339 + 150), animals)
             {
                 ID = 0,
-                RenderOrder = 1,
-                PivotPoint = new Point(780+150-20, 339+150)
-            };
-            var spotPoint_box = new HideSpot(Content.Load<Texture2D>("Graphics/TempUI"), new Point(900, 489))
-            {
-                ID = 0,
-                RenderOrder = 4
+                RenderOrder = 3
             };
 
-            sofa = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/sofa_0"), Content.Load<Texture2D>("Graphics/sofa_1"), Content.Load<Texture2D>("Graphics/sofa_2") }, new Rectangle(420, 189, 300, 300))
+            sofa = new InteractableObj(new Texture2D[] { Content.Load<Texture2D>("Graphics/sofa_0"), Content.Load<Texture2D>("Graphics/sofa_1"), Content.Load<Texture2D>("Graphics/sofa_2") }, new Rectangle(420, 189, 300, 300), new Point(420 + 184, 189 + 226), animals)
             {
                 ID = 1,
-                RenderOrder = 1
-            };
-            var spotPoint_Sofa = new HideSpot(Content.Load<Texture2D>("Graphics/TempUI"), new Point(550, 339))
-            {
-                ID = 1,
-                RenderOrder = 4
+                RenderOrder = 3
             };
 
-            rug = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/rug_0"), Content.Load<Texture2D>("Graphics/rug_1"), Content.Load<Texture2D>("Graphics/rug_2") }, new Rectangle(320, 389, 300, 300))
+            rug = new InteractableObj(new Texture2D[] { Content.Load<Texture2D>("Graphics/rug_0"), Content.Load<Texture2D>("Graphics/rug_1"), Content.Load<Texture2D>("Graphics/rug_2") }, new Rectangle(320, 389, 300, 300), new Point(126 + 320, 389 + 220), animals)
             {
                 ID = 2,
-                RenderOrder = 1,
-                PivotPoint=  new Point(126+320,389+220)
+                RenderOrder = 3,
             };
             var spotPoint_Rug = new HideSpot(Content.Load<Texture2D>("Graphics/TempUI"), new Point(450, 539))
             {
                 ID = 2,
                 RenderOrder = 4
             };
-            animals = new Dragable[]
-            {
-                 new Dragable(new Texture2D[] { Content.Load<Texture2D>("Graphics/fox_0"), Content.Load<Texture2D>("Graphics/fox_1") }, new Rectangle(rd.Next(377,1213), rd.Next(273,546), 171, 216))
-                {
-                RenderOrder = 4,
-                ID = 0
-                },
-                                  new Dragable(new Texture2D[] { Content.Load<Texture2D>("Graphics/fox_0"), Content.Load<Texture2D>("Graphics/fox_1") }, new Rectangle(rd.Next(377,1213), rd.Next(273,546), 171, 216))
-                {
-                RenderOrder = 4,
-                ID = 1
-                },
-                                                   new Dragable(new Texture2D[] { Content.Load<Texture2D>("Graphics/fox_0"), Content.Load<Texture2D>("Graphics/fox_1") }, new Rectangle(rd.Next(377,1213), rd.Next(273,546), 171, 216))
-                {
-                RenderOrder = 4,
-                ID = 2
-                }
-            };
-            
+
+
             foreach (var item in animals)
             {
                 item.Press += DragItem_Press;
                 item.Release += DragItem_Release;
 
             }
-
-            //dragFox.Press += DragItem_Press;
-            // dragFox.Release += DragItem_Release;
-
-            /*
-            // UI Elements
-            downUI = new UI(null, Content.Load<Texture2D>("Graphics/Down_UI"), new Point(535, 646))
-            {
-                RenderOrder = 5,
-                UIMoveSpeed = 3
-            };
-            sideUI = new UI(null, Content.Load<Texture2D>("Graphics/Side_UI"), new Point(1180, 300))
-            {
-                RenderOrder = 5,
-                UIMoveSpeed = 3
-            };
-            countDown = new UI[] {
-                new UI(null,Content.Load<Texture2D>("Graphics/Back_coutdown_UI"), new Point(273, 27))
-                {
-                    RenderOrder = 5,
-                    UIMoveSpeed = 3
-                },
-                new UI(null,Content.Load<Texture2D>("Graphics/Top_coutdown_UI"), new Point(273, 27))
-                {
-                    RenderOrder = 6,
-                    UIMoveSpeed =1
-                },
-               
-            };
-            */
 
             #endregion
 
@@ -252,9 +209,6 @@ namespace SurpriseParty
                 boxes,
                 sofa,
                 rug,
-                spotPoint_box,
-                spotPoint_Sofa,
-                spotPoint_Rug,
                 animals[0],
                 animals[1],
                 animals[2]
@@ -266,11 +220,10 @@ namespace SurpriseParty
 
             #region interaction list and method
 
-            hiddenObj = new List<BGGraphic>()
+            hiddenObj = new List<InteractableObj>()
             {
                 boxes,
-                sofa,
-                rug
+
             };
 
             interactions = new List<Interaction>();
@@ -279,7 +232,7 @@ namespace SurpriseParty
             {
                 for (int j = 0; j < hiddenObj.Count; j++)
                 {
-                    interactions.Add(new Interaction(animals[i], hiddenObj[j]) { ID = j + i*animals.Length});
+                    //interactions.Add(new Interaction(animals[i], hiddenObj[j]) { ID = j + i*animals.Length});
                 }
             }
 
@@ -292,7 +245,7 @@ namespace SurpriseParty
 
             //   exitButton.Click += ExitButton_Click;
 
-          //  countDown[1].MoveTo(new Point(-546, 0));
+            //  countDown[1].MoveTo(new Point(-546, 0));
         }
 
         #region EventMethods
@@ -308,6 +261,9 @@ namespace SurpriseParty
                     interactionID = item.ID;
                     tempInteract = item;
                     item._graphic.Interacted = true;
+
+                    item._graphic._interaction = item;
+                    item._dragable._interaction = item;
                 }
 
             }
@@ -324,14 +280,20 @@ namespace SurpriseParty
                 tempInteract = null;
             }
 
-            
+
         }
 
         private void DragItem_Press(object sender, IntEventArgs e)
         {
-          //  animals[e.ID].RenderOrder = downUI.RenderOrder - 1;
+            //  animals[e.ID].RenderOrder = downUI.RenderOrder - 1;
             animals[e.ID].isVisible = true;
 
+            if (animals[e.ID]._interaction != null && animals[e.ID]._interaction._graphic.Interacted)
+            {
+                animals[e.ID]._interaction._graphic.Interacted = false;
+                animals[e.ID]._interaction._graphic._interaction = null;
+                animals[e.ID]._interaction = null;
+            }
         }
 
         private void ExitButton_Click(object sender, EventArgs e)
@@ -341,11 +303,12 @@ namespace SurpriseParty
 
         private void OnDrag_Enter(object sender, IntEventArgs e)
         {
-            if(!interactions[e.ID]._graphic.Interacted)
-            interactions[e.ID]._graphic.SetIMG(1);
+            if (!interactions[e.ID]._graphic.Interacted)
+                interactions[e.ID]._graphic.SetIMG(1);
         }
         private void OnDrag_Exit(object sender, IntEventArgs e)
         {
+
             if (!interactions[e.ID]._graphic.Interacted)
                 interactions[e.ID]._graphic.SetIMG(0);
 
@@ -382,10 +345,6 @@ namespace SurpriseParty
             {
                 item.Update(gameTime);
             }
-
-            // Keyboard staffs
-            previousKeyboardState = currentKeyboardState;
-            currentKeyboardState = Keyboard.GetState();
 
             // mouse staffs
             previousMouseState = currentMouseState;
@@ -520,6 +479,16 @@ namespace SurpriseParty
             ShowResult = true;
 
 
+        }
+
+        private static readonly Random getrandom = new Random();
+
+        public static int GetRandomNumber(int min, int max)
+        {
+            lock (getrandom) // synchronize
+            {
+                return getrandom.Next(min, max);
+            }
         }
     }
 }
