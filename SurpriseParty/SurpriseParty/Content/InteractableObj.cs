@@ -78,6 +78,8 @@ namespace SurpriseParty
                                 Interacted = true;
                                 item.isVisible = false;
                                 item.StopMovement();
+                                item.InSpot = true;
+                                Game1.putCount++;
                                 _currentInteractID = item.ID;
                                 break;
                             }
@@ -101,7 +103,10 @@ namespace SurpriseParty
                             item.isVisible = true;
                             // item -> return to move
                             item.StartMovement();
+                            item.InSpot = false;
                             Interacted = false;
+                            Game1.putCount--;
+
                             _currentInteractID = -1;
                         }
                     }

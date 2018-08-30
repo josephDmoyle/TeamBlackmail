@@ -34,11 +34,11 @@ namespace SurpriseParty
         public event EventHandler<IntEventArgs> Press;
         public event EventHandler<IntEventArgs> Release;
 
-
         public bool isVisible;
         public int DisplayingID { get; set; }
         public bool canPut;
         public bool Clicked { get; set; }
+        public bool InSpot;
         public Rectangle CenterRect
         {
             get; set;

@@ -14,7 +14,8 @@ namespace SurpriseParty
         // fields
         private Rectangle _rectangle;
         private Texture2D[] _texture;
-
+        private bool moving = false;
+        private Point _destination;
 
         public bool isVisible, suprisee;
         public int DisplayingID { get; set; }
@@ -35,6 +36,7 @@ namespace SurpriseParty
 
         public float alpha = 1;
         public Color color;
+        public int MoveSpeed;
 
 
 
@@ -49,6 +51,21 @@ namespace SurpriseParty
 
         public override void Update(GameTime gameTime)
         {
+            if (moving)
+            {
+
+                Vector2 direction = MoveSpeed * Vector2.Normalize(new Vector2(_destination.X - _rectangle.X, _destination.Y - _rectangle.Y));
+                _rectangle.X += (int)direction.X;
+                _rectangle.Y += (int)direction.Y;
+
+                if (Math.Abs(_rectangle.X - _destination.X) < 2 && Math.Abs(_rectangle.Y - _destination.Y) < 2)
+                {
+                    _rectangle.X = _destination.X;
+                    _rectangle.Y = _destination.Y;
+                    // moving done
+                    moving = false;
+                }
+            }
         }
 
         public void NextIMG()
@@ -72,6 +89,12 @@ namespace SurpriseParty
                 DisplayingID = _idx;
         }
 
-    
+        public void MoveTo(Point direction)
+        {
+            moving = true;
+            _destination = new Point(_rectangle.X, _rectangle.Y) + direction;
+
+        }
+
     }
 }

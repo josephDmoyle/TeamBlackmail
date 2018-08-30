@@ -36,7 +36,7 @@ namespace SurpriseParty
         private bool playMusic = true;
 
         private readonly TimeSpan DoorOpenToComeIn = TimeSpan.FromSeconds(2);
-        private readonly TimeSpan PlaceObjectTime = TimeSpan.FromSeconds(30);
+        private readonly TimeSpan PlaceObjectTime = TimeSpan.FromSeconds(10);
 
         private TimeSpan timeStartToOpenDoor;
 
@@ -60,7 +60,8 @@ namespace SurpriseParty
         InteractableObj rug;
         BGGraphic door;
         BGGraphic cat;
-
+        Button lightOff;
+        BGGraphic spaceBar;
 
 
         // UI
@@ -68,16 +69,12 @@ namespace SurpriseParty
         int currentDragID;
 
         List<Component> components;
-        List<InteractableObj> hiddenObj;
-
-
-
-        // interaction
-        List<Interaction> interactions;
-        Interaction tempInteract;
+        List<InteractableObj> interactObjs;
 
         bool doorOpened;
         bool doorOpening;
+        bool halfTime;
+      public static  int putCount  =0;
 
         GameTime _gameTime;
         Random rd;
@@ -153,15 +150,15 @@ namespace SurpriseParty
 
             door = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/door_0"), Content.Load<Texture2D>("Graphics/door_1") }, new Rectangle(811, 125, 143, 230))
             {
-                RenderOrder = 1
+                RenderOrder = 0
             };
-            cat = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/cat_0"), Content.Load<Texture2D>("Graphics/cat_1"), Content.Load<Texture2D>("Graphics/cat_2") }, new Rectangle(811, 125, 143, 230))
+            cat = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/cat_0"), Content.Load<Texture2D>("Graphics/cat_1"), Content.Load<Texture2D>("Graphics/cat_2") }, new Rectangle(0, 275, 147, 235))
             {
-                RenderOrder = 2,
-                suprisee = true
-
+                RenderOrder =-1,
+                suprisee = true,
+                MoveSpeed = 2
             };
-            cat.isVisible = false;
+            cat.isVisible = true;
 
             var room = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/room") }, new Rectangle(0, 0, 1280, 720))
             {
@@ -189,16 +186,22 @@ namespace SurpriseParty
                 ID = 2,
                 RenderOrder = 4
             };
-
-
-            foreach (var item in animals)
+            lightOff = new Button(Content.Load<Texture2D>("Graphics/LightButton"))
             {
-                item.Press += DragItem_Press;
-                item.Release += DragItem_Release;
+                RenderOrder = 5,
+                Position = new Vector2(1000, 180)
 
-            }
+            };
+            lightOff.Click += LightOff_Click;
+
+            spaceBar = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/space") }, new Rectangle(1079, 564, 165, 132)) {
+                RenderOrder = 4,
+                isVisible = false,
+                suprisee = true
+            };
 
             #endregion
+
 
 
             components = new List<Component>()
@@ -211,7 +214,9 @@ namespace SurpriseParty
                 rug,
                 animals[0],
                 animals[1],
-                animals[2]
+                animals[2],
+                lightOff,
+                spaceBar
             };
 
 
@@ -220,35 +225,37 @@ namespace SurpriseParty
 
             #region interaction list and method
 
-            hiddenObj = new List<InteractableObj>()
+            interactObjs = new List<InteractableObj>()
             {
                 boxes,
-
+                sofa,
+                rug
             };
-
-            interactions = new List<Interaction>();
-
-            for (int i = 0; i < animals.Length; i++)
-            {
-                for (int j = 0; j < hiddenObj.Count; j++)
-                {
-                    //interactions.Add(new Interaction(animals[i], hiddenObj[j]) { ID = j + i*animals.Length});
-                }
-            }
-
-            foreach (var item in interactions)
-            {
-                item.onEnter += OnDrag_Enter;
-                item.onExit += OnDrag_Exit;
-            }
             #endregion
 
-            //   exitButton.Click += ExitButton_Click;
+            cat.MoveTo(new Point(250, 107 - 275));
+        }
 
-            //  countDown[1].MoveTo(new Point(-546, 0));
+        bool isLightOff;
+        private void LightOff_Click(object sender, EventArgs e)
+        {
+            if (!isLightOff)
+            {
+                Game1.supriser = Color.Black;
+                Game1.suprisee = Color.DarkGray;
+                isLightOff = true;
+            }
+            else
+            {
+                Game1.supriser = Color.White;
+                Game1.suprisee = Color.White;
+                isLightOff = false;
+            }
+
         }
 
         #region EventMethods
+        /*
         private void DragItem_Release(object sender, IntEventArgs e)
         {
             bool inSpot = false;
@@ -282,7 +289,7 @@ namespace SurpriseParty
 
 
         }
-
+        */
         private void DragItem_Press(object sender, IntEventArgs e)
         {
             //  animals[e.ID].RenderOrder = downUI.RenderOrder - 1;
@@ -301,18 +308,18 @@ namespace SurpriseParty
             Exit();
         }
 
-        private void OnDrag_Enter(object sender, IntEventArgs e)
-        {
-            if (!interactions[e.ID]._graphic.Interacted)
-                interactions[e.ID]._graphic.SetIMG(1);
-        }
-        private void OnDrag_Exit(object sender, IntEventArgs e)
-        {
+        //private void OnDrag_Enter(object sender, IntEventArgs e)
+        //{
+        //    if (!interactions[e.ID]._graphic.Interacted)
+        //        interactions[e.ID]._graphic.SetIMG(1);
+        //}
+        //private void OnDrag_Exit(object sender, IntEventArgs e)
+        //{
 
-            if (!interactions[e.ID]._graphic.Interacted)
-                interactions[e.ID]._graphic.SetIMG(0);
+        //    if (!interactions[e.ID]._graphic.Interacted)
+        //        interactions[e.ID]._graphic.SetIMG(0);
 
-        }
+        //}
 
         #endregion
         /// <summary>
@@ -341,11 +348,6 @@ namespace SurpriseParty
                 item.Update(gameTime);
             }
 
-            foreach (var item in interactions)
-            {
-                item.Update(gameTime);
-            }
-
             // mouse staffs
             previousMouseState = currentMouseState;
             currentMouseState = Mouse.GetState();
@@ -354,14 +356,19 @@ namespace SurpriseParty
 
             if (!doorOpening)
             {
+                if(!halfTime && gameTime.TotalGameTime > TimeSpan.FromSeconds(PlaceObjectTime.Seconds / 2))
+                {
+                    halfTime = true;
+                    cat.MoveTo(new Point(555, 0));
+                }
+
                 if (gameTime.TotalGameTime > PlaceObjectTime)
                 {
                     // cout down finish
                     doorOpening = true;
                     state = 1;
                     OpenDoor(gameTime);
-                    Game1.supriser = Color.Black;
-                    Game1.suprisee = Color.DarkGray;
+                    
                     if (playMusic)
                     {
                         musicPlayer.Pause();
@@ -376,8 +383,14 @@ namespace SurpriseParty
                 if (gameTime.TotalGameTime - timeStartToOpenDoor > DoorOpenToComeIn)
                 {
                     doorOpened = true;
-                    // show rabit
-                    ShowNPC();
+                    spaceBar.isVisible = true;
+                    door.RenderOrder = -2;
+                    foreach (var item in animals)
+                    {
+                        item.StopMovement();
+                    }
+                        // show rabit
+                        ShowNPC();
                 }
             }
 
@@ -391,6 +404,7 @@ namespace SurpriseParty
                     musicPlayer.Pause();
                     musicPlayer = supriseSong.CreateInstance();
                     musicPlayer.Play();
+
                 }
 
                 scream.Play();
@@ -399,7 +413,20 @@ namespace SurpriseParty
 
             if (state == 2)
             {
+                state = 3;
 
+                foreach (var item in animals)
+                {
+                    if (item.InSpot)
+                    {
+                        item.DisplayingID = 1;
+                    }
+                    item.isVisible = true;
+                }
+                foreach (var item in interactObjs)
+                {
+                    item.SetIMG(0);
+                }
             }
 
             base.Update(gameTime);
@@ -466,18 +493,24 @@ namespace SurpriseParty
         {
             // according to the placement of objects and friends, to decide the suprise value
 
-            if (tempInteract != null)
-            {
-                tempInteract._graphic.SetIMG(0);
 
-                foreach (var item in animals)
-                {
-                    item.DisplayingID = 2;
-                }
-            }
+            //if (tempInteract != null)
+            //{
+            //    tempInteract._graphic.SetIMG(0);
 
+            //    foreach (var item in animals)
+            //    {
+            //        item.DisplayingID = 2;
+            //    }
+            //}
+
+            spaceBar.isVisible = false;
             ShowResult = true;
 
+            if (putCount == 3 && isLightOff)
+                cat.SetIMG(1);
+            else
+                cat.SetIMG(2);
 
         }
 
