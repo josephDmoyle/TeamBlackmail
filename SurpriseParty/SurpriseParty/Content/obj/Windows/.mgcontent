@@ -50,6 +50,7 @@
     <File>C:/Users/u1218984/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/Graphics/space.PNG</File>
     <File>C:/Users/u1218984/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/Graphics/TaskList.PNG</File>
     <File>C:/Users/u1218984/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/Graphics/confetti.png</File>
+<<<<<<< HEAD
     <File>C:/Users/u1218984/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/Graphics/owl_brown_0.png</File>
     <File>C:/Users/u1218984/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/Graphics/owl_brown_1.png</File>
 =======
@@ -116,5 +117,7 @@
     <File>C:/Users/u0929730/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/SFX/shush.wav</File>
     <File>C:/Users/u0929730/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/Graphics/confetti.png</File>
 >>>>>>> 8f36f6aceaa837f1d4b23e748a71b77463b8b122
+=======
+>>>>>>> parent of 50e647a... Speed and Owl size
   </SourceFiles>
 </SourceFileCollection>

@@ -4,6 +4,7 @@
   <SourceFile>C:/Users/u1218984/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/Graphics/TempUI.png</SourceFile>
   <SourceTime>2018-08-23T11:25:16.1097895-06:00</SourceTime>
   <DestFile>C:/Users/u1218984/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/bin/DesktopGL/Graphics/TempUI.xnb</DestFile>
+<<<<<<< HEAD
   <DestTime>2018-08-30T08:51:40.1514286-06:00</DestTime>
 =======
   <SourceFile>C:/Users/Hordeling/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/Graphics/TempUI.png</SourceFile>
@@ -11,6 +12,9 @@
   <DestFile>C:/Users/Hordeling/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/bin/DesktopGL/Graphics/TempUI.xnb</DestFile>
   <DestTime>2018-08-29T23:55:44.6940921-06:00</DestTime>
 >>>>>>> 8f36f6aceaa837f1d4b23e748a71b77463b8b122
+=======
+  <DestTime>2018-08-29T23:23:26.5002518-06:00</DestTime>
+>>>>>>> parent of 50e647a... Speed and Owl size
   <Importer>TextureImporter</Importer>
   <ImporterTime>2017-03-01T08:05:36-07:00</ImporterTime>
   <Processor>TextureProcessor</Processor>

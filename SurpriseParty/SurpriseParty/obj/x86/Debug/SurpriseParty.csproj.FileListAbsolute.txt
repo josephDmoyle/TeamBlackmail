@@ -237,6 +237,7 @@ C:\Users\u1218984\Documents\GitHub\TeamBlackmail\SurpriseParty\SurpriseParty\bin
 C:\Users\u1218984\Documents\GitHub\TeamBlackmail\SurpriseParty\SurpriseParty\bin\Windows\x86\Debug\Content\Graphics\TaskList.xnb
 <<<<<<< HEAD
 C:\Users\u1218984\Documents\GitHub\TeamBlackmail\SurpriseParty\SurpriseParty\bin\Windows\x86\Debug\Content\Graphics\confetti.xnb
+<<<<<<< HEAD
 C:\Users\u1218984\Documents\GitHub\TeamBlackmail\SurpriseParty\SurpriseParty\bin\Windows\x86\Debug\Content\Graphics\owl_brown_0.xnb
 C:\Users\u1218984\Documents\GitHub\TeamBlackmail\SurpriseParty\SurpriseParty\bin\Windows\x86\Debug\Content\Graphics\owl_brown_1.xnb
 C:\Users\u1218984\Documents\GitHub\TeamBlackmail\SurpriseParty\SurpriseParty\bin\Windows\x86\Debug\Content\Graphics\Cat Normal.xnb
@@ -306,3 +307,5 @@ C:\Users\u0929730\Documents\GitHub\TeamBlackmail\SurpriseParty\SurpriseParty\bin
 C:\Users\u0929730\Documents\GitHub\TeamBlackmail\SurpriseParty\SurpriseParty\bin\Windows\x86\Debug\Content\SFX\go-go-go.xnb
 C:\Users\u0929730\Documents\GitHub\TeamBlackmail\SurpriseParty\SurpriseParty\bin\Windows\x86\Debug\Content\SFX\shush.xnb
 >>>>>>> 8f36f6aceaa837f1d4b23e748a71b77463b8b122
+=======
+>>>>>>> parent of 50e647a... Speed and Owl size
