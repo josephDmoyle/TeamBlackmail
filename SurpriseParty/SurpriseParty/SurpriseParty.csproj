@@ -46,7 +46,6 @@
     <Compile Include="Content\Button.cs" />
     <Compile Include="Content\Componet.cs" />
     <Compile Include="Content\Dragable.cs" />
-    <Compile Include="Content\HideSpot.cs" />
     <Compile Include="Content\InteractableObj.cs" />
     <Compile Include="Content\Interaction.cs" />
     <Compile Include="Content\TaskList.cs" />

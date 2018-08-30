@@ -20,7 +20,25 @@ namespace SurpriseParty
     public class Game1 : Game
     {
         public static int isDragging = -1;
+<<<<<<< HEAD
         public static Color supriser = Color.White, suprisee = Color.White;
+=======
+        /// <summary>
+        /// Colors of the interior of the room
+        /// </summary>
+        public static Color supriser = Color.White;
+        /// <summary>
+        /// Colors of the character which is being suprised
+        /// </summary>
+        public static Color suprisee = Color.White;
+        /// <summary>
+        /// Global state of the game
+        /// 0 : initial
+        /// 1 : door is opened
+        /// 2 : cat is waiting
+        /// 3 : cat has been suprised
+        /// </summary>
+>>>>>>> 8f36f6aceaa837f1d4b23e748a71b77463b8b122
         public static int gameState = 0;
         public static MouseState currentMouseState;
         public static MouseState previousMouseState;
@@ -33,21 +51,33 @@ namespace SurpriseParty
         const int ScreenWidth = 1280;
         const int ScreenHeight = 720;
 
-        private bool playMusic = true;
+        /// <summary>
+        /// Developer variable whether you want to hear the music or not
+        /// </summary>
+        private readonly bool playMusic = true;
 
+        /// <summary>
+        /// How long the door is open until the cat is set
+        /// </summary>
         private readonly TimeSpan DoorOpenToComeIn = TimeSpan.FromSeconds(2);
-        private readonly TimeSpan PlaceObjectTime = TimeSpan.FromSeconds(10);
+        /// <summary>
+        /// How long until the cat arrives
+        /// </summary>
+        private readonly TimeSpan PlaceObjectTime = TimeSpan.FromSeconds(8);
 
         private TimeSpan timeStartToOpenDoor;
 
         GraphicsDeviceManager graphics;
+        /// <summary>
+        /// Used to draw all sprites to
+        /// </summary>
         SpriteBatch spriteBatch;
 
         // Player Input - Keyboard
 
 
 
-        private SoundEffect beginningSong, waitSong, supriseSong, scream;
+        private SoundEffect beginningSong, supriseSong, scream, comeOn, goGoGo, shush;
         private SoundEffectInstance musicPlayer;
 
         // Player Input - Mouse
@@ -58,11 +88,12 @@ namespace SurpriseParty
         InteractableObj boxes;
         InteractableObj sofa;
         InteractableObj rug;
+        BGGraphic balloons;
+        BGGraphic confetti;
         BGGraphic door;
         BGGraphic cat;
         Button lightOff;
         BGGraphic spaceBar;
-        BGGraphic confetti;
        public static TaskList taskList;
 
 
@@ -118,13 +149,18 @@ namespace SurpriseParty
 
             // TODO: use this.Content to load your game content here
 
-            beginningSong = Content.Load<SoundEffect>("SFX/beginningSong");
-            waitSong = Content.Load<SoundEffect>("SFX/waitSong");
+            beginningSong = Content.Load<SoundEffect>("SFX/waitSong");
             supriseSong = Content.Load<SoundEffect>("SFX/supriseSong");
             scream = Content.Load<SoundEffect>("SFX/scream");
+
+            comeOn = Content.Load<SoundEffect>("SFX/come-on");
+            goGoGo = Content.Load<SoundEffect>("SFX/go-go-go");
+            shush = Content.Load<SoundEffect>("SFX/shush");
+
             musicPlayer = beginningSong.CreateInstance();
             if (playMusic)
                 musicPlayer.Play();
+            comeOn.Play();
             // UIs
             #region Initialize parameters
             // dragable animals
@@ -136,8 +172,8 @@ namespace SurpriseParty
                 RenderOrder = 4,
                 ID = 0
                 },
-                new Dragable(new Texture2D[] { Content.Load<Texture2D>("Graphics/fox_0"), Content.Load<Texture2D>("Graphics/fox_1") },
-                 new Rectangle(rd.Next(ObjectMovingRestrictionList[0].X,ObjectMovingRestrictionList[0].X+ObjectMovingRestrictionList[0].Width), rd.Next(ObjectMovingRestrictionList[0].X,ObjectMovingRestrictionList[0].Y+ObjectMovingRestrictionList[0].Height), 171, 216))
+                new Dragable(new Texture2D[] { Content.Load<Texture2D>("Graphics/owl_0"), Content.Load<Texture2D>("Graphics/owl_1") },
+                 new Rectangle(rd.Next(ObjectMovingRestrictionList[0].X,ObjectMovingRestrictionList[0].X+ObjectMovingRestrictionList[0].Width), rd.Next(ObjectMovingRestrictionList[0].X,ObjectMovingRestrictionList[0].Y+ObjectMovingRestrictionList[0].Height), 330, 216))
                 {
                 RenderOrder = 4,
                 ID = 1
@@ -154,15 +190,24 @@ namespace SurpriseParty
                 RenderOrder = 5,
                 taskList = new Task[]
                 {
-                    new Task("Hide fox1", 0),
-                    new Task("Hide fox2", 1),
-                    new Task("Hide fox3", 2),
+                    new Task("Hide Foxxy", 0),
+                    new Task("Hide Owly", 1),
+                    new Task("Hide Barny", 2),
                     new Task("Turn off the\n         light", 3)
                 }
             };
             door = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/door_0"), Content.Load<Texture2D>("Graphics/door_1") }, new Rectangle(811, 130, 143, 230))
             {
                 RenderOrder = 0
+            };
+            confetti = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/confetti") }, new Rectangle(0, 0, ScreenWidth, ScreenHeight))
+            {
+                RenderOrder = 100,
+                isVisible = false
+            };
+            balloons = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/ballons") }, new Rectangle(480, 100, 143, 230))
+            {
+                RenderOrder = 1
             };
             cat = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/cat_0"), Content.Load<Texture2D>("Graphics/cat_1"), Content.Load<Texture2D>("Graphics/cat_2") }, new Rectangle(0, 219, 147, 235))
             {
@@ -171,11 +216,7 @@ namespace SurpriseParty
                 MoveSpeed = 2
             };
             cat.isVisible = true;
-            confetti = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/confetti") }, new Rectangle(0, 0, 1280, 720))
-            {
-                RenderOrder = 6,
-                isVisible = false
-            };
+
             var room = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/room") }, new Rectangle(0, 0, 1280, 720))
             {
                 RenderOrder = 0
@@ -196,11 +237,6 @@ namespace SurpriseParty
             {
                 ID = 2,
                 RenderOrder = 3,
-            };
-            var spotPoint_Rug = new HideSpot(Content.Load<Texture2D>("Graphics/TempUI"), new Point(450, 539))
-            {
-                ID = 2,
-                RenderOrder = 4
             };
             lightOff = new Button(Content.Load<Texture2D>("Graphics/LightButton"))
             {
@@ -223,6 +259,7 @@ namespace SurpriseParty
             components = new List<Component>()
             {
                 door,
+                balloons,
                 cat,
                 room,
                 boxes,
@@ -381,6 +418,7 @@ namespace SurpriseParty
                 {
                     halfTime = true;
                     cat.MoveTo(new Point(800-170, 0));
+                    goGoGo.Play();
                 }
 
                 if (gameTime.TotalGameTime > PlaceObjectTime)
@@ -389,13 +427,8 @@ namespace SurpriseParty
                     doorOpening = true;
                     gameState = 1;
                     OpenDoor(gameTime);
-                    
-                    if (playMusic)
-                    {
-                        musicPlayer.Pause();
-                        musicPlayer = waitSong.CreateInstance();
-                        musicPlayer.Play();
-                    }
+
+                    shush.Play();
                 }
             }
 
@@ -420,7 +453,16 @@ namespace SurpriseParty
                 gameState = 2;
                 Game1.supriser = Color.White;
                 Game1.suprisee = Color.White;
+                confetti.isVisible = true;
+                if (playMusic)
+                {
+                    musicPlayer.Pause();
+                    musicPlayer = supriseSong.CreateInstance();
+                    musicPlayer.Play();
 
+                }
+
+                scream.Play();
                 CheckResult();
             }
 
@@ -460,7 +502,6 @@ namespace SurpriseParty
 
             spriteBatch.Begin();
 
-            //spriteBatch.Draw(room, new Rectangle(0, 0, ScreenWidth, ScreenHeight), Color.White);
             foreach (var item in components)
             {
                 item.Draw(gameTime, spriteBatch);
@@ -521,19 +562,7 @@ namespace SurpriseParty
             ShowResult = true;
 
             if (putCount == 3 && isLightOff)
-            {
-                if (playMusic)
-                {
-                    musicPlayer.Pause();
-                    musicPlayer = supriseSong.CreateInstance();
-                    musicPlayer.Play();
-
-                }
-
-                scream.Play();
-                confetti.isVisible = true;
                 cat.SetIMG(1);
-            }
             else
                 cat.SetIMG(2);
 
