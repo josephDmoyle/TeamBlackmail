@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <SourceFile>C:/Users/Hordeling/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/Graphics/shadow.png</SourceFile>
-  <SourceTime>2018-08-29T21:50:43.6675499-06:00</SourceTime>
-  <DestFile>C:/Users/Hordeling/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/bin/Windows/Graphics/shadow.xnb</DestFile>
-  <DestTime>2018-08-29T23:51:42.6237932-06:00</DestTime>
+  <SourceFile>C:/Users/u0929730/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/Graphics/shadow.png</SourceFile>
+  <SourceTime>2018-08-30T08:26:07.8684161-06:00</SourceTime>
+  <DestFile>C:/Users/u0929730/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/bin/Windows/Graphics/shadow.xnb</DestFile>
+  <DestTime>2018-08-30T08:27:20.393576-06:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2017-03-01T08:05:36-07:00</ImporterTime>
   <Processor>TextureProcessor</Processor>

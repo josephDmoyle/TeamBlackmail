@@ -121,7 +121,7 @@ namespace SurpriseParty
             }
 
             // movement
-            if (_canMove)
+            if (_canMove && Game1.gameState == 0)
             {
 
                 _currentPosition += Vector2.Normalize ( new Vector2(currentDirecton.X, currentDirecton.Y) )* MoveSpeed;

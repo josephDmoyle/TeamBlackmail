@@ -20,7 +20,21 @@ namespace SurpriseParty
     public class Game1 : Game
     {
         public static int isDragging = -1;
-        public static Color supriser = Color.White, suprisee = Color.White;
+        /// <summary>
+        /// Colors of the interior of the room
+        /// </summary>
+        public static Color supriser = Color.White;
+        /// <summary>
+        /// Colors of the character which is being suprised
+        /// </summary>
+        public static Color suprisee = Color.White;
+        /// <summary>
+        /// Global state of the game
+        /// 0 : initial
+        /// 1 : door is opened
+        /// 2 : cat is waiting
+        /// 3 : cat has been suprised
+        /// </summary>
         public static int gameState = 0;
         public static MouseState currentMouseState;
         public static MouseState previousMouseState;
@@ -33,21 +47,33 @@ namespace SurpriseParty
         const int ScreenWidth = 1280;
         const int ScreenHeight = 720;
 
-        private bool playMusic = true;
+        /// <summary>
+        /// Developer variable whether you want to hear the music or not
+        /// </summary>
+        private readonly bool playMusic = true;
 
+        /// <summary>
+        /// How long the door is open until the cat is set
+        /// </summary>
         private readonly TimeSpan DoorOpenToComeIn = TimeSpan.FromSeconds(2);
+        /// <summary>
+        /// How long until the cat arrives
+        /// </summary>
         private readonly TimeSpan PlaceObjectTime = TimeSpan.FromSeconds(8);
 
         private TimeSpan timeStartToOpenDoor;
 
         GraphicsDeviceManager graphics;
+        /// <summary>
+        /// Used to draw all sprites to
+        /// </summary>
         SpriteBatch spriteBatch;
 
         // Player Input - Keyboard
 
 
 
-        private SoundEffect beginningSong, waitSong, supriseSong, scream, comeOn, goGoGo, shush;
+        private SoundEffect beginningSong, supriseSong, scream, comeOn, goGoGo, shush;
         private SoundEffectInstance musicPlayer;
 
         // Player Input - Mouse
@@ -119,8 +145,7 @@ namespace SurpriseParty
 
             // TODO: use this.Content to load your game content here
 
-            beginningSong = Content.Load<SoundEffect>("SFX/beginningSong");
-            waitSong = Content.Load<SoundEffect>("SFX/waitSong");
+            beginningSong = Content.Load<SoundEffect>("SFX/waitSong");
             supriseSong = Content.Load<SoundEffect>("SFX/supriseSong");
             scream = Content.Load<SoundEffect>("SFX/scream");
 
@@ -405,13 +430,6 @@ namespace SurpriseParty
                     OpenDoor(gameTime);
 
                     shush.Play();
-
-                    if (playMusic)
-                    {
-                        musicPlayer.Pause();
-                        musicPlayer = waitSong.CreateInstance();
-                        musicPlayer.Play();
-                    }
                 }
             }
 
@@ -485,7 +503,6 @@ namespace SurpriseParty
 
             spriteBatch.Begin();
 
-            //spriteBatch.Draw(room, new Rectangle(0, 0, ScreenWidth, ScreenHeight), Color.White);
             foreach (var item in components)
             {
                 item.Draw(gameTime, spriteBatch);
