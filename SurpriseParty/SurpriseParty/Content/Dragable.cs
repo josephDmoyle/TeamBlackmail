@@ -76,7 +76,7 @@ namespace SurpriseParty
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             Color color = Game1.supriser;
-            if (_isHovering && (Game1.state == 0))
+            if (_isHovering && (Game1.gameState == 0))
                 color = Color.Gray;
             if (isVisible)
                 // spriteBatch.Draw(_textures[DisplayingID], Rectangle,Rectangle, color,0,new  Vector2(0,0), flipped?SpriteEffects.FlipHorizontally:SpriteEffects.None,1 );
@@ -89,7 +89,7 @@ namespace SurpriseParty
             _currentState = Mouse.GetState();
 
             Rectangle mouseRectangele = new Rectangle(_currentState.X, _currentState.Y, 1, 1);
-            if (Game1.state == 0)
+            if (Game1.gameState == 0)
             {
                 _isHovering = false;
                 if (mouseRectangele.Intersects(Rectangle) && Game1.isDragging == -1)
@@ -143,7 +143,7 @@ namespace SurpriseParty
 
         public void MoveToCenterOfSpotPoint(Point point)
         {
-            if (Game1.state == 0)
+            if (Game1.gameState == 0)
                 _rectangle = new Rectangle(point.X - _textures[DisplayingID].Width / 2, point.Y - _textures[DisplayingID].Height / 2, _textures[DisplayingID].Width, _textures[DisplayingID].Height);
         }
 

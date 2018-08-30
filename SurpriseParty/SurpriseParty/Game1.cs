@@ -21,7 +21,7 @@ namespace SurpriseParty
     {
         public static int isDragging = -1;
         public static Color supriser = Color.White, suprisee = Color.White;
-        public static int state = 0;
+        public static int gameState = 0;
         public static MouseState currentMouseState;
         public static MouseState previousMouseState;
         public static Rectangle[] ObjectMovingRestrictionList = new Rectangle[]
@@ -36,7 +36,7 @@ namespace SurpriseParty
         private bool playMusic = true;
 
         private readonly TimeSpan DoorOpenToComeIn = TimeSpan.FromSeconds(2);
-        private readonly TimeSpan PlaceObjectTime = TimeSpan.FromSeconds(10);
+        private readonly TimeSpan PlaceObjectTime = TimeSpan.FromSeconds(8);
 
         private TimeSpan timeStartToOpenDoor;
 
@@ -47,7 +47,7 @@ namespace SurpriseParty
 
 
 
-        private SoundEffect beginningSong, waitSong, supriseSong, scream;
+        private SoundEffect beginningSong, waitSong, supriseSong, scream, comeOn, goGoGo, shush;
         private SoundEffectInstance musicPlayer;
 
         // Player Input - Mouse
@@ -58,6 +58,8 @@ namespace SurpriseParty
         InteractableObj boxes;
         InteractableObj sofa;
         InteractableObj rug;
+        BGGraphic balloons;
+        BGGraphic confetti;
         BGGraphic door;
         BGGraphic cat;
         Button lightOff;
@@ -121,9 +123,15 @@ namespace SurpriseParty
             waitSong = Content.Load<SoundEffect>("SFX/waitSong");
             supriseSong = Content.Load<SoundEffect>("SFX/supriseSong");
             scream = Content.Load<SoundEffect>("SFX/scream");
+
+            comeOn = Content.Load<SoundEffect>("SFX/come-on");
+            goGoGo = Content.Load<SoundEffect>("SFX/go-go-go");
+            shush = Content.Load<SoundEffect>("SFX/shush");
+
             musicPlayer = beginningSong.CreateInstance();
             if (playMusic)
                 musicPlayer.Play();
+            comeOn.Play();
             // UIs
             #region Initialize parameters
             // dragable animals
@@ -135,14 +143,14 @@ namespace SurpriseParty
                 RenderOrder = 4,
                 ID = 0
                 },
-                new Dragable(new Texture2D[] { Content.Load<Texture2D>("Graphics/fox_0"), Content.Load<Texture2D>("Graphics/fox_1") },
-                 new Rectangle(rd.Next(ObjectMovingRestrictionList[0].X,ObjectMovingRestrictionList[0].X+ObjectMovingRestrictionList[0].Width), rd.Next(ObjectMovingRestrictionList[0].X,ObjectMovingRestrictionList[0].Y+ObjectMovingRestrictionList[0].Height), 171, 216))
+                new Dragable(new Texture2D[] { Content.Load<Texture2D>("Graphics/owl_0"), Content.Load<Texture2D>("Graphics/owl_1") },
+                 new Rectangle(rd.Next(ObjectMovingRestrictionList[0].X,ObjectMovingRestrictionList[0].X+ObjectMovingRestrictionList[0].Width), rd.Next(ObjectMovingRestrictionList[0].X,ObjectMovingRestrictionList[0].Y+ObjectMovingRestrictionList[0].Height), 330, 216))
                 {
                 RenderOrder = 4,
                 ID = 1
                 },
-                new Dragable(new Texture2D[] { Content.Load<Texture2D>("Graphics/fox_0"), Content.Load<Texture2D>("Graphics/fox_1") },
-                 new Rectangle(rd.Next(ObjectMovingRestrictionList[0].X,ObjectMovingRestrictionList[0].X+ObjectMovingRestrictionList[0].Width), rd.Next(ObjectMovingRestrictionList[0].X,ObjectMovingRestrictionList[0].Y+ObjectMovingRestrictionList[0].Height), 171, 216))
+                new Dragable(new Texture2D[] { Content.Load<Texture2D>("Graphics/owl_brown_0"), Content.Load<Texture2D>("Graphics/owl_brown_1") },
+                 new Rectangle(rd.Next(ObjectMovingRestrictionList[0].X,ObjectMovingRestrictionList[0].X+ObjectMovingRestrictionList[0].Width), rd.Next(ObjectMovingRestrictionList[0].X,ObjectMovingRestrictionList[0].Y+ObjectMovingRestrictionList[0].Height), 330, 216))
                 {
                 RenderOrder = 4,
                 ID = 2
@@ -153,13 +161,21 @@ namespace SurpriseParty
                 RenderOrder = 5,
                 taskList = new Task[]
                 {
-                    new Task("Hide fox1", 0),
-                    new Task("Hide fox2", 1),
-                    new Task("Hide fox3", 2),
+                    new Task("Hide Foxxy", 0),
+                    new Task("Hide Owly", 1),
+                    new Task("Hide Barny", 2),
                     new Task("Turn off the\n         light", 3)
                 }
             };
             door = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/door_0"), Content.Load<Texture2D>("Graphics/door_1") }, new Rectangle(811, 130, 143, 230))
+            {
+                RenderOrder = 0
+            };
+            confetti = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/confetti") }, new Rectangle(811, 130, 143, 230))
+            {
+                RenderOrder = 100
+            };
+            balloons = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/ballons") }, new Rectangle(811, 130, 143, 230))
             {
                 RenderOrder = 0
             };
@@ -218,6 +234,7 @@ namespace SurpriseParty
             components = new List<Component>()
             {
                 door,
+                balloons,
                 cat,
                 room,
                 boxes,
@@ -375,15 +392,18 @@ namespace SurpriseParty
                 {
                     halfTime = true;
                     cat.MoveTo(new Point(800-170, 0));
+                    goGoGo.Play();
                 }
 
                 if (gameTime.TotalGameTime > PlaceObjectTime)
                 {
                     // cout down finish
                     doorOpening = true;
-                    state = 1;
+                    gameState = 1;
                     OpenDoor(gameTime);
-                    
+
+                    shush.Play();
+
                     if (playMusic)
                     {
                         musicPlayer.Pause();
@@ -409,11 +429,12 @@ namespace SurpriseParty
                 }
             }
 
-            if (doorOpened && doorOpening && Keyboard.GetState().IsKeyDown(Keys.Space) && (state == 1))
+            if (doorOpened && doorOpening && Keyboard.GetState().IsKeyDown(Keys.Space) && (gameState == 1))
             {
-                state = 2;
+                gameState = 2;
                 Game1.supriser = Color.White;
                 Game1.suprisee = Color.White;
+                components.Add(confetti);
                 if (playMusic)
                 {
                     musicPlayer.Pause();
@@ -426,9 +447,9 @@ namespace SurpriseParty
                 CheckResult();
             }
 
-            if (state == 2)
+            if (gameState == 2)
             {
-                state = 3;
+                gameState = 3;
 
                 foreach (var item in animals)
                 {
