@@ -512,7 +512,6 @@
 /processorParam:TextureFormat=Color
 /build:Graphics/TaskList.PNG
 
-<<<<<<< HEAD
 #begin Graphics/owl_0.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -699,8 +698,6 @@
 /processorParam:Quality=Best
 /build:SFX/shush.wav
 
-=======
->>>>>>> 9d8fd19d60ffe011a8d4e91466b01764a30e6a1a
 #begin Graphics/confetti.png
 /importer:TextureImporter
 /processor:TextureProcessor

@@ -235,7 +235,6 @@ C:\Users\u1218984\Documents\GitHub\TeamBlackmail\SurpriseParty\SurpriseParty\bin
 C:\Users\u1218984\Documents\GitHub\TeamBlackmail\SurpriseParty\SurpriseParty\bin\Windows\x86\Debug\Content\Graphics\LightButton.xnb
 C:\Users\u1218984\Documents\GitHub\TeamBlackmail\SurpriseParty\SurpriseParty\bin\Windows\x86\Debug\Content\Graphics\space.xnb
 C:\Users\u1218984\Documents\GitHub\TeamBlackmail\SurpriseParty\SurpriseParty\bin\Windows\x86\Debug\Content\Graphics\TaskList.xnb
-<<<<<<< HEAD
 C:\Users\Hordeling\Documents\GitHub\TeamBlackmail\SurpriseParty\SurpriseParty\bin\Windows\x86\Debug\Content\Graphics\LightButton.xnb
 C:\Users\Hordeling\Documents\GitHub\TeamBlackmail\SurpriseParty\SurpriseParty\bin\Windows\x86\Debug\Content\Graphics\space.xnb
 C:\Users\Hordeling\Documents\GitHub\TeamBlackmail\SurpriseParty\SurpriseParty\bin\Windows\x86\Debug\Content\Graphics\TaskList.xnb
@@ -261,6 +260,3 @@ C:\Users\Hordeling\Documents\GitHub\TeamBlackmail\SurpriseParty\SurpriseParty\bi
 C:\Users\Hordeling\Documents\GitHub\TeamBlackmail\SurpriseParty\SurpriseParty\bin\Windows\x86\Debug\Content\Graphics\Orange cat.xnb
 C:\Users\Hordeling\Documents\GitHub\TeamBlackmail\SurpriseParty\SurpriseParty\bin\Windows\x86\Debug\Content\Graphics\shadow.xnb
 C:\Users\Hordeling\Documents\GitHub\TeamBlackmail\SurpriseParty\SurpriseParty\bin\Windows\x86\Debug\Content\Graphics\confetti.xnb
-=======
-C:\Users\u1218984\Documents\GitHub\TeamBlackmail\SurpriseParty\SurpriseParty\bin\Windows\x86\Debug\Content\Graphics\confetti.xnb
->>>>>>> 9d8fd19d60ffe011a8d4e91466b01764a30e6a1a
