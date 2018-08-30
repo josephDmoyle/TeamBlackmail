@@ -234,11 +234,6 @@ namespace SurpriseParty
                 ID = 2,
                 RenderOrder = 3,
             };
-            var spotPoint_Rug = new HideSpot(Content.Load<Texture2D>("Graphics/TempUI"), new Point(450, 539))
-            {
-                ID = 2,
-                RenderOrder = 4
-            };
             lightOff = new Button(Content.Load<Texture2D>("Graphics/LightButton"))
             {
                 RenderOrder = 5,

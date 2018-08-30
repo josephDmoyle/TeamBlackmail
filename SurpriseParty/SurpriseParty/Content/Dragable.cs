@@ -30,6 +30,7 @@ namespace SurpriseParty
         public Interaction _interaction;
         public int MoveSpeed;
         #endregion
+
         #region Properties
         public event EventHandler<IntEventArgs> Press;
         public event EventHandler<IntEventArgs> Release;
@@ -130,7 +131,7 @@ namespace SurpriseParty
                 }
             }
 
-            // movement
+            // Movement
             if (_canMove && Game1.gameState == 0)
             {
 
@@ -169,10 +170,12 @@ namespace SurpriseParty
             _canMove = false;
         }
 
+        /// <summary>
+        /// Sees if there is a collision
+        /// </summary>
+        /// <returns>0 left, 1 top, 2 right, 3 down</returns>
         int CheckCollision()
         {
-            // 0 left, 1 top, 2 right, 3 down
-
             if(_rectangle.Y > Game1.ObjectMovingRestrictionList[0].Bottom)
             {
                 _collided = true;
