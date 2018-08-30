@@ -1,5 +1,0 @@
-C:\Users\u1218984\Documents\GitHub\TeamBlackmail\SurpriseParty\MyXMLData\bin\Release\MyXMLData.dll
-C:\Users\u1218984\Documents\GitHub\TeamBlackmail\SurpriseParty\MyXMLData\bin\Release\MyXMLData.pdb
-C:\Users\u1218984\Documents\GitHub\TeamBlackmail\SurpriseParty\MyXMLData\obj\Release\MyXMLData.csproj.CoreCompileInputs.cache
-C:\Users\u1218984\Documents\GitHub\TeamBlackmail\SurpriseParty\MyXMLData\obj\Release\MyXMLData.dll
-C:\Users\u1218984\Documents\GitHub\TeamBlackmail\SurpriseParty\MyXMLData\obj\Release\MyXMLData.pdb
