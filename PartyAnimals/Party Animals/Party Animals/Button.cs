@@ -13,10 +13,7 @@ namespace Party_Animals
     public class Button : Component
     {
         #region private
-        private MouseState _currentState;
-        //private SpriteFont _font;
         private bool _isHovering;
-        private MouseState _prevousState;
         private Texture2D _texture;
         #endregion
         #region Properties
@@ -44,7 +41,6 @@ namespace Party_Animals
         public Button(Texture2D texture)
         {
             _texture = texture;
-            //_font = font;
 
             PenColor = Color.Black;
         }
@@ -56,27 +52,17 @@ namespace Party_Animals
                 color = Color.Gray;
 
             spriteBatch.Draw(_texture, Rectangle, color);
-            //if (!string.IsNullOrEmpty(Text))
-            //{
-            //    float x = (Rectangle.X + Rectangle.Width/2)-(_font.MeasureString(Text).X / 2);
-            //    float y = (Rectangle.Y + Rectangle.Height / 2) - (_font.MeasureString(Text).Y / 2);
-
-            //    spriteBatch.DrawString(_font, Text, new Vector2(x, y), PenColor);
-            //}
         }
 
         public override void Update(GameTime gameTime)
         {
-            _prevousState = _currentState;
-            _currentState = Mouse.GetState();
-
-            Rectangle mouseRectangele = new Rectangle(_currentState.X, _currentState.Y, 1, 1);
+            Rectangle mouseRectangele = new Rectangle(Game1.currentMouseState.X, Game1.currentMouseState.Y, 1, 1);
 
             _isHovering = false;
             if (mouseRectangele.Intersects(Rectangle) && Game1.gameState == 0)
             {
                 _isHovering = true;
-                if (_currentState.LeftButton == ButtonState.Released && _prevousState.LeftButton == ButtonState.Pressed)
+                if (Game1.currentMouseState.LeftButton == ButtonState.Released && Game1.previousMouseState.LeftButton == ButtonState.Pressed)
                 {
                     Click?.Invoke(this, new EventArgs());
                 }

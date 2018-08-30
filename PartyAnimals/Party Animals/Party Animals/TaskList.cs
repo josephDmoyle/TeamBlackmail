@@ -43,7 +43,7 @@ namespace Party_Animals
         private int leftPad = 13;
         private int lineSpace = 30;
 
-        public Task[] taskList;
+        public List<Task> taskList;
 
         public TaskList(Texture2D texture2D, Rectangle rectangle, SpriteFont font)
         {
@@ -61,7 +61,7 @@ namespace Party_Animals
         {
             spriteBatch.Draw(_texture, _rectangle, Game1.suprisee);
 
-            for (int i = 0; i < taskList.Length; i++)
+            for (int i = 0; i < taskList.Count; i++)
             {
                 if (!string.IsNullOrEmpty(taskList[i].displayString))
                 {
@@ -74,7 +74,7 @@ namespace Party_Animals
 
         public void FinishTask(int i)
         {
-            if (taskList.Length > 0)
+            if (taskList.Count > 0)
             {
                 taskList[i].ChangeTaskStatus(true);
             }
@@ -82,7 +82,7 @@ namespace Party_Animals
 
         public void UnFinishTask(int i)
         {
-            if (taskList.Length > 0)
+            if (taskList.Count > 0)
             {
                 taskList[i].ChangeTaskStatus(false);
 

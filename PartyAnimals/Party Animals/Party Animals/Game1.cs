@@ -90,7 +90,7 @@ namespace Party_Animals
 
 
         // UI
-        Dragable[] animals;
+        List<Dragable> animals;
         int currentDragID;
 
         List<Component> components;
@@ -156,38 +156,40 @@ namespace Party_Animals
             // UIs
             #region Initialize parameters
             // dragable animals
-            animals = new Dragable[]
+            animals = new List<Dragable>
             {
-                 new Dragable(new Texture2D[] { Content.Load<Texture2D>("Graphics/fox_0"), Content.Load<Texture2D>("Graphics/fox_1") },
-                 new Rectangle(rd.Next(ObjectMovingRestrictionList[0].X,ObjectMovingRestrictionList[0].X+ObjectMovingRestrictionList[0].Width), rd.Next(ObjectMovingRestrictionList[0].X,ObjectMovingRestrictionList[0].Y+ObjectMovingRestrictionList[0].Height), 171, 216))
+                 new Dragable(new Texture2D[] { Content.Load<Texture2D>("Graphics/owl_grey_0"), Content.Load<Texture2D>("Graphics/owl_grey_1") },
+                 new Rectangle(rd.Next(ObjectMovingRestrictionList[0].X,ObjectMovingRestrictionList[0].X+ObjectMovingRestrictionList[0].Width), rd.Next(ObjectMovingRestrictionList[0].Y,ObjectMovingRestrictionList[0].Y+ObjectMovingRestrictionList[0].Height), 171, 216))
                 {
                 RenderOrder = 4,
-                ID = 0
+                ID = 0,
+                name = "Snowy"
                 },
                 new Dragable(new Texture2D[] { Content.Load<Texture2D>("Graphics/hamster_0"), Content.Load<Texture2D>("Graphics/hamster_1") },
                  new Rectangle(rd.Next(ObjectMovingRestrictionList[0].X,ObjectMovingRestrictionList[0].X+ObjectMovingRestrictionList[0].Width), rd.Next(ObjectMovingRestrictionList[0].X,ObjectMovingRestrictionList[0].Y+ObjectMovingRestrictionList[0].Height), 103, 127))
                 {
                 RenderOrder = 4,
-                ID = 1
+                ID = 1,
+                name = "Hammy"
                 },
                 new Dragable(new Texture2D[] { Content.Load<Texture2D>("Graphics/owl_brown_0"), Content.Load<Texture2D>("Graphics/owl_brown_1") },
                  new Rectangle(rd.Next(ObjectMovingRestrictionList[0].X,ObjectMovingRestrictionList[0].X+ObjectMovingRestrictionList[0].Width), rd.Next(ObjectMovingRestrictionList[0].X,ObjectMovingRestrictionList[0].Y+ObjectMovingRestrictionList[0].Height), 251, 162))
                 {
                 RenderOrder = 4,
-                ID = 2
-                }
+                ID = 2,
+                name = "Barny"
+                },
             };
             taskList = new TaskList(Content.Load<Texture2D>("Graphics/TaskList"), new Rectangle(29, 20, 147, 200), Content.Load<SpriteFont>("Font/font"))
             {
                 RenderOrder = 5,
-                taskList = new Task[]
-                {
-                    new Task("Hide Foxxy", 0),
-                    new Task("Hide Owly", 1),
-                    new Task("Hide Barny", 2),
-                    new Task("Turn off the\n         light", 3)
-                }
+                taskList = new List<Task>()
             };
+            foreach(Dragable animal in animals)
+            {
+                taskList.taskList.Add(new Task("Hide " + animal.name, animal.ID));
+            }
+            taskList.taskList.Add(new Task("Turn off the\n         light", animals.Count));
             door = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/door_0"), Content.Load<Texture2D>("Graphics/door_1") }, new Rectangle(811, 130, 143, 230))
             {
                 RenderOrder = 0
@@ -258,14 +260,15 @@ namespace Party_Animals
                 boxes,
                 sofa,
                 rug,
-                animals[0],
-                animals[1],
-                animals[2],
                 lightOff,
                 spaceBar,
                 taskList,
                 confetti
             };
+            foreach(Dragable animal in animals)
+            {
+                components.Add(animal);
+            }
 
 
             // sort the list by the render order
@@ -306,41 +309,6 @@ namespace Party_Animals
         }
 
         #region EventMethods
-        /*
-        private void DragItem_Release(object sender, IntEventArgs e)
-        {
-            bool inSpot = false;
-            int interactionID = 0;
-            foreach (var item in interactions)
-            {
-                if (animals[e.ID].Rectangle.Contains(item._graphic.PivotPoint) && !item._graphic.Interacted)
-                {
-                    inSpot = true;
-                    interactionID = item.ID;
-                    tempInteract = item;
-                    item._graphic.Interacted = true;
-
-                    item._graphic._interaction = item;
-                    item._dragable._interaction = item;
-                }
-
-            }
-            if (inSpot)
-            {
-
-                animals[e.ID].MoveToCenterOfSpotPoint(interactions[interactionID]._graphic.PivotPoint);
-                interactions[interactionID]._graphic.SetIMG(2);
-                animals[e.ID].isVisible = false;
-            }
-            else
-            {
-                // fox move again
-                tempInteract = null;
-            }
-
-
-        }
-        */
         private void DragItem_Press(object sender, IntEventArgs e)
         {
             //  animals[e.ID].RenderOrder = downUI.RenderOrder - 1;
@@ -538,19 +506,6 @@ namespace Party_Animals
 
         void CheckResult()
         {
-            // according to the placement of objects and friends, to decide the suprise value
-
-
-            //if (tempInteract != null)
-            //{
-            //    tempInteract._graphic.SetIMG(0);
-
-            //    foreach (var item in animals)
-            //    {
-            //        item.DisplayingID = 2;
-            //    }
-            //}
-
             spaceBar.isVisible = false;
             ShowResult = true;
 

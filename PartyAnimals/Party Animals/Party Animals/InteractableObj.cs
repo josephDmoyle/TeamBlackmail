@@ -15,7 +15,7 @@ namespace Party_Animals
     {
         private Texture2D[] _texture;
         private Point _pivotPoint;
-        private Dragable[] _dragables;
+        private List<Dragable> _dragables;
         private int _currentInteractID = -1;
         private bool suprisee;
         private Rectangle _rectangle;
@@ -31,7 +31,7 @@ namespace Party_Animals
         public float alpha = 1;
 
 
-        public InteractableObj(Texture2D[] textures, Rectangle rect, Point pivot, Dragable[] list)
+        public InteractableObj(Texture2D[] textures, Rectangle rect, Point pivot, List<Dragable> list)
         {
             _dragables = list;
             _texture = textures;
@@ -52,7 +52,7 @@ namespace Party_Animals
 
         public override void Update(GameTime gameTime)
         {
-            if (_dragables.Length > 0 && Game1.gameState == 0)
+            if (_dragables.Count > 0 && Game1.gameState == 0)
             {
                 if (!Interacted)
                 {
