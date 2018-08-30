@@ -52,7 +52,7 @@ namespace SurpriseParty
 
         public override void Update(GameTime gameTime)
         {
-            if (_dragables.Length > 0)
+            if (_dragables.Length > 0 && Game1.gameState==0)
             {
                 if (!Interacted)
                 {

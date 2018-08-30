@@ -21,7 +21,7 @@ namespace SurpriseParty
     {
         public static int isDragging = -1;
         public static Color supriser = Color.White, suprisee = Color.White;
-        public static int state = 0;
+        public static int gameState = 0;
         public static MouseState currentMouseState;
         public static MouseState previousMouseState;
         public static Rectangle[] ObjectMovingRestrictionList = new Rectangle[]
@@ -387,7 +387,7 @@ namespace SurpriseParty
                 {
                     // cout down finish
                     doorOpening = true;
-                    state = 1;
+                    gameState = 1;
                     OpenDoor(gameTime);
                     
                     if (playMusic)
@@ -415,18 +415,18 @@ namespace SurpriseParty
                 }
             }
 
-            if (doorOpened && doorOpening && Keyboard.GetState().IsKeyDown(Keys.Space) && (state == 1))
+            if (doorOpened && doorOpening && Keyboard.GetState().IsKeyDown(Keys.Space) && (gameState == 1))
             {
-                state = 2;
+                gameState = 2;
                 Game1.supriser = Color.White;
                 Game1.suprisee = Color.White;
 
                 CheckResult();
             }
 
-            if (state == 2)
+            if (gameState == 2)
             {
-                state = 3;
+                gameState = 3;
 
                 foreach (var item in animals)
                 {

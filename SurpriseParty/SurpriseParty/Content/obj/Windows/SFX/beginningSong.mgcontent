@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <SourceFile>C:/Users/u0929730/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/SFX/beginningSong.wav</SourceFile>
-  <SourceTime>2018-08-28T08:18:15.2845889-06:00</SourceTime>
-  <DestFile>C:/Users/u0929730/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/bin/Windows/SFX/beginningSong.xnb</DestFile>
-  <DestTime>2018-08-30T08:27:18.753347-06:00</DestTime>
+  <SourceFile>C:/Users/u1218984/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/SFX/beginningSong.wav</SourceFile>
+  <SourceTime>2018-08-28T08:56:13.3150047-06:00</SourceTime>
+  <DestFile>C:/Users/u1218984/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/bin/Windows/SFX/beginningSong.xnb</DestFile>
+  <DestTime>2018-08-30T09:13:44.5561417-06:00</DestTime>
   <Importer>WavImporter</Importer>
   <ImporterTime>2017-03-01T08:05:36-07:00</ImporterTime>
   <Processor>SoundEffectProcessor</Processor>
