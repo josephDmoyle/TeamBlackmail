@@ -60,6 +60,11 @@ namespace SurpriseParty
         #endregion
 
         #region Methods
+        /// <summary>
+        /// Object that you can move
+        /// </summary>
+        /// <param name="texture">Array of images that make up the character</param>
+        /// <param name="defaultPos"> x, y, width, height </param>
         public Dragable(Texture2D[] texture, Rectangle defaultPos)
         {
             _textures = texture;
@@ -73,13 +78,18 @@ namespace SurpriseParty
             _currentPosition = new Vector2(_defaultPosition.X, _defaultPosition.Y);
             ChangeDirection();
         }
+
+        /// <summary>
+        /// Render the object into the scene
+        /// </summary>
+        /// <param name="gameTime">Time of the game</param>
+        /// <param name="spriteBatch">Spritebatch that is rendering this</param>
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             Color color = Game1.supriser;
             if (_isHovering && (Game1.gameState == 0))
                 color = Color.Gray;
             if (isVisible)
-                // spriteBatch.Draw(_textures[DisplayingID], Rectangle,Rectangle, color,0,new  Vector2(0,0), flipped?SpriteEffects.FlipHorizontally:SpriteEffects.None,1 );
                 spriteBatch.Draw(_textures[DisplayingID], Rectangle, color);
         }
 
@@ -135,12 +145,6 @@ namespace SurpriseParty
             }
         }
 
-        /* public void GoBacktToOrigin()
-         {
-             if (Game1.state == 0)
-                 Rectangle = _defaultPosition;
-         }*/
-
         public void MoveToCenterOfSpotPoint(Point point)
         {
             if (Game1.gameState == 0)
@@ -172,28 +176,24 @@ namespace SurpriseParty
             if(_rectangle.Y > Game1.ObjectMovingRestrictionList[0].Bottom)
             {
                 _collided = true;
-             //   _rectangle.Y = Game1.ObjectMovingRestrictionList[0].Bottom - _textures[DisplayingID].Height -1;
                 currentDirecton.Y *= -1;
                 return 3;
             }
            else  if (_rectangle.X > Game1.ObjectMovingRestrictionList[0].Right)
             {
                 _collided = true;
-              //  _rectangle.X = Game1.ObjectMovingRestrictionList[0].Right - _textures[DisplayingID].Width - 1;
                 currentDirecton.X *= -1;
                 return 2;
             }
             else if (_rectangle.X < Game1.ObjectMovingRestrictionList[0].Left)
             {
                 _collided = true;
-             //   _rectangle.X = Game1.ObjectMovingRestrictionList[0].Left + 1;
                 currentDirecton.X *= -1;
                 return 1;
             }
             else if (_rectangle.Y < Game1.ObjectMovingRestrictionList[0].Top)
             {
                 _collided = true;
-           //     _rectangle.Y = Game1.ObjectMovingRestrictionList[0].Top + 1;
                 currentDirecton.Y *= -1;
                 return 0;
             }
