@@ -68,7 +68,7 @@ namespace SurpriseParty
             CenterRect = new Rectangle((int)(defaultPos.X + defaultPos.Width / 2) - _centerLength, (int)(defaultPos.Y + defaultPos.Height / 2) - _centerLength, _centerLength, _centerLength);
 
             isVisible = true;
-            MoveSpeed = Game1.GetRandomNumber(2,4);
+            MoveSpeed = Game1.GetRandomNumber(4,7);
             _canMove = true;
             _currentPosition = new Vector2(_defaultPosition.X, _defaultPosition.Y);
             ChangeDirection();
