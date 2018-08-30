@@ -62,6 +62,7 @@ namespace SurpriseParty
         BGGraphic cat;
         Button lightOff;
         BGGraphic spaceBar;
+       public static TaskList taskList;
 
 
         // UI
@@ -147,12 +148,22 @@ namespace SurpriseParty
                 ID = 2
                 }
             };
-
-            door = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/door_0"), Content.Load<Texture2D>("Graphics/door_1") }, new Rectangle(811, 125, 143, 230))
+            taskList = new TaskList(Content.Load<Texture2D>("Graphics/TaskList"), new Rectangle(29, 20, 147, 200), Content.Load<SpriteFont>("Font/font"))
+            {
+                RenderOrder = 5,
+                taskList = new Task[]
+                {
+                    new Task("Hide fox1", 0),
+                    new Task("Hide fox2", 1),
+                    new Task("Hide fox3", 2),
+                    new Task("Turn off the\n         light", 3)
+                }
+            };
+            door = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/door_0"), Content.Load<Texture2D>("Graphics/door_1") }, new Rectangle(811, 130, 143, 230))
             {
                 RenderOrder = 0
             };
-            cat = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/cat_0"), Content.Load<Texture2D>("Graphics/cat_1"), Content.Load<Texture2D>("Graphics/cat_2") }, new Rectangle(0, 275, 147, 235))
+            cat = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/cat_0"), Content.Load<Texture2D>("Graphics/cat_1"), Content.Load<Texture2D>("Graphics/cat_2") }, new Rectangle(0, 219, 147, 235))
             {
                 RenderOrder =-1,
                 suprisee = true,
@@ -216,7 +227,8 @@ namespace SurpriseParty
                 animals[1],
                 animals[2],
                 lightOff,
-                spaceBar
+                spaceBar,
+                taskList
             };
 
 
@@ -233,7 +245,7 @@ namespace SurpriseParty
             };
             #endregion
 
-            cat.MoveTo(new Point(250, 107 - 275));
+            cat.MoveTo(new Point(170, 142 - 219));
         }
 
         bool isLightOff;
@@ -241,6 +253,8 @@ namespace SurpriseParty
         {
             if (!isLightOff)
             {
+                Game1.taskList.taskList[3].ChangeTaskStatus(true);
+
                 Game1.supriser = Color.Black;
                 Game1.suprisee = Color.DarkGray;
                 isLightOff = true;
@@ -249,6 +263,7 @@ namespace SurpriseParty
             {
                 Game1.supriser = Color.White;
                 Game1.suprisee = Color.White;
+                Game1.taskList.taskList[3].ChangeTaskStatus(false);
                 isLightOff = false;
             }
 
@@ -359,7 +374,7 @@ namespace SurpriseParty
                 if(!halfTime && gameTime.TotalGameTime > TimeSpan.FromSeconds(PlaceObjectTime.Seconds / 2))
                 {
                     halfTime = true;
-                    cat.MoveTo(new Point(555, 0));
+                    cat.MoveTo(new Point(800-170, 0));
                 }
 
                 if (gameTime.TotalGameTime > PlaceObjectTime)

@@ -80,6 +80,7 @@ namespace SurpriseParty
                                 item.StopMovement();
                                 item.InSpot = true;
                                 Game1.putCount++;
+                                Game1.taskList.taskList[item.ID].ChangeTaskStatus(true);
                                 _currentInteractID = item.ID;
                                 break;
                             }
@@ -106,6 +107,7 @@ namespace SurpriseParty
                             item.InSpot = false;
                             Interacted = false;
                             Game1.putCount--;
+                            Game1.taskList.taskList[item.ID].ChangeTaskStatus(false);
 
                             _currentInteractID = -1;
                         }

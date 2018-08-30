@@ -50,7 +50,7 @@ namespace SurpriseParty
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            Color color = Game1.supriser;
+            Color color = Game1.suprisee;
             if (_isHovering && Game1.state == 0)
                 color = Color.Gray;
 

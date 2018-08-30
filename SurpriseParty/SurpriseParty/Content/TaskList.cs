@@ -10,7 +10,7 @@ namespace SurpriseParty
 {
     public class Task
     {
-        string[] tickOrNot = {" ", "☑"};
+        string[] tickOrNot = {"X", "O"};
         string Name;
         public int ID;
         public bool Done;
@@ -23,6 +23,13 @@ namespace SurpriseParty
             Done = false;
             displayString = tickOrNot[0] + " " + ID.ToString() + ". " + Name +".";
         }
+
+        public void ChangeTaskStatus(bool finished)
+        {
+            displayString = tickOrNot[finished?1:0] + " " + ID.ToString() + ". " + Name +".";
+            Done = finished;
+
+        }
     }
 
    public class TaskList: Component
@@ -32,12 +39,16 @@ namespace SurpriseParty
         private Rectangle _rectangle;
         private SpriteFont _font;
 
-        public Task[] Tasklist;
+        private int leftPad = 13;
+        private int lineSpace = 30;
+
+        public Task[] taskList;
         
         public TaskList(Texture2D texture2D, Rectangle rectangle, SpriteFont font)
         {
             _texture = texture2D;
             _rectangle = rectangle;
+            _font = font;
         }
 
         public override void Update(GameTime gameTime)
@@ -47,21 +58,33 @@ namespace SurpriseParty
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
+            spriteBatch.Draw(_texture, _rectangle, Game1.suprisee);
+
+            for (int i = 0; i < taskList.Length; i++)
+            {
+                if (!string.IsNullOrEmpty(taskList[i].displayString))
+                {
+                    float x = _rectangle.X + leftPad;
+                    float y = _rectangle.Y + 50 + lineSpace * i;
+                    spriteBatch.DrawString(_font, taskList[i].displayString, new Vector2(x, y), Color.Black);
+                }
+            }
         }
 
         public void FinishTask(int i)
         {
-            if (Tasklist.Length > 0)
+            if (taskList.Length > 0)
             {
-                Tasklist[i].Done = true;
+                taskList[i].ChangeTaskStatus(true);
             }
         }
 
         public void UnFinishTask(int i)
         {
-            if (Tasklist.Length > 0)
+            if (taskList.Length > 0)
             {
-                Tasklist[i].Done = false;
+                taskList[i].ChangeTaskStatus(false);
+
             }
         }
     }

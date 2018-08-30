@@ -234,3 +234,4 @@ C:\Users\u1218984\Documents\GitHub\TeamBlackmail\SurpriseParty\SurpriseParty\bin
 C:\Users\u1218984\Documents\GitHub\TeamBlackmail\SurpriseParty\SurpriseParty\bin\Windows\x86\Debug\Content\Graphics\valueBar_top.xnb
 C:\Users\u1218984\Documents\GitHub\TeamBlackmail\SurpriseParty\SurpriseParty\bin\Windows\x86\Debug\Content\Graphics\LightButton.xnb
 C:\Users\u1218984\Documents\GitHub\TeamBlackmail\SurpriseParty\SurpriseParty\bin\Windows\x86\Debug\Content\Graphics\space.xnb
+C:\Users\u1218984\Documents\GitHub\TeamBlackmail\SurpriseParty\SurpriseParty\bin\Windows\x86\Debug\Content\Graphics\TaskList.xnb
