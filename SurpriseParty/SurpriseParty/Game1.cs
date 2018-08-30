@@ -171,13 +171,14 @@ namespace SurpriseParty
             {
                 RenderOrder = 0
             };
-            confetti = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/confetti") }, new Rectangle(811, 130, 143, 230))
+            confetti = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/confetti") }, new Rectangle(0, 0, ScreenWidth, ScreenHeight))
             {
-                RenderOrder = 100
+                RenderOrder = 100,
+                isVisible = false
             };
-            balloons = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/ballons") }, new Rectangle(811, 130, 143, 230))
+            balloons = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/ballons") }, new Rectangle(480, 100, 143, 230))
             {
-                RenderOrder = 0
+                RenderOrder = 1
             };
             cat = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/cat_0"), Content.Load<Texture2D>("Graphics/cat_1"), Content.Load<Texture2D>("Graphics/cat_2") }, new Rectangle(0, 219, 147, 235))
             {
@@ -245,7 +246,8 @@ namespace SurpriseParty
                 animals[2],
                 lightOff,
                 spaceBar,
-                taskList
+                taskList,
+                confetti
             };
 
 
@@ -434,7 +436,7 @@ namespace SurpriseParty
                 gameState = 2;
                 Game1.supriser = Color.White;
                 Game1.suprisee = Color.White;
-                components.Add(confetti);
+                confetti.isVisible = true;
                 if (playMusic)
                 {
                     musicPlayer.Pause();
