@@ -64,6 +64,7 @@ namespace SurpriseParty
         BGGraphic cat;
         Button lightOff;
         BGGraphic spaceBar;
+        BGGraphic confetti;
        public static TaskList taskList;
 
 
@@ -186,7 +187,11 @@ namespace SurpriseParty
                 MoveSpeed = 2
             };
             cat.isVisible = true;
-
+            confetti = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/confetti") }, new Rectangle(0, 0, 1280, 720))
+            {
+                RenderOrder = 6,
+                isVisible = false
+            };
             var room = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/room") }, new Rectangle(0, 0, 1280, 720))
             {
                 RenderOrder = 0
@@ -245,7 +250,8 @@ namespace SurpriseParty
                 animals[2],
                 lightOff,
                 spaceBar,
-                taskList
+                taskList,
+                confetti
             };
 
 
@@ -434,16 +440,16 @@ namespace SurpriseParty
                 gameState = 2;
                 Game1.supriser = Color.White;
                 Game1.suprisee = Color.White;
+<<<<<<< HEAD
                 components.Add(confetti);
                 if (playMusic)
                 {
                     musicPlayer.Pause();
                     musicPlayer = supriseSong.CreateInstance();
                     musicPlayer.Play();
+=======
+>>>>>>> 9d8fd19d60ffe011a8d4e91466b01764a30e6a1a
 
-                }
-
-                scream.Play();
                 CheckResult();
             }
 
@@ -544,7 +550,19 @@ namespace SurpriseParty
             ShowResult = true;
 
             if (putCount == 3 && isLightOff)
+            {
+                if (playMusic)
+                {
+                    musicPlayer.Pause();
+                    musicPlayer = supriseSong.CreateInstance();
+                    musicPlayer.Play();
+
+                }
+
+                scream.Play();
+                confetti.isVisible = true;
                 cat.SetIMG(1);
+            }
             else
                 cat.SetIMG(2);
 

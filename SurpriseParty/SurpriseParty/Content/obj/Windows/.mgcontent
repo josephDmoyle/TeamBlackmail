@@ -4,6 +4,7 @@
   <Platform>Windows</Platform>
   <Config />
   <SourceFiles>
+<<<<<<< HEAD
     <File>C:/Users/Hordeling/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/Graphics/partyHorn.jpg</File>
     <File>C:/Users/Hordeling/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/Graphics/ballons.png</File>
     <File>C:/Users/Hordeling/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/Graphics/bottle.png</File>
@@ -66,5 +67,52 @@
     <File>C:/Users/Hordeling/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/SFX/go-go-go.wav</File>
     <File>C:/Users/Hordeling/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/SFX/shush.wav</File>
     <File>C:/Users/Hordeling/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/Graphics/confetti.png</File>
+=======
+    <File>C:/Users/u1218984/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/Graphics/partyHorn.jpg</File>
+    <File>C:/Users/u1218984/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/Graphics/ballons.png</File>
+    <File>C:/Users/u1218984/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/Graphics/bottle.png</File>
+    <File>C:/Users/u1218984/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/Graphics/box1.png</File>
+    <File>C:/Users/u1218984/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/Graphics/box3.png</File>
+    <File>C:/Users/u1218984/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/Graphics/draw.png</File>
+    <File>C:/Users/u1218984/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/Graphics/drink.png</File>
+    <File>C:/Users/u1218984/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/Graphics/plant.png</File>
+    <File>C:/Users/u1218984/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/Graphics/room.png</File>
+    <File>C:/Users/u1218984/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/Graphics/sofa.png</File>
+    <File>C:/Users/u1218984/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/Graphics/table.png</File>
+    <File>C:/Users/u1218984/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/Font/font.spritefont</File>
+    <File>C:/Users/u1218984/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/Graphics/TempUI.png</File>
+    <File>C:/Users/u1218984/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/SFX/scream.wav</File>
+    <File>C:/Users/u1218984/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/Graphics/Down_UI.png</File>
+    <File>C:/Users/u1218984/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/Graphics/Side_UI.png</File>
+    <File>C:/Users/u1218984/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/Graphics/cat_0.png</File>
+    <File>C:/Users/u1218984/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/Graphics/cat_1.png</File>
+    <File>C:/Users/u1218984/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/Graphics/cat_2.png</File>
+    <File>C:/Users/u1218984/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/Graphics/box_0.png</File>
+    <File>C:/Users/u1218984/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/Graphics/box_1.png</File>
+    <File>C:/Users/u1218984/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/Graphics/box_2.png</File>
+    <File>C:/Users/u1218984/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/Graphics/fox_0.png</File>
+    <File>C:/Users/u1218984/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/Graphics/fox_1.png</File>
+    <File>C:/Users/u1218984/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/Graphics/sofa_0.png</File>
+    <File>C:/Users/u1218984/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/Graphics/sofa_1.png</File>
+    <File>C:/Users/u1218984/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/Graphics/sofa_2.png</File>
+    <File>C:/Users/u1218984/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/Graphics/door_0.png</File>
+    <File>C:/Users/u1218984/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/Graphics/door_1.png</File>
+    <File>C:/Users/u1218984/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/Graphics/Back_coutdown_UI.png</File>
+    <File>C:/Users/u1218984/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/Graphics/Top_coutdown_UI.png</File>
+    <File>C:/Users/u1218984/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/Graphics/rug_0.png</File>
+    <File>C:/Users/u1218984/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/Graphics/rug_1.png</File>
+    <File>C:/Users/u1218984/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/Graphics/rug_2.png</File>
+    <File>C:/Users/u1218984/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/SFX/beginningSong.wav</File>
+    <File>C:/Users/u1218984/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/SFX/supriseSong.wav</File>
+    <File>C:/Users/u1218984/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/SFX/waitSong.wav</File>
+    <File>C:/Users/u1218984/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/Graphics/valueBar_0.png</File>
+    <File>C:/Users/u1218984/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/Graphics/valueBar_1.png</File>
+    <File>C:/Users/u1218984/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/Graphics/valueBar_2.png</File>
+    <File>C:/Users/u1218984/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/Graphics/valueBar_top.png</File>
+    <File>C:/Users/u1218984/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/Graphics/LightButton.PNG</File>
+    <File>C:/Users/u1218984/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/Graphics/space.PNG</File>
+    <File>C:/Users/u1218984/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/Graphics/TaskList.PNG</File>
+    <File>C:/Users/u1218984/Documents/GitHub/TeamBlackmail/SurpriseParty/SurpriseParty/Content/Graphics/confetti.png</File>
+>>>>>>> 9d8fd19d60ffe011a8d4e91466b01764a30e6a1a
   </SourceFiles>
 </SourceFileCollection>
