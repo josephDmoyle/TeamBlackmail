@@ -51,7 +51,7 @@ namespace SurpriseParty
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             Color color = Game1.suprisee;
-            if (_isHovering && Game1.state == 0)
+            if (_isHovering && Game1.gameState == 0)
                 color = Color.Gray;
 
             spriteBatch.Draw(_texture, Rectangle, color);
@@ -72,7 +72,7 @@ namespace SurpriseParty
             Rectangle mouseRectangele = new Rectangle(_currentState.X, _currentState.Y, 1, 1);
 
             _isHovering = false;
-            if (mouseRectangele.Intersects(Rectangle) && Game1.state == 0)
+            if (mouseRectangele.Intersects(Rectangle) && Game1.gameState == 0)
             {
                 _isHovering = true;
                 if(_currentState.LeftButton == ButtonState.Released && _prevousState.LeftButton == ButtonState.Pressed)
