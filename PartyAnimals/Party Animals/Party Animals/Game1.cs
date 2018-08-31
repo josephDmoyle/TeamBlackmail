@@ -13,9 +13,12 @@ using System.Threading.Tasks;
 
 namespace Party_Animals
 {
+    
+
     public class Game1 : Game
     {
-        public static int isDragging = -1;
+
+
         /// <summary>
         /// Colors of the interior of the room
         /// </summary>
@@ -31,6 +34,8 @@ namespace Party_Animals
         /// 2 : cat is waiting
         /// 3 : cat has been suprised
         /// </summary>
+
+        public static int GameScene = 1;
         public static int gameState = 0;
         public static MouseState currentMouseState;
         public static MouseState previousMouseState;
@@ -38,7 +43,7 @@ namespace Party_Animals
         {
             new Rectangle(247,219,893,286)
         };
-
+        public static int putCount = 0;
 
         const int ScreenWidth = 1280;
         const int ScreenHeight = 720;
@@ -46,7 +51,7 @@ namespace Party_Animals
         /// <summary>
         /// Developer variable whether you want to hear the music or not
         /// </summary>
-        private readonly bool playMusic = true;
+        private readonly bool playMusic = false;
 
         /// <summary>
         /// How long the door is open until the cat is set
@@ -57,13 +62,16 @@ namespace Party_Animals
         /// </summary>
         private readonly TimeSpan PlaceObjectTime = TimeSpan.FromSeconds(8);
 
-        private TimeSpan timeStartToOpenDoor;
-
         GraphicsDeviceManager graphics;
         /// <summary>
         /// Used to draw all sprites to
         /// </summary>
         SpriteBatch spriteBatch;
+
+        #region Parameter_Scene1
+        private TimeSpan timeStartToOpenDoor;
+
+
 
         // Player Input - Keyboard
 
@@ -86,8 +94,11 @@ namespace Party_Animals
         BGGraphic cat;
         Button lightOff;
         BGGraphic spaceBar;
-        public static TaskList taskList;
 
+        BGGraphic[] curtains;
+
+        public static TaskList taskList;
+        public static int isDragging = -1;
 
         // UI
         List<Dragable> animals;
@@ -99,8 +110,15 @@ namespace Party_Animals
         bool doorOpened;
         bool doorOpening;
         bool halfTime;
-        public static int putCount = 0;
 
+        #endregion
+        #region Parameter_LoadingScene
+        List<Component> loadingSceneComponts;
+        BGGraphic loadingSceneBG;
+        #endregion
+        #region Parameter_Scene2
+
+        #endregion
         GameTime _gameTime;
         Random rd;
         public Game1()
@@ -141,6 +159,25 @@ namespace Party_Animals
 
             // TODO: use this.Content to load your game content here
 
+            LoadContent_Scene1();
+            LoadContent_LoadingScene();
+        }
+
+        void LoadContent_LoadingScene()
+        {
+            loadingSceneBG = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/LoadingBackground") }, new Rectangle(0, 0, 1280, 720))
+            {
+                RenderOrder = 1,
+                ID = 0
+            };
+            loadingSceneComponts = new List<Component>()
+            {
+                loadingSceneBG
+            };
+        }
+        void LoadContent_Scene1()
+        {
+            #region Scene1_LoadContent
             beginningSong = Content.Load<SoundEffect>("SFX/beginningSong");
             supriseSong = Content.Load<SoundEffect>("SFX/supriseSong");
             scream = Content.Load<SoundEffect>("SFX/scream");
@@ -185,7 +222,7 @@ namespace Party_Animals
                 RenderOrder = 5,
                 taskList = new List<Task>()
             };
-            foreach(Dragable animal in animals)
+            foreach (Dragable animal in animals)
             {
                 taskList.taskList.Add(new Task("Hide " + animal.name, animal.ID));
             }
@@ -247,6 +284,17 @@ namespace Party_Animals
                 suprisee = true
             };
 
+            curtains = new BGGraphic[]
+            {
+                new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/curtain_0"),  Content.Load<Texture2D>("Graphics/curtain_1") }, new Rectangle(265,58,175,258)){ ID = 20},
+                new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/curtain_0"),  Content.Load<Texture2D>("Graphics/curtain_1") }, new Rectangle(567,58,175,258)){ ID = 21}
+
+            };
+
+            foreach (var item in curtains)
+            {
+                item.OnPress += OnPressCurtain;
+            }
             #endregion
 
 
@@ -263,9 +311,11 @@ namespace Party_Animals
                 lightOff,
                 spaceBar,
                 taskList,
-                confetti
+                confetti,
+                curtains[0],
+                curtains[1]
             };
-            foreach(Dragable animal in animals)
+            foreach (Dragable animal in animals)
             {
                 components.Add(animal);
             }
@@ -285,8 +335,13 @@ namespace Party_Animals
             #endregion
 
             cat.MoveTo(new Point(170, 142 - 219));
+
+            #endregion
         }
 
+
+
+        #region Scene1_EventMethods
         bool isLightOff;
         private void LightOff_Click(object sender, EventArgs e)
         {
@@ -308,7 +363,18 @@ namespace Party_Animals
 
         }
 
-        #region EventMethods
+        private void OnPressCurtain(object sender, IntEventArgs e)
+        {
+            if (curtains[e.ID - 20].DisplayingID == 0)
+            {
+                curtains[e.ID - 20].DisplayingID = 1;
+            }
+            else
+            {
+                curtains[e.ID - 20].DisplayingID = 0;
+
+            }
+        }
         private void DragItem_Press(object sender, IntEventArgs e)
         {
             //  animals[e.ID].RenderOrder = downUI.RenderOrder - 1;
@@ -361,7 +427,25 @@ namespace Party_Animals
                 Exit();
 
             _gameTime = gameTime;
+            switch (GameScene)
+            {
+                case 0:
+                    {
+                        Update_Scene1(_gameTime);
+                        break;
+                    }
+                case 1:
+                    {
+                        Update_Scene2(_gameTime);
+                        break;
+                    }
+            }
+            base.Update(gameTime);
+        }
 
+        void Update_Scene1(GameTime gameTime)
+        {
+            #region Update_Scene1
             foreach (var item in components)
             {
                 item.Update(gameTime);
@@ -414,7 +498,7 @@ namespace Party_Animals
                 gameState = 2;
                 Game1.supriser = Color.White;
                 Game1.suprisee = Color.White;
-                confetti.isVisible = true;
+
                 if (playMusic)
                 {
                     musicPlayer.Pause();
@@ -423,7 +507,7 @@ namespace Party_Animals
 
                 }
 
-                scream.Play();
+
                 CheckResult();
             }
 
@@ -444,10 +528,9 @@ namespace Party_Animals
                     item.SetIMG(0);
                 }
             }
-
-            base.Update(gameTime);
+            #endregion
         }
-
+        void Update_Scene2(GameTime gameTime) { }
         /// <summary>
         /// This is called when the game should draw itself.
         /// </summary>
@@ -459,19 +542,45 @@ namespace Party_Animals
             GraphicsDevice.Clear(Color.Gray);
 
             // sort the layer before draw
-            components.Sort((x, y) => x.RenderOrder.CompareTo(y.RenderOrder));
+
 
             spriteBatch.Begin();
-
-            foreach (var item in components)
+            switch (GameScene)
             {
-                item.Draw(gameTime, spriteBatch);
+                case 0:
+                    {
+                        Draw_Scene1(gameTime);
+                        break;
+                    }
+                case 1:
+                    {
+                        Draw_LoadingScene(gameTime);
+                        break;
+                    }
             }
+
             spriteBatch.End();
 
             base.Draw(gameTime);
         }
 
+        void Draw_Scene1(GameTime gameTime)
+        {
+            components.Sort((x, y) => x.RenderOrder.CompareTo(y.RenderOrder));
+            foreach (var item in components)
+            {
+                item.Draw(gameTime, spriteBatch);
+            }
+        }
+        void Draw_Scene2(GameTime gameTime) { }
+        void Draw_LoadingScene(GameTime gameTime)
+        {
+            loadingSceneComponts.Sort((x, y) => x.RenderOrder.CompareTo(y.RenderOrder));
+            foreach (var item in components)
+            {
+                item.Draw(gameTime, spriteBatch);
+            }
+        }
         void UpdateMouse()
         {
 
@@ -510,7 +619,12 @@ namespace Party_Animals
             ShowResult = true;
 
             if (putCount == 3 && isLightOff)
+            {
                 cat.SetIMG(1);
+                scream.Play();
+                confetti.isVisible = true;
+            }
+
             else
                 cat.SetIMG(2);
 

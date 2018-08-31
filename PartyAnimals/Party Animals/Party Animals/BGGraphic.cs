@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 using System;
 using System.Collections.Generic;
@@ -26,6 +27,8 @@ namespace Party_Animals
         public bool Interacted;
 
         public Interaction _interaction;
+
+        public EventHandler<IntEventArgs> OnPress;
 
         public BGGraphic(Texture2D[] textures, Rectangle rect)
         {
@@ -66,6 +69,20 @@ namespace Party_Animals
                     moving = false;
                 }
             }
+
+            Rectangle mouseRectangele = new Rectangle(Game1.currentMouseState.X, Game1.currentMouseState.Y, 1, 1);
+
+
+            if (mouseRectangele.Intersects(Rectangle) && Game1.gameState == 0)
+            {
+
+                if (Game1.currentMouseState.LeftButton == ButtonState.Released && Game1.previousMouseState.LeftButton == ButtonState.Pressed)
+                {
+                    OnPress?.Invoke(this, new IntEventArgs(ID));
+                }
+            }
+
+
         }
 
         public void NextIMG()
