@@ -68,14 +68,13 @@ namespace Party_Animals
         /// Used to draw all sprites to
         /// </summary>
         SpriteBatch spriteBatch;
-
-        #region Parameter_Scene1
         private TimeSpan timeStartToOpenDoor;
         // Player Input - Keyboard
         private SoundEffect beginningSong, supriseSong, scream, comeOn, goGoGo, shush;
         private SoundEffectInstance musicPlayer;
         // Player Input - Mouse
         Vector2 mousePosition;
+        #region Parameter_Scene1
 
         // graphic component
         InteractableObj boxes;
@@ -109,6 +108,7 @@ namespace Party_Animals
         BGGraphic loadingSceneBG;
         #endregion
         #region Parameter_Scene2
+
 
         #endregion
         GameTime _gameTime;
@@ -163,24 +163,18 @@ namespace Party_Animals
                         LoadContent_LoadingScene();
                         break;
                     }
+                case 2:
+                    {
+                        LoadContent_Scene2();
+                        break;
+                    }
                 default:
                     break;
             }
 
         }
 
-        void LoadContent_LoadingScene()
-        {
-            loadingSceneBG = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/LoadingBackground") }, new Rectangle(0, 0, 1280, 720))
-            {
-                RenderOrder = 1,
-                ID = 0
-            };
-            loadingSceneComponts = new List<Component>()
-            {
-                loadingSceneBG
-            };
-        }
+
         void LoadContent_Scene1()
         {
             #region Scene1_LoadContent
@@ -344,7 +338,18 @@ namespace Party_Animals
 
             #endregion
         }
-
+        void LoadContent_LoadingScene()
+        {
+            loadingSceneBG = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/LoadingBackground") }, new Rectangle(0, 0, 1280, 720))
+            {
+                RenderOrder = 1,
+                ID = 0
+            };
+            loadingSceneComponts = new List<Component>()
+            {
+                loadingSceneBG
+            };
+        }
         void LoadContent_Scene2() { }
 
         #region Scene1_EventMethods
@@ -443,6 +448,11 @@ namespace Party_Animals
                 case 1:
                     {
                         Update_LoadingScene(_gameTime);
+                        break;
+                    }
+                case 2:
+                    {
+                        Update_Scene2(_gameTime);
                         break;
                     }
             }
@@ -557,6 +567,11 @@ namespace Party_Animals
                 GameScene = 2;
                 LoadContent_Scene2();
             }
+        }
+
+        void Update_Scene2(GameTime gameTime)
+        {
+
         }
         /// <summary>
         /// This is called when the game should draw itself.
