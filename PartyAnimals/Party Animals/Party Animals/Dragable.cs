@@ -106,7 +106,7 @@ namespace Party_Animals
             if (Game1.gameState == 0)
             {
                 _isHovering = false;
-                if (mouseRectangele.Intersects(Rectangle) && Game1.isDragging == -1)
+                if (mouseRectangele.Intersects(Rectangle) && Game1.isDragging == -1 && _prevousState.LeftButton != ButtonState.Pressed)
                 {
                     _isHovering = true;
                 }
