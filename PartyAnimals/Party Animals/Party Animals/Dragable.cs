@@ -29,8 +29,12 @@ namespace Party_Animals
         //private bool flipped;
         private bool _canMove;
         private bool _collided;
+        //
+        private bool interacted;
+        private ObjInBody objinbody;
+        public List<ObjInBody> objInBodies;
+        public Point holdPoint;
 
-        public Interaction _interaction;
         public int MoveSpeed;
         #endregion
 
@@ -81,6 +85,8 @@ namespace Party_Animals
             _canMove = true;
             _currentPosition = new Vector2(_defaultPosition.X, _defaultPosition.Y);
             ChangeDirection();
+
+            objInBodies = new List<ObjInBody>();
         }
 
         /// <summary>
@@ -147,12 +153,40 @@ namespace Party_Animals
 
                 CheckCollision();
             }
+
+            // obj in hand
+            if (!interacted && objInBodies.Count > 0)
+            {
+                foreach (var item in objInBodies)
+                {
+                    if (item.Rectangle.Contains(new Rectangle(holdPoint.X + Rectangle.X - 10, holdPoint.Y + Rectangle.Y-10,20,20)))
+                    {
+                        if (Game1.currentMouseState.LeftButton.Equals(ButtonState.Released) &&
+                       Game1.previousMouseState.LeftButton.Equals(ButtonState.Pressed) &&
+                        item.Rectangle.Contains(Game1.currentMouseState.Position))
+                        {
+                            interacted = true;
+                            item.Rectangle = new Rectangle(holdPoint.X - item.Rectangle.Width / 2, holdPoint.Y - item.Rectangle.Height / 2, item.Rectangle.Width, item.Rectangle.Height);
+                            objinbody = item;
+                            item.InSpot = true;
+                            item.RenderOrder = RenderOrder + 1;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if (interacted)
+            {
+                objinbody.Rectangle = new Rectangle(Rectangle.X + holdPoint.X - objinbody.Rectangle.Width / 2, Rectangle.Y+ holdPoint.Y - objinbody.Rectangle.Height / 2, objinbody.Rectangle.Width, objinbody.Rectangle.Height);
+            }
         }
 
         public void MoveToCenterOfSpotPoint(Point point)
         {
             if (Game1.gameState == 0)
                 _rectangle = new Rectangle(point.X - _textures[DisplayingID].Width / 2, point.Y - _textures[DisplayingID].Height / 2, _textures[DisplayingID].Width, _textures[DisplayingID].Height);
+
         }
 
         private Point currentDirecton;

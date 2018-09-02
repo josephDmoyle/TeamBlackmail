@@ -13,12 +13,12 @@ using System.Threading.Tasks;
 
 namespace Party_Animals
 {
-    
+
 
     public class Game1 : Game
     {
 
-
+        public static int mouseInLeve;
         /// <summary>
         /// Colors of the interior of the room
         /// </summary>
@@ -365,21 +365,26 @@ namespace Party_Animals
                 {
                 RenderOrder = 4,
                 ID = 0,
-                name = "Snowy"
+                name = "Snowy",
+                holdPoint = new Point(58,92)
+
                 },
                 new Dragable(new Texture2D[] { Content.Load<Texture2D>("Graphics/Fox_Peach_0"), Content.Load<Texture2D>("Graphics/Fox_Peach_1") },
                  new Rectangle(rd.Next(ObjectMovingRestrictionList[0].X,ObjectMovingRestrictionList[0].X+ObjectMovingRestrictionList[0].Width), rd.Next(ObjectMovingRestrictionList[0].X,ObjectMovingRestrictionList[0].Y+ObjectMovingRestrictionList[0].Height), 180, 184))
                 {
                 RenderOrder = 4,
                 ID = 1,
-                name = "Hammy"
+                name = "Hammy",
+                holdPoint = new Point(58,92)
+
                 },
                 new Dragable(new Texture2D[] { Content.Load<Texture2D>("Graphics/Bear_0"), Content.Load<Texture2D>("Graphics/Bear_1") },
                  new Rectangle(rd.Next(ObjectMovingRestrictionList[0].X,ObjectMovingRestrictionList[0].X+ObjectMovingRestrictionList[0].Width), rd.Next(ObjectMovingRestrictionList[0].X,ObjectMovingRestrictionList[0].Y+ObjectMovingRestrictionList[0].Height), 200, 200))
                 {
                 RenderOrder = 4,
                 ID = 2,
-                name = "Barny"
+                name = "Barny",
+                holdPoint = new Point(58,92)
                 },
             };
             taskList = new TaskList(Content.Load<Texture2D>("Graphics/TaskList"), new Rectangle(29, 20, 147, 200), Content.Load<SpriteFont>("Font/font"))
@@ -432,6 +437,18 @@ namespace Party_Animals
                 suprisee = true,
                 MoveSpeed = 2
             };
+
+            var horn = new ObjInBody(Content.Load<Texture2D>("Graphics/Horn_0"), new Rectangle(100, 600, 50, 50))
+            {
+                RenderOrder = 4,
+                isVisible = true
+            };
+
+            foreach (var item in animals)
+            {
+                item.objInBodies.Add(horn);
+            }
+
             components = new List<Component>()
             {
                 animals[0],
@@ -444,7 +461,8 @@ namespace Party_Animals
                 lightOff,
                 door,
                 confetti,
-                cat
+                cat,
+                horn
             };
 
             cat.MoveTo(new Point(170, 142 - 219));
@@ -489,13 +507,6 @@ namespace Party_Animals
         {
             //  animals[e.ID].RenderOrder = downUI.RenderOrder - 1;
             animals[e.ID].isVisible = true;
-
-            if (animals[e.ID]._interaction != null && animals[e.ID]._interaction._graphic.Interacted)
-            {
-                animals[e.ID]._interaction._graphic.Interacted = false;
-                animals[e.ID]._interaction._graphic._interaction = null;
-                animals[e.ID]._interaction = null;
-            }
         }
 
         private void ExitButton_Click(object sender, EventArgs e)
@@ -648,7 +659,7 @@ namespace Party_Animals
             {
                 if (Keyboard.GetState().IsKeyDown(Keys.N))
                 {
-                    
+
                     GameScene = 1;
                     LoadContent_LoadingScene();
                     LevelFinish = false;
@@ -730,7 +741,7 @@ namespace Party_Animals
                 }
 
 
-              //  CheckResult_Scene2();
+                //  CheckResult_Scene2();
             }
             if (gameState == 2)
             {
