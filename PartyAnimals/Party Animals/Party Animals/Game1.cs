@@ -27,7 +27,7 @@ namespace Party_Animals
             new Rectangle(247,219,893,286)
         };
         public static int putCount = 0;
-        public static bool LevelFinish = false;
+        public static bool LevelFinish = false, lightOn;
 
         private const int ScreenHeight = 720, ScreenWidth = 1280;
 
@@ -55,7 +55,7 @@ namespace Party_Animals
         /// </summary>
         SpriteBatch spriteBatch;
 
-        private TimeSpan SceneStart, IntervalSpan, IntervalSpan2;
+        private TimeSpan SceneStart, IntervalSpan2;
 
         private Dictionary<string, SoundEffect> sounds = new Dictionary<string, SoundEffect>();
 
@@ -74,7 +74,7 @@ namespace Party_Animals
         BGGraphic confetti;
         BGGraphic door;
         BGGraphic cat;
-        Button lightOff;
+        Button lightSwitch;
         BGGraphic spaceBar;
 
         List<BGGraphic> curtains;
@@ -279,13 +279,12 @@ namespace Party_Animals
                 ID = 2,
                 RenderOrder = 3,
             };
-            lightOff = new Button(Content.Load<Texture2D>("Graphics/switch_1"), Content.Load<Texture2D>("Graphics/switch_0"))
+            lightSwitch = new Button(Content.Load<Texture2D>("Graphics/switch_1"), Content.Load<Texture2D>("Graphics/switch_0"))
             {
                 RenderOrder = 3,
                 Position = new Vector2(1000, 180)
 
             };
-            lightOff.Click += LightOff_Click;
 
             spaceBar = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/space") }, new Rectangle(1079, 564, 165, 132))
             {
@@ -318,7 +317,7 @@ namespace Party_Animals
                 boxes,
                 sofa,
                 rug,
-                lightOff,
+                lightSwitch,
                 spaceBar,
                 confetti,
                 curtains[0],
@@ -433,7 +432,7 @@ namespace Party_Animals
                 isVisible = false,
                 suprisee = true
             };
-            lightOff = new Button(Content.Load<Texture2D>("Graphics/switch_1"), Content.Load<Texture2D>("Graphics/switch_0"))
+            lightSwitch = new Button(Content.Load<Texture2D>("Graphics/switch_1"), Content.Load<Texture2D>("Graphics/switch_0"))
             {
                 RenderOrder = 3,
                 Position = new Vector2(1000, 180)
@@ -471,7 +470,7 @@ namespace Party_Animals
             {
                 room,
                 spaceBar,
-                lightOff,
+                lightSwitch,
                 door,
                 confetti,
                 cat,
@@ -489,28 +488,6 @@ namespace Party_Animals
 
 
         #region Scene1_EventMethods
-
-        bool isLightOff;
-
-        private void LightOff_Click(object sender, EventArgs e)
-        {
-            if (!isLightOff)
-            {
-                //Game1.taskList.taskList[3].ChangeTaskStatus(true);
-
-                Game1.supriser = Color.Black;
-                Game1.suprisee = Color.DarkGray;
-                isLightOff = true;
-            }
-            else
-            {
-                Game1.supriser = Color.White;
-                Game1.suprisee = Color.White;
-                //Game1.taskList.taskList[3].ChangeTaskStatus(false);
-                isLightOff = false;
-            }
-
-        }
 
         private void OnPressCurtain(object sender, IntEventArgs e)
         {
@@ -904,7 +881,7 @@ namespace Party_Animals
             spaceBar.isVisible = false;
             ShowResult = true;
 
-            if (putCount == 3 && isLightOff)
+            if (putCount == 3 && !lightOn)
             {
                 cat.SetIMG(1);
                 sounds["scream"].Play();

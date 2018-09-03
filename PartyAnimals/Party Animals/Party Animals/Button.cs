@@ -17,8 +17,6 @@ namespace Party_Animals
         private Texture2D _texture, ON, OFF;
         #endregion
         #region Properties
-        public event EventHandler Click;
-        public bool Clicked { get; set; }
         public Vector2 Position { get; set; }
         public Rectangle Rectangle
         {
@@ -56,8 +54,20 @@ namespace Party_Animals
                 _isHovering = true;
                 if (Game1.currentMouseState.LeftButton == ButtonState.Released && Game1.previousMouseState.LeftButton == ButtonState.Pressed)
                 {
-                    Click?.Invoke(this, new EventArgs());
-                    _texture = (_texture == ON) ? OFF : ON;
+                    if(_texture == ON)
+                    {
+                        _texture = OFF;
+                        Game1.lightOn = false;
+                        Game1.supriser = Color.Black;
+                        Game1.suprisee = Color.DarkGray;
+                    }
+                    else
+                    {
+                        _texture = ON;
+                        Game1.lightOn = true;
+                        Game1.supriser = Color.White;
+                        Game1.suprisee = Color.White;
+                    }
                 }
             }
         }
