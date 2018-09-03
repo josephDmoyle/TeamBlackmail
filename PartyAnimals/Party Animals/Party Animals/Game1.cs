@@ -94,7 +94,7 @@ namespace Party_Animals
         #endregion
 
         #region Parameter_LoadingScene
-        List<BGGraphic> vans;
+        BGGraphic van;
         TimeSpan vanFrame;
         #endregion
 
@@ -178,28 +178,21 @@ namespace Party_Animals
             musicPlayer = sounds["beginningSong"].CreateInstance();
             if (playMusic)
                 musicPlayer.Play();
-
-            putCount = 0;
             SceneStart = new TimeSpan();
             IntervalSpan2 = SceneStart + FrameRate;
-            BGGraphic van0 = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/van_0") }, new Rectangle(0, 0, 1280, 720))
+            van = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/van_0"), Content.Load<Texture2D>("Graphics/van_1")}, new Rectangle(0, 0, 1280, 720))
             {
                 RenderOrder = 2,
                 ID = 0
             };
-            BGGraphic van1 = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/van_1") }, new Rectangle(0, 0, 1280, 720))
+            spaceBar = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/space") }, new Rectangle(1079, 564, 165, 132))
             {
-                RenderOrder = 2,
-                ID = 1
+                RenderOrder = 4,
             };
 
             components = new List<Component>()
             {
-                van0, van1
-            };
-            vans = new List<BGGraphic>()
-            {
-                van0, van1
+                van, spaceBar
             };
         }
 
@@ -361,37 +354,20 @@ namespace Party_Animals
 
         void Load_2()
         {
-            putCount = 0;
             IntervalSpan2 = SceneStart + FrameRate;
-            BGGraphic van0 = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/van_0") }, new Rectangle(0, 0, 1280, 720))
+            van = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/van_0"), Content.Load<Texture2D>("Graphics/van_1"), Content.Load<Texture2D>("Graphics/van_2"), Content.Load<Texture2D>("Graphics/van_3") }, new Rectangle(0, 0, 1280, 720))
             {
                 RenderOrder = 2,
                 ID = 0
             };
-            BGGraphic van1 = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/van_1") }, new Rectangle(0, 0, 1280, 720))
+            spaceBar = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/space") }, new Rectangle(1079, 564, 165, 132))
             {
-                RenderOrder = 2,
-                ID = 1
-            };
-            BGGraphic van2 = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/van_2") }, new Rectangle(0, 0, 1280, 720))
-            {
-                RenderOrder = 2,
-                ID = 1
-            };
-            BGGraphic van3 = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/van_3") }, new Rectangle(0, 0, 1280, 720))
-            {
-                RenderOrder = 2,
-                ID = 1
+                RenderOrder = 4,
             };
             components = new List<Component>()
             {
-                van0, van1, van2, van3
+                van, spaceBar
             };
-            vans = new List<BGGraphic>()
-            {
-                van0, van1, van2, van3
-            };
-
         }
 
         void Load_3()
@@ -626,14 +602,13 @@ namespace Party_Animals
                 else if (gameTime.TotalGameTime > IntervalSpan2)
                 {
                     IntervalSpan2 = gameTime.TotalGameTime + FrameRate;
-                    vans[putCount].isVisible = false;
-                    putCount = (putCount + 1) % components.Count;
-                    vans[putCount].isVisible = true;
+                    van.NextIMG();
                 }
             }
             else if (Keyboard.GetState().IsKeyDown(Keys.Space) && LevelFinish == false)
             {
                 sounds["vanStart"].Play();
+                spaceBar.isVisible = false;
                 IntervalSpan = gameTime.TotalGameTime + sounds["vanStart"].Duration;
                 LevelFinish = true;
             }
@@ -746,13 +721,12 @@ namespace Party_Animals
             if(gameTime.TotalGameTime > IntervalSpan2)
             {
                 IntervalSpan2 = gameTime.TotalGameTime + FrameRate;
-                vans[putCount].isVisible = false;
-                putCount = (putCount + 1) % components.Count;
-                vans[putCount].isVisible = true;
+                van.NextIMG();
             }
 
             if (Keyboard.GetState().IsKeyDown(Keys.Space))
             {
+                spaceBar.isVisible = false;
                 GameScene = 3;
                 Load_3();
             }
