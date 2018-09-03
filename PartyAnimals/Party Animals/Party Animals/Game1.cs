@@ -388,12 +388,9 @@ namespace Party_Animals
                 {
                 RenderOrder = 4,
                 ID = 0,
-<<<<<<< HEAD
-                name = "Snowy",
+
                 holdPoint = new Point(98,65)
-=======
-                holdPoint = new Point(58,92)
->>>>>>> 0d6bbf77b46e9d322a6d7cd9cd4179c3873cc4f2
+
 
                 },
                 new Dragable(new Texture2D[] { Content.Load<Texture2D>("Graphics/Fox_Peach_0"), Content.Load<Texture2D>("Graphics/Fox_Peach_1") },
@@ -409,12 +406,9 @@ namespace Party_Animals
                 {
                 RenderOrder = 4,
                 ID = 2,
-<<<<<<< HEAD
-                name = "Barny",
+
                 holdPoint = new Point(49,61)
-=======
-                holdPoint = new Point(58,92)
->>>>>>> 0d6bbf77b46e9d322a6d7cd9cd4179c3873cc4f2
+
                 },
             };
 
@@ -680,7 +674,7 @@ namespace Party_Animals
 
             if (!doorOpened && doorOpening)
             {
-                if (gameTime.TotalGameTime - IntervalSpan > DoorOpenToComeIn)
+                if (gameTime.TotalGameTime - IntervalSpan2 > DoorOpenToComeIn)
                 {
                     doorOpened = true;
                     spaceBar.isVisible = true;
@@ -942,7 +936,7 @@ namespace Party_Animals
         void CheckResult_Scene2()
         {
             spaceBar.isVisible = false;
-            ShowResult = true;
+
             foreach (var item in interactableObjs2)
             {
                 item.SetIMG(0);
@@ -952,7 +946,7 @@ namespace Party_Animals
                 item.isVisible = true;
             }
 
-            if (putCount == 3 && isLightOff)
+            if (putCount == 3 && !lightOn)
             {
                 cat.SetIMG(1);
                 sounds["scream"].Play();
