@@ -14,7 +14,7 @@ namespace Party_Animals
     {
         #region private
         private bool _isHovering;
-        private Texture2D _texture;
+        private Texture2D _texture, ON, OFF;
         #endregion
         #region Properties
         public event EventHandler Click;
@@ -38,9 +38,11 @@ namespace Party_Animals
 
         #region Methods
 
-        public Button(Texture2D texture)
+        public Button(Texture2D on, Texture2D off)
         {
-            _texture = texture;
+            ON = on;
+            OFF = off;
+            _texture = ON;
 
             PenColor = Color.Black;
         }
@@ -65,6 +67,7 @@ namespace Party_Animals
                 if (Game1.currentMouseState.LeftButton == ButtonState.Released && Game1.previousMouseState.LeftButton == ButtonState.Pressed)
                 {
                     Click?.Invoke(this, new EventArgs());
+                    _texture = (_texture == ON) ? OFF : ON;
                 }
             }
         }

@@ -78,7 +78,7 @@ namespace Party_Animals
         Button lightOff;
         BGGraphic spaceBar;
 
-        BGGraphic[] curtains;
+        List<BGGraphic> curtains;
 
         //public static TaskList taskList;
         public static int isDragging = -1;
@@ -182,21 +182,21 @@ namespace Party_Animals
             vanFrame = SceneStart + FrameRate;
             road = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/road_0") }, new Rectangle(0, 0, 1280, 720))
             {
-                RenderOrder = 2
+                RenderOrder = 1
             };
             van = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/van_0"), Content.Load<Texture2D>("Graphics/van_1")}, new Rectangle(0, 0, 1280, 720))
             {
-                RenderOrder = 3,
-                ID = 0
+                RenderOrder = 2
             };
             spaceBar = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/space") }, new Rectangle(1079, 564, 165, 132))
             {
-                RenderOrder = 4
+                RenderOrder = 3
             };
             components = new List<Component>()
             {
                 van, road, spaceBar
             };
+            components.Sort((x, y) => x.RenderOrder.CompareTo(y.RenderOrder));
         }
 
         void Load_1()
@@ -286,9 +286,9 @@ namespace Party_Animals
                 ID = 2,
                 RenderOrder = 3,
             };
-            lightOff = new Button(Content.Load<Texture2D>("Graphics/LightButton"))
+            lightOff = new Button(Content.Load<Texture2D>("Graphics/switch_1"), Content.Load<Texture2D>("Graphics/switch_0"))
             {
-                RenderOrder = 5,
+                RenderOrder = 3,
                 Position = new Vector2(1000, 180)
 
             };
@@ -301,7 +301,7 @@ namespace Party_Animals
                 suprisee = true
             };
 
-            curtains = new BGGraphic[]
+            curtains = new List<BGGraphic>()
             {
                 new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/curtain_0"),  Content.Load<Texture2D>("Graphics/curtain_1") }, new Rectangle(265,58,175,258)){ ID = 20},
                 new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/curtain_0"),  Content.Load<Texture2D>("Graphics/curtain_1") }, new Rectangle(567,58,175,258)){ ID = 21}
@@ -360,21 +360,21 @@ namespace Party_Animals
             vanFrame = SceneStart + FrameRate;
             road = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/road_0"), Content.Load<Texture2D>("Graphics/road_1"), Content.Load<Texture2D>("Graphics/road_2"), Content.Load<Texture2D>("Graphics/road_3"), Content.Load<Texture2D>("Graphics/road_4"), }, new Rectangle(0, 0, 1280, 720))
             {
-                RenderOrder = 2
+                RenderOrder = 1
             };
             van = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/van_0"), Content.Load<Texture2D>("Graphics/van_2"), Content.Load<Texture2D>("Graphics/van_3"), Content.Load<Texture2D>("Graphics/van_4") }, new Rectangle(0, 0, 1280, 720))
             {
-                RenderOrder = 3,
-                ID = 0
+                RenderOrder = 2
             };
             spaceBar = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/space") }, new Rectangle(1079, 564, 165, 132))
             {
-                RenderOrder = 4,
+                RenderOrder = 3
             };
             components = new List<Component>()
             {
                 van, road, spaceBar
             };
+            components.Sort((x, y) => x.RenderOrder.CompareTo(y.RenderOrder));
         }
 
         void Load_3()
@@ -431,7 +431,7 @@ namespace Party_Animals
                 RenderOrder = 0
             };
 
-            curtains = new BGGraphic[]
+            curtains = new List<BGGraphic>
             {
                 new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/curtain_0"),  Content.Load<Texture2D>("Graphics/curtain_1") }, new Rectangle(265,58,175,258)){ ID = 20},
                 new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/curtain_0"),  Content.Load<Texture2D>("Graphics/curtain_1") }, new Rectangle(567,58,175,258)){ ID = 21}
@@ -443,9 +443,9 @@ namespace Party_Animals
                 isVisible = false,
                 suprisee = true
             };
-            lightOff = new Button(Content.Load<Texture2D>("Graphics/LightButton"))
+            lightOff = new Button(Content.Load<Texture2D>("Graphics/switch_1"), Content.Load<Texture2D>("Graphics/switch_0"))
             {
-                RenderOrder = 5,
+                RenderOrder = 3,
                 Position = new Vector2(1000, 180)
 
             };
@@ -479,12 +479,7 @@ namespace Party_Animals
 
             components = new List<Component>()
             {
-                animals[0],
-                animals[1],
-                animals[2],
                 room,
-                curtains[0],
-                curtains[1],
                 spaceBar,
                 lightOff,
                 door,
@@ -492,6 +487,11 @@ namespace Party_Animals
                 cat,
                 horn
             };
+
+            foreach (Dragable anim in animals)
+                components.Add(anim);
+            foreach (BGGraphic curt in curtains)
+                components.Add(curt);
 
             cat.MoveTo(new Point(170, 142 - 219));
             SceneStart = _gameTime.TotalGameTime;
@@ -858,7 +858,6 @@ namespace Party_Animals
 
         void Draw_0(GameTime gameTime)
         {
-            components.Sort((x, y) => x.RenderOrder.CompareTo(y.RenderOrder));
             foreach (var item in components)
             {
                 item.Draw(gameTime, spriteBatch);
@@ -877,7 +876,6 @@ namespace Party_Animals
         void Draw_2(GameTime gameTime)
         {
 
-            components.Sort((x, y) => x.RenderOrder.CompareTo(y.RenderOrder));
             foreach (var item in components)
             {
                 item.Draw(gameTime, spriteBatch);
