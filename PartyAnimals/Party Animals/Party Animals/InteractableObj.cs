@@ -17,7 +17,7 @@ namespace Party_Animals
         private Point _pivotPoint;
         private List<Dragable> _dragables;
         private int _currentInteractID = -1;
-        private bool suprisee;
+        private bool suprisee = false;
         private Rectangle _rectangle;
 
 

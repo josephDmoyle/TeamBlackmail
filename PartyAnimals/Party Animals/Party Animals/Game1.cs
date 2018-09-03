@@ -874,12 +874,9 @@ namespace Party_Animals
             doorOpening = true;
         }
 
-        bool ShowResult;
-
         void CheckResult_Scene1()
         {
             spaceBar.isVisible = false;
-            ShowResult = true;
 
             if (putCount == 3 && !lightOn)
             {
