@@ -355,7 +355,7 @@ namespace Party_Animals
         void Load_2()
         {
             IntervalSpan2 = SceneStart + FrameRate;
-            van = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/van_0"), Content.Load<Texture2D>("Graphics/van_1"), Content.Load<Texture2D>("Graphics/van_2"), Content.Load<Texture2D>("Graphics/van_3") }, new Rectangle(0, 0, 1280, 720))
+            van = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/van_0"), Content.Load<Texture2D>("Graphics/van_2"), Content.Load<Texture2D>("Graphics/van_3"), Content.Load<Texture2D>("Graphics/van_4") }, new Rectangle(0, 0, 1280, 720))
             {
                 RenderOrder = 2,
                 ID = 0
