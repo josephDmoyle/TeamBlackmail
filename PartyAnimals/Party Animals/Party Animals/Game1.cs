@@ -98,9 +98,14 @@ namespace Party_Animals
         TimeSpan vanFrame, goFrame;
         #endregion
 
+        #region Parameter_Scene2
+        InteractableObj lounge;
+        #endregion
+
         GameTime _gameTime;
         Random rd;
-
+        List<InteractableObj> interactableObjs2;
+        ObjInBody[] horns;
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -383,6 +388,7 @@ namespace Party_Animals
             doorOpening = false;
             LevelFinish = false;
             gameState = 0;
+            putCount = 0;
             animals = new List<Dragable>
             {
                  new Dragable(new Texture2D[] { Content.Load<Texture2D>("Graphics/owl_grey_0"), Content.Load<Texture2D>("Graphics/owl_grey_1") },
@@ -391,7 +397,7 @@ namespace Party_Animals
                 RenderOrder = 4,
                 ID = 0,
                 name = "Snowy",
-                holdPoint = new Point(58,92)
+                holdPoint = new Point(98,65)
 
                 },
                 new Dragable(new Texture2D[] { Content.Load<Texture2D>("Graphics/Fox_Peach_0"), Content.Load<Texture2D>("Graphics/Fox_Peach_1") },
@@ -409,7 +415,7 @@ namespace Party_Animals
                 RenderOrder = 4,
                 ID = 2,
                 name = "Barny",
-                holdPoint = new Point(58,92)
+                holdPoint = new Point(49,61)
                 },
             };
 
@@ -426,7 +432,7 @@ namespace Party_Animals
             taskList.taskList.Add(new Task("Turn off the\n         light", animals.Count));
             */
 
-            var room = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/room") }, new Rectangle(0, 0, 1280, 720))
+            var room = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/room2") }, new Rectangle(0, 0, 1280, 720))
             {
                 RenderOrder = 0
             };
@@ -466,15 +472,46 @@ namespace Party_Animals
                 MoveSpeed = 2
             };
 
-            var horn = new ObjInBody(Content.Load<Texture2D>("Graphics/Horn_0"), new Rectangle(100, 600, 50, 50))
+            lounge = new InteractableObj(new Texture2D[] { Content.Load<Texture2D>("Graphics/Lounge_0"), Content.Load<Texture2D>("Graphics/Lounge_1"), Content.Load<Texture2D>("Graphics/Lounge_2") }, new Rectangle(325, 251, 398, 219), new Point(467 , 354), animals)
             {
-                RenderOrder = 4,
+                ID = 0,
+                RenderOrder = 3
+            };
+          var  rug2 = new InteractableObj(new Texture2D[] { Content.Load<Texture2D>("Graphics/rug_0"), Content.Load<Texture2D>("Graphics/rug_1"), Content.Load<Texture2D>("Graphics/rug_2") }, new Rectangle(521, 452, 366, 366), new Point(615, 665), animals)
+            {
+                ID = 1,
+                RenderOrder = 3
+            };
+            var sofa2 = new InteractableObj(new Texture2D[] { Content.Load<Texture2D>("Graphics/sofa_0"), Content.Load<Texture2D>("Graphics/sofa_1"), Content.Load<Texture2D>("Graphics/sofa_2") }, new Rectangle(100, 360, 352, 352), new Point(258, 548), animals)
+            {
+                ID = 2,
+                RenderOrder = 3
+            };
+
+             horns = new ObjInBody[]{
+                new ObjInBody(Content.Load<Texture2D>("Graphics/Horn_0"), new Rectangle(100, 600, 50, 50))
+            {
+                RenderOrder = 3,
                 isVisible = true
+            }, new ObjInBody(Content.Load<Texture2D>("Graphics/Horn_1"), new Rectangle(200, 400, 50, 50))
+            {
+                RenderOrder = 3,
+                isVisible = true
+            },
+                new ObjInBody(Content.Load<Texture2D>("Graphics/Horn_2"), new Rectangle(400, 500, 50, 50))
+            {
+                RenderOrder = 3,
+                isVisible = true
+            }
             };
 
             foreach (var item in animals)
             {
-                item.objInBodies.Add(horn);
+                for (int i = 0; i < horns.Length; i++)
+                {
+                    item.objInBodies.Add(horns[i]);
+                }
+               
             }
 
             components = new List<Component>()
@@ -490,8 +527,17 @@ namespace Party_Animals
                 door,
                 confetti,
                 cat,
-                horn
+                horns[0],
+                horns[1],
+                horns[2],
+                lounge,
+                rug2,
+                sofa2
             };
+            interactableObjs2 = new List<InteractableObj>();
+            interactableObjs2.Add(lounge);
+            interactableObjs2.Add(rug2);
+            interactableObjs2.Add(sofa2);
 
             cat.MoveTo(new Point(170, 142 - 219));
             SceneStart = _gameTime.TotalGameTime;
@@ -658,7 +704,7 @@ namespace Party_Animals
 
             if (!doorOpened && doorOpening)
             {
-                if (gameTime.TotalGameTime - IntervalSpan2 > DoorOpenToComeIn)
+                if (gameTime.TotalGameTime - IntervalSpan > DoorOpenToComeIn)
                 {
                     doorOpened = true;
                     spaceBar.isVisible = true;
@@ -765,7 +811,7 @@ namespace Party_Animals
 
             if (!doorOpened && doorOpening)
             {
-                if (SceneStart - IntervalSpan2 > DoorOpenToComeIn)
+                if ((gameTime.TotalGameTime -  SceneStart) > DoorOpenToComeIn)
                 {
                     doorOpened = true;
                     spaceBar.isVisible = true;
@@ -775,6 +821,7 @@ namespace Party_Animals
                         item.StopMovement();
                     }
                     cat.SetIMG(0);
+
                 }
             }
             if (doorOpened && doorOpening && Keyboard.GetState().IsKeyDown(Keys.Space) && (gameState == 1))
@@ -784,7 +831,7 @@ namespace Party_Animals
                 Game1.suprisee = Color.White;
 
 
-                //  CheckResult_Scene2();
+                  CheckResult_Scene2();
             }
             if (gameState == 2)
             {
@@ -804,17 +851,6 @@ namespace Party_Animals
                 }
             }
 
-            if (LevelFinish)
-            {
-                if (Keyboard.GetState().IsKeyDown(Keys.N))
-                {
-
-                    GameScene = 1;
-                    Load_2();
-                    LevelFinish = false;
-                }
-
-            }
         }
 
         /// <summary>
@@ -921,6 +957,33 @@ namespace Party_Animals
         {
             spaceBar.isVisible = false;
             ShowResult = true;
+
+            if (putCount == 3 && isLightOff)
+            {
+                cat.SetIMG(1);
+                sounds["scream"].Play();
+                confetti.isVisible = true;
+            }
+
+            else
+                cat.SetIMG(2);
+
+            if (!LevelFinish)
+                LevelFinish = true;
+
+        }
+        void CheckResult_Scene2()
+        {
+            spaceBar.isVisible = false;
+            ShowResult = true;
+            foreach (var item in interactableObjs2)
+            {
+                item.SetIMG(0);
+            }
+            foreach (var item in horns)
+            {
+                item.isVisible = true;
+            }
 
             if (putCount == 3 && isLightOff)
             {

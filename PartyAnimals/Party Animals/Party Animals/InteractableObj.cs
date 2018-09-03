@@ -77,6 +77,8 @@ namespace Party_Animals
                                 // item -> stop moving
                                 Interacted = true;
                                 item.isVisible = false;
+                                if(item.objinbody!=null)
+                                item.objinbody.isVisible = false;
                                 item.StopMovement();
                                 item.InSpot = true;
                                 Game1.putCount++;
@@ -104,6 +106,8 @@ namespace Party_Animals
                             item.isVisible = true;
                             // item -> return to move
                             item.StartMovement();
+                            if (item.objinbody != null)
+                                item.objinbody.isVisible = true;
                             item.InSpot = false;
                             Interacted = false;
                             Game1.putCount--;

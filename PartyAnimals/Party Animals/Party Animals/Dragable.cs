@@ -31,7 +31,7 @@ namespace Party_Animals
         private bool _collided;
         //
         private bool interacted;
-        private ObjInBody objinbody;
+        public ObjInBody objinbody;
         public List<ObjInBody> objInBodies;
         public Point holdPoint;
 
@@ -161,8 +161,8 @@ namespace Party_Animals
                 {
                     if (item.Rectangle.Contains(new Rectangle(holdPoint.X + Rectangle.X - 10, holdPoint.Y + Rectangle.Y-10,20,20)))
                     {
-                        if (Game1.currentMouseState.LeftButton.Equals(ButtonState.Released) &&
-                       Game1.previousMouseState.LeftButton.Equals(ButtonState.Pressed) &&
+                        if (Game1.currentMouseState.LeftButton.Equals(ButtonState.Pressed) &&
+                       //Game1.previousMouseState.LeftButton.Equals(ButtonState.Pressed) &&
                         item.Rectangle.Contains(Game1.currentMouseState.Position))
                         {
                             interacted = true;
