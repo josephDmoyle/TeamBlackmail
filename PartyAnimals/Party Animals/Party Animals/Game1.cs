@@ -17,7 +17,6 @@ namespace Party_Animals
 
     public class Game1 : Game
     {
-
         public static int mouseInLeve;
         public static Color supriser = Color.White, suprisee = Color.White;
         public static int GameScene = 0, gameState = 0;
@@ -28,7 +27,7 @@ namespace Party_Animals
             new Rectangle(247,219,893,286)
         };
         public static int putCount = 0;
-        public static bool LevelFinish = false;
+        public static bool LevelFinish = false, lightOn;
 
         private const int ScreenHeight = 720, ScreenWidth = 1280;
 
@@ -56,7 +55,7 @@ namespace Party_Animals
         /// </summary>
         SpriteBatch spriteBatch;
 
-        private TimeSpan SceneStart, IntervalSpan, IntervalSpan2;
+        private TimeSpan SceneStart, IntervalSpan2;
 
         private Dictionary<string, SoundEffect> sounds = new Dictionary<string, SoundEffect>();
 
@@ -75,10 +74,10 @@ namespace Party_Animals
         BGGraphic confetti;
         BGGraphic door;
         BGGraphic cat;
-        Button lightOff;
+        Button lightSwitch;
         BGGraphic spaceBar;
 
-        BGGraphic[] curtains;
+        List<BGGraphic> curtains;
 
         //public static TaskList taskList;
         public static int isDragging = -1;
@@ -128,8 +127,6 @@ namespace Party_Animals
             base.Initialize();
         }
 
-
-
         /// <summary>
         /// LoadContent will be called once per game and is the place to load
         /// all of your content.
@@ -141,13 +138,12 @@ namespace Party_Animals
             sounds["beginningSong"] = Content.Load<SoundEffect>("SFX/beginningSong");
             sounds["supriseSong"] = Content.Load<SoundEffect>("SFX/supriseSong");
             sounds["scream"] = Content.Load<SoundEffect>("SFX/scream");
+            sounds["boo"] = Content.Load<SoundEffect>("SFX/boo");
             sounds["comeOn"] = Content.Load<SoundEffect>("SFX/come-on");
             sounds["goGoGo"] = Content.Load<SoundEffect>("SFX/go-go-go");
             sounds["shush"] = Content.Load<SoundEffect>("SFX/shush");
             sounds["stab"] = Content.Load<SoundEffect>("SFX/stab");
             sounds["vanStart"] = Content.Load<SoundEffect>("SFX/vanStart");
-
-            // TODO: use this.Content to load your game content here
 
             switch (GameScene)
             {
@@ -187,21 +183,21 @@ namespace Party_Animals
             vanFrame = SceneStart + FrameRate;
             road = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/road_0") }, new Rectangle(0, 0, 1280, 720))
             {
-                RenderOrder = 2
+                RenderOrder = 1
             };
             van = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/van_0"), Content.Load<Texture2D>("Graphics/van_1")}, new Rectangle(0, 0, 1280, 720))
             {
-                RenderOrder = 3,
-                ID = 0
+                RenderOrder = 2
             };
             spaceBar = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/space") }, new Rectangle(1079, 564, 165, 132))
             {
-                RenderOrder = 4
+                RenderOrder = 3
             };
             components = new List<Component>()
             {
                 van, road, spaceBar
             };
+            components.Sort((x, y) => x.RenderOrder.CompareTo(y.RenderOrder));
         }
 
         void Load_1()
@@ -218,22 +214,19 @@ namespace Party_Animals
                  new Rectangle(rd.Next(ObjectMovingRestrictionList[0].X,ObjectMovingRestrictionList[0].X+ObjectMovingRestrictionList[0].Width), rd.Next(ObjectMovingRestrictionList[0].Y,ObjectMovingRestrictionList[0].Y+ObjectMovingRestrictionList[0].Height), 171, 216))
                 {
                 RenderOrder = 4,
-                ID = 0,
-                name = "Snowy"
+                ID = 0
                 },
                 new Dragable(new Texture2D[] { Content.Load<Texture2D>("Graphics/hamster_0"), Content.Load<Texture2D>("Graphics/hamster_1") },
                  new Rectangle(rd.Next(ObjectMovingRestrictionList[0].X,ObjectMovingRestrictionList[0].X+ObjectMovingRestrictionList[0].Width), rd.Next(ObjectMovingRestrictionList[0].X,ObjectMovingRestrictionList[0].Y+ObjectMovingRestrictionList[0].Height), 103, 127))
                 {
                 RenderOrder = 4,
-                ID = 1,
-                name = "Hammy"
+                ID = 1
                 },
                 new Dragable(new Texture2D[] { Content.Load<Texture2D>("Graphics/Bear_0"), Content.Load<Texture2D>("Graphics/Bear_1") },
                  new Rectangle(rd.Next(ObjectMovingRestrictionList[0].X,ObjectMovingRestrictionList[0].X+ObjectMovingRestrictionList[0].Width), rd.Next(ObjectMovingRestrictionList[0].X,ObjectMovingRestrictionList[0].Y+ObjectMovingRestrictionList[0].Height), 100, 100))
                 {
                 RenderOrder = 4,
-                ID = 2,
-                name = "Bear"
+                ID = 2
                 },
             };
             /*
@@ -291,13 +284,12 @@ namespace Party_Animals
                 ID = 2,
                 RenderOrder = 3,
             };
-            lightOff = new Button(Content.Load<Texture2D>("Graphics/LightButton"))
+            lightSwitch = new Button(Content.Load<Texture2D>("Graphics/switch_1"), Content.Load<Texture2D>("Graphics/switch_0"))
             {
-                RenderOrder = 5,
+                RenderOrder = 3,
                 Position = new Vector2(1000, 180)
 
             };
-            lightOff.Click += LightOff_Click;
 
             spaceBar = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/space") }, new Rectangle(1079, 564, 165, 132))
             {
@@ -306,7 +298,7 @@ namespace Party_Animals
                 suprisee = true
             };
 
-            curtains = new BGGraphic[]
+            curtains = new List<BGGraphic>()
             {
                 new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/curtain_0"),  Content.Load<Texture2D>("Graphics/curtain_1") }, new Rectangle(265,58,175,258)){ ID = 20},
                 new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/curtain_0"),  Content.Load<Texture2D>("Graphics/curtain_1") }, new Rectangle(567,58,175,258)){ ID = 21}
@@ -330,7 +322,7 @@ namespace Party_Animals
                 boxes,
                 sofa,
                 rug,
-                lightOff,
+                lightSwitch,
                 spaceBar,
                 confetti,
                 curtains[0],
@@ -365,21 +357,21 @@ namespace Party_Animals
             vanFrame = SceneStart + FrameRate;
             road = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/road_0"), Content.Load<Texture2D>("Graphics/road_1"), Content.Load<Texture2D>("Graphics/road_2"), Content.Load<Texture2D>("Graphics/road_3"), Content.Load<Texture2D>("Graphics/road_4"), }, new Rectangle(0, 0, 1280, 720))
             {
-                RenderOrder = 2
+                RenderOrder = 1
             };
             van = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/van_0"), Content.Load<Texture2D>("Graphics/van_2"), Content.Load<Texture2D>("Graphics/van_3"), Content.Load<Texture2D>("Graphics/van_4") }, new Rectangle(0, 0, 1280, 720))
             {
-                RenderOrder = 3,
-                ID = 0
+                RenderOrder = 2
             };
             spaceBar = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/space") }, new Rectangle(1079, 564, 165, 132))
             {
-                RenderOrder = 4,
+                RenderOrder = 3
             };
             components = new List<Component>()
             {
                 van, road, spaceBar
             };
+            components.Sort((x, y) => x.RenderOrder.CompareTo(y.RenderOrder));
         }
 
         void Load_3()
@@ -396,8 +388,12 @@ namespace Party_Animals
                 {
                 RenderOrder = 4,
                 ID = 0,
+<<<<<<< HEAD
                 name = "Snowy",
                 holdPoint = new Point(98,65)
+=======
+                holdPoint = new Point(58,92)
+>>>>>>> 0d6bbf77b46e9d322a6d7cd9cd4179c3873cc4f2
 
                 },
                 new Dragable(new Texture2D[] { Content.Load<Texture2D>("Graphics/Fox_Peach_0"), Content.Load<Texture2D>("Graphics/Fox_Peach_1") },
@@ -405,7 +401,6 @@ namespace Party_Animals
                 {
                 RenderOrder = 4,
                 ID = 1,
-                name = "Hammy",
                 holdPoint = new Point(58,92)
 
                 },
@@ -414,8 +409,12 @@ namespace Party_Animals
                 {
                 RenderOrder = 4,
                 ID = 2,
+<<<<<<< HEAD
                 name = "Barny",
                 holdPoint = new Point(49,61)
+=======
+                holdPoint = new Point(58,92)
+>>>>>>> 0d6bbf77b46e9d322a6d7cd9cd4179c3873cc4f2
                 },
             };
 
@@ -437,7 +436,7 @@ namespace Party_Animals
                 RenderOrder = 0
             };
 
-            curtains = new BGGraphic[]
+            curtains = new List<BGGraphic>
             {
                 new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/curtain_0"),  Content.Load<Texture2D>("Graphics/curtain_1") }, new Rectangle(265,58,175,258)){ ID = 20},
                 new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/curtain_0"),  Content.Load<Texture2D>("Graphics/curtain_1") }, new Rectangle(567,58,175,258)){ ID = 21}
@@ -449,9 +448,9 @@ namespace Party_Animals
                 isVisible = false,
                 suprisee = true
             };
-            lightOff = new Button(Content.Load<Texture2D>("Graphics/LightButton"))
+            lightSwitch = new Button(Content.Load<Texture2D>("Graphics/switch_1"), Content.Load<Texture2D>("Graphics/switch_0"))
             {
-                RenderOrder = 5,
+                RenderOrder = 3,
                 Position = new Vector2(1000, 180)
 
             };
@@ -516,14 +515,9 @@ namespace Party_Animals
 
             components = new List<Component>()
             {
-                animals[0],
-                animals[1],
-                animals[2],
                 room,
-                curtains[0],
-                curtains[1],
                 spaceBar,
-                lightOff,
+                lightSwitch,
                 door,
                 confetti,
                 cat,
@@ -539,34 +533,17 @@ namespace Party_Animals
             interactableObjs2.Add(rug2);
             interactableObjs2.Add(sofa2);
 
+            foreach (Dragable anim in animals)
+                components.Add(anim);
+            foreach (BGGraphic curt in curtains)
+                components.Add(curt);
+
             cat.MoveTo(new Point(170, 142 - 219));
             SceneStart = _gameTime.TotalGameTime;
         }
 
 
         #region Scene1_EventMethods
-
-        bool isLightOff;
-
-        private void LightOff_Click(object sender, EventArgs e)
-        {
-            if (!isLightOff)
-            {
-                //Game1.taskList.taskList[3].ChangeTaskStatus(true);
-
-                Game1.supriser = Color.Black;
-                Game1.suprisee = Color.DarkGray;
-                isLightOff = true;
-            }
-            else
-            {
-                Game1.supriser = Color.White;
-                Game1.suprisee = Color.White;
-                //Game1.taskList.taskList[3].ChangeTaskStatus(false);
-                isLightOff = false;
-            }
-
-        }
 
         private void OnPressCurtain(object sender, IntEventArgs e)
         {
@@ -583,7 +560,6 @@ namespace Party_Animals
 
         private void DragItem_Press(object sender, IntEventArgs e)
         {
-            //  animals[e.ID].RenderOrder = downUI.RenderOrder - 1;
             animals[e.ID].isVisible = true;
         }
 
@@ -894,11 +870,8 @@ namespace Party_Animals
 
         void Draw_0(GameTime gameTime)
         {
-            components.Sort((x, y) => x.RenderOrder.CompareTo(y.RenderOrder));
             foreach (var item in components)
-            {
                 item.Draw(gameTime, spriteBatch);
-            }
         }
 
         void Draw_1(GameTime gameTime)
@@ -913,11 +886,8 @@ namespace Party_Animals
         void Draw_2(GameTime gameTime)
         {
 
-            components.Sort((x, y) => x.RenderOrder.CompareTo(y.RenderOrder));
             foreach (var item in components)
-            {
                 item.Draw(gameTime, spriteBatch);
-            }
         }
 
         void Draw_3(GameTime gameTime)
@@ -948,29 +918,26 @@ namespace Party_Animals
             cat.DisplayingID = 0;
             IntervalSpan2 = SceneStart;
             doorOpening = true;
-
         }
-
-        bool ShowResult;
 
         void CheckResult_Scene1()
         {
             spaceBar.isVisible = false;
-            ShowResult = true;
 
-            if (putCount == 3 && isLightOff)
+            if (putCount == 3 && !lightOn)
             {
                 cat.SetIMG(1);
                 sounds["scream"].Play();
                 confetti.isVisible = true;
             }
-
             else
+            {
                 cat.SetIMG(2);
+                sounds["boo"].Play();
+            }
 
             if (!LevelFinish)
                 LevelFinish = true;
-
         }
         void CheckResult_Scene2()
         {

@@ -14,12 +14,9 @@ namespace Party_Animals
     {
         #region private
         private bool _isHovering;
-        private Texture2D _texture;
+        private Texture2D _texture, ON, OFF;
         #endregion
         #region Properties
-        public event EventHandler Click;
-        public bool Clicked { get; set; }
-        public Color PenColor { get; set; }
         public Vector2 Position { get; set; }
         public Rectangle Rectangle
         {
@@ -28,21 +25,15 @@ namespace Party_Animals
                 return new Rectangle((int)Position.X, (int)Position.Y, _texture.Width, _texture.Height);
             }
         }
-
-        public string Text
-        {
-            get;
-            set;
-        }
         #endregion
 
         #region Methods
 
-        public Button(Texture2D texture)
+        public Button(Texture2D on, Texture2D off)
         {
-            _texture = texture;
-
-            PenColor = Color.Black;
+            ON = on;
+            OFF = off;
+            _texture = ON;
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -50,7 +41,6 @@ namespace Party_Animals
             Color color = Game1.suprisee;
             if (_isHovering && Game1.gameState == 0)
                 color = Color.Gray;
-
             spriteBatch.Draw(_texture, Rectangle, color);
         }
 
@@ -64,7 +54,20 @@ namespace Party_Animals
                 _isHovering = true;
                 if (Game1.currentMouseState.LeftButton == ButtonState.Released && Game1.previousMouseState.LeftButton == ButtonState.Pressed)
                 {
-                    Click?.Invoke(this, new EventArgs());
+                    if(_texture == ON)
+                    {
+                        _texture = OFF;
+                        Game1.lightOn = false;
+                        Game1.supriser = Color.Black;
+                        Game1.suprisee = Color.DarkGray;
+                    }
+                    else
+                    {
+                        _texture = ON;
+                        Game1.lightOn = true;
+                        Game1.supriser = Color.White;
+                        Game1.suprisee = Color.White;
+                    }
                 }
             }
         }

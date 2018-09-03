@@ -416,18 +416,6 @@
 /processorParam:TextureFormat=Color
 /build:Graphics/curtain_1.png
 
-#begin Graphics/LoadingBackground.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Graphics/LoadingBackground.png
-
 #begin Graphics/Bear_0.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -992,6 +980,7 @@
 /processorParam:TextureFormat=Color
 /build:Graphics/road_4.png
 
+<<<<<<< HEAD
 #begin Graphics/room2.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -1063,4 +1052,11 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Graphics/Lounge_2.png
+=======
+#begin SFX/boo.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SFX/boo.wav
+>>>>>>> 0d6bbf77b46e9d322a6d7cd9cd4179c3873cc4f2
 
