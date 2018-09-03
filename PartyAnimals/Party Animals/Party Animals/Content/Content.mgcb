@@ -860,3 +860,15 @@
 /processorParam:TextureFormat=Color
 /build:Graphics/Cat_White_0.png
 
+#begin SFX/stab.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SFX/stab.wav
+
+#begin SFX/vanStart.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SFX/vanStart.wav
+

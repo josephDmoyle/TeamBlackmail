@@ -46,7 +46,7 @@ namespace Party_Animals
         /// <summary>
         /// How long until the cat arrives
         /// </summary>
-        private readonly TimeSpan PlaceObjectTime = TimeSpan.FromSeconds(8);
+        private readonly TimeSpan FirstLeg = TimeSpan.FromSeconds(4), SecondLeg = TimeSpan.FromSeconds(4);
 
         GraphicsDeviceManager graphics;
 
@@ -55,9 +55,9 @@ namespace Party_Animals
         /// </summary>
         SpriteBatch spriteBatch;
 
-        private TimeSpan timeStartToOpenDoor;
+        private TimeSpan timeStartToOpenDoor, SceneStart, IntervalSpan;
 
-        private SoundEffect beginningSong, supriseSong, scream, comeOn, goGoGo, shush;
+        private Dictionary<string, SoundEffect> sounds = new Dictionary<string, SoundEffect>();
 
         private SoundEffectInstance musicPlayer;
 
@@ -90,7 +90,6 @@ namespace Party_Animals
 
         bool doorOpened;
         bool doorOpening;
-        bool halfTime;
 
         #endregion
         #region Parameter_LoadingScene
@@ -103,6 +102,7 @@ namespace Party_Animals
         #endregion
         GameTime _gameTime;
         Random rd;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -135,6 +135,14 @@ namespace Party_Animals
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            sounds["beginningSong"] = Content.Load<SoundEffect>("SFX/beginningSong");
+            sounds["supriseSong"] = Content.Load<SoundEffect>("SFX/supriseSong");
+            sounds["scream"] = Content.Load<SoundEffect>("SFX/scream");
+            sounds["comeOn"] = Content.Load<SoundEffect>("SFX/come-on");
+            sounds["goGoGo"] = Content.Load<SoundEffect>("SFX/go-go-go");
+            sounds["shush"] = Content.Load<SoundEffect>("SFX/shush");
+            sounds["stab"] = Content.Load<SoundEffect>("SFX/stab");
+            sounds["vanStart"] = Content.Load<SoundEffect>("SFX/vanStart");
 
             // TODO: use this.Content to load your game content here
 
@@ -169,24 +177,17 @@ namespace Party_Animals
 
         void Load_0()
         {
-            #region FirstScene
-            beginningSong = Content.Load<SoundEffect>("SFX/beginningSong");
-            #endregion
+            SceneStart = new TimeSpan();
         }
 
         void Load_1()
         {
             #region Scene1_LoadContent
-            supriseSong = Content.Load<SoundEffect>("SFX/supriseSong");
-            scream = Content.Load<SoundEffect>("SFX/scream");
-            comeOn = Content.Load<SoundEffect>("SFX/come-on");
-            goGoGo = Content.Load<SoundEffect>("SFX/go-go-go");
-            shush = Content.Load<SoundEffect>("SFX/shush");
 
-            musicPlayer = beginningSong.CreateInstance();
+            musicPlayer = sounds["beginningSong"].CreateInstance();
             if (playMusic)
                 musicPlayer.Play();
-            comeOn.Play();
+            sounds["comeOn"].Play();
             // UIs
             #region Initialize parameters
             // dragable animals
@@ -354,7 +355,6 @@ namespace Party_Animals
         {
             doorOpened = false;
             doorOpening = false;
-            halfTime = false;
             LevelFinish = false;
             gameState = 0;
             animals = new List<Dragable>
@@ -567,10 +567,20 @@ namespace Party_Animals
 
         void Update_0(GameTime gameTime)
         {
-            if (Keyboard.GetState().IsKeyDown(Keys.Space))
+            if (Keyboard.GetState().IsKeyDown(Keys.Space) && LevelFinish == false)
             {
+                sounds["vanStart"].Play();
+                IntervalSpan = gameTime.TotalGameTime + sounds["vanStart"].Duration;
+                LevelFinish = true;
+            }
+            if(LevelFinish == true && gameTime.TotalGameTime > IntervalSpan)
+            {
+                sounds["stab"].Play();
+                SceneStart = gameTime.TotalGameTime;
                 GameScene = 1;
+                LevelFinish = false;
                 Load_1();
+
             }
         }
 
@@ -590,21 +600,19 @@ namespace Party_Animals
 
             if (!doorOpening)
             {
-                if (!halfTime && gameTime.TotalGameTime > TimeSpan.FromSeconds(PlaceObjectTime.Seconds / 2))
+                if (gameTime.TotalGameTime > SceneStart + FirstLeg)
                 {
-                    halfTime = true;
                     cat.MoveTo(new Point(800 - 170, 0));
-                    goGoGo.Play();
+                    sounds["goGoGo"].Play();
                 }
 
-                if (gameTime.TotalGameTime > PlaceObjectTime)
+                if (gameTime.TotalGameTime > SceneStart + FirstLeg + SecondLeg)
                 {
                     // cout down finish
                     doorOpening = true;
                     gameState = 1;
                     OpenDoor(gameTime);
-
-                    shush.Play();
+                    sounds["shush"].Play();
                 }
             }
 
@@ -633,7 +641,7 @@ namespace Party_Animals
                 if (playMusic)
                 {
                     musicPlayer.Pause();
-                    musicPlayer = supriseSong.CreateInstance();
+                    musicPlayer = sounds["supriseSong"].CreateInstance();
                     musicPlayer.Play();
 
                 }
@@ -700,27 +708,26 @@ namespace Party_Animals
 
             if (!doorOpening)
             {
-                if (!halfTime && gameTime.TotalGameTime > TimeSpan.FromSeconds(PlaceObjectTime.Seconds / 2) + scene2StartTime)
+                if (gameTime.TotalGameTime > SceneStart + FirstLeg)
                 {
-                    halfTime = true;
                     cat.MoveTo(new Point(800 - 170, 0));
-                    goGoGo.Play();
+                    sounds["goGoGo"].Play();
                 }
 
-                if (gameTime.TotalGameTime > PlaceObjectTime + scene2StartTime)
+                if (gameTime.TotalGameTime > SceneStart + FirstLeg + SecondLeg)
                 {
                     // cout down finish
                     doorOpening = true;
                     gameState = 1;
                     OpenDoor(gameTime);
 
-                    shush.Play();
+                    sounds["shush"].Play();
                 }
             }
 
             if (!doorOpened && doorOpening)
             {
-                if (gameTime.TotalGameTime - timeStartToOpenDoor > DoorOpenToComeIn)
+                if (SceneStart - timeStartToOpenDoor > DoorOpenToComeIn)
                 {
                     doorOpened = true;
                     spaceBar.isVisible = true;
@@ -741,9 +748,8 @@ namespace Party_Animals
                 if (playMusic)
                 {
                     musicPlayer.Pause();
-                    musicPlayer = supriseSong.CreateInstance();
+                    musicPlayer = sounds["supriseSong"].CreateInstance();
                     musicPlayer.Play();
-
                 }
 
 
@@ -871,7 +877,7 @@ namespace Party_Animals
         {
             door.SetIMG(1);
             cat.DisplayingID = 0;
-            timeStartToOpenDoor = gameTime.TotalGameTime;
+            timeStartToOpenDoor = SceneStart;
             doorOpening = true;
 
         }
@@ -886,7 +892,7 @@ namespace Party_Animals
             if (putCount == 3 && isLightOff)
             {
                 cat.SetIMG(1);
-                scream.Play();
+                sounds["scream"].Play();
                 confetti.isVisible = true;
             }
 
