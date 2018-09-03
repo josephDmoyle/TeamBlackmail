@@ -14,8 +14,6 @@ namespace Party_Animals
     {
         public static int currentDraggingID;
 
-        public string name;
-
         #region Fields
         private MouseState _currentState;
         private bool _isHovering;

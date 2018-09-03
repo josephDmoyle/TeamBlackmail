@@ -17,7 +17,6 @@ namespace Party_Animals
 
     public class Game1 : Game
     {
-
         public static int mouseInLeve;
         public static Color supriser = Color.White, suprisee = Color.White;
         public static int GameScene = 0, gameState = 0;
@@ -123,8 +122,6 @@ namespace Party_Animals
             base.Initialize();
         }
 
-
-
         /// <summary>
         /// LoadContent will be called once per game and is the place to load
         /// all of your content.
@@ -136,13 +133,12 @@ namespace Party_Animals
             sounds["beginningSong"] = Content.Load<SoundEffect>("SFX/beginningSong");
             sounds["supriseSong"] = Content.Load<SoundEffect>("SFX/supriseSong");
             sounds["scream"] = Content.Load<SoundEffect>("SFX/scream");
+            sounds["boo"] = Content.Load<SoundEffect>("SFX/boo");
             sounds["comeOn"] = Content.Load<SoundEffect>("SFX/come-on");
             sounds["goGoGo"] = Content.Load<SoundEffect>("SFX/go-go-go");
             sounds["shush"] = Content.Load<SoundEffect>("SFX/shush");
             sounds["stab"] = Content.Load<SoundEffect>("SFX/stab");
             sounds["vanStart"] = Content.Load<SoundEffect>("SFX/vanStart");
-
-            // TODO: use this.Content to load your game content here
 
             switch (GameScene)
             {
@@ -213,22 +209,19 @@ namespace Party_Animals
                  new Rectangle(rd.Next(ObjectMovingRestrictionList[0].X,ObjectMovingRestrictionList[0].X+ObjectMovingRestrictionList[0].Width), rd.Next(ObjectMovingRestrictionList[0].Y,ObjectMovingRestrictionList[0].Y+ObjectMovingRestrictionList[0].Height), 171, 216))
                 {
                 RenderOrder = 4,
-                ID = 0,
-                name = "Snowy"
+                ID = 0
                 },
                 new Dragable(new Texture2D[] { Content.Load<Texture2D>("Graphics/hamster_0"), Content.Load<Texture2D>("Graphics/hamster_1") },
                  new Rectangle(rd.Next(ObjectMovingRestrictionList[0].X,ObjectMovingRestrictionList[0].X+ObjectMovingRestrictionList[0].Width), rd.Next(ObjectMovingRestrictionList[0].X,ObjectMovingRestrictionList[0].Y+ObjectMovingRestrictionList[0].Height), 103, 127))
                 {
                 RenderOrder = 4,
-                ID = 1,
-                name = "Hammy"
+                ID = 1
                 },
                 new Dragable(new Texture2D[] { Content.Load<Texture2D>("Graphics/Bear_0"), Content.Load<Texture2D>("Graphics/Bear_1") },
                  new Rectangle(rd.Next(ObjectMovingRestrictionList[0].X,ObjectMovingRestrictionList[0].X+ObjectMovingRestrictionList[0].Width), rd.Next(ObjectMovingRestrictionList[0].X,ObjectMovingRestrictionList[0].Y+ObjectMovingRestrictionList[0].Height), 100, 100))
                 {
                 RenderOrder = 4,
-                ID = 2,
-                name = "Bear"
+                ID = 2
                 },
             };
             /*
@@ -390,7 +383,6 @@ namespace Party_Animals
                 {
                 RenderOrder = 4,
                 ID = 0,
-                name = "Snowy",
                 holdPoint = new Point(58,92)
 
                 },
@@ -399,7 +391,6 @@ namespace Party_Animals
                 {
                 RenderOrder = 4,
                 ID = 1,
-                name = "Hammy",
                 holdPoint = new Point(58,92)
 
                 },
@@ -408,7 +399,6 @@ namespace Party_Animals
                 {
                 RenderOrder = 4,
                 ID = 2,
-                name = "Barny",
                 holdPoint = new Point(58,92)
                 },
             };
@@ -537,7 +527,6 @@ namespace Party_Animals
 
         private void DragItem_Press(object sender, IntEventArgs e)
         {
-            //  animals[e.ID].RenderOrder = downUI.RenderOrder - 1;
             animals[e.ID].isVisible = true;
         }
 
@@ -859,9 +848,7 @@ namespace Party_Animals
         void Draw_0(GameTime gameTime)
         {
             foreach (var item in components)
-            {
                 item.Draw(gameTime, spriteBatch);
-            }
         }
 
         void Draw_1(GameTime gameTime)
@@ -877,9 +864,7 @@ namespace Party_Animals
         {
 
             foreach (var item in components)
-            {
                 item.Draw(gameTime, spriteBatch);
-            }
         }
 
         void Draw_3(GameTime gameTime)
@@ -910,7 +895,6 @@ namespace Party_Animals
             cat.DisplayingID = 0;
             IntervalSpan2 = SceneStart;
             doorOpening = true;
-
         }
 
         bool ShowResult;
@@ -926,13 +910,14 @@ namespace Party_Animals
                 sounds["scream"].Play();
                 confetti.isVisible = true;
             }
-
             else
+            {
                 cat.SetIMG(2);
+                sounds["boo"].Play();
+            }
 
             if (!LevelFinish)
                 LevelFinish = true;
-
         }
 
         private static readonly Random getrandom = new Random();

@@ -19,7 +19,6 @@ namespace Party_Animals
         #region Properties
         public event EventHandler Click;
         public bool Clicked { get; set; }
-        public Color PenColor { get; set; }
         public Vector2 Position { get; set; }
         public Rectangle Rectangle
         {
@@ -27,12 +26,6 @@ namespace Party_Animals
             {
                 return new Rectangle((int)Position.X, (int)Position.Y, _texture.Width, _texture.Height);
             }
-        }
-
-        public string Text
-        {
-            get;
-            set;
         }
         #endregion
 
@@ -43,8 +36,6 @@ namespace Party_Animals
             ON = on;
             OFF = off;
             _texture = ON;
-
-            PenColor = Color.Black;
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -52,7 +43,6 @@ namespace Party_Animals
             Color color = Game1.suprisee;
             if (_isHovering && Game1.gameState == 0)
                 color = Color.Gray;
-
             spriteBatch.Draw(_texture, Rectangle, color);
         }
 

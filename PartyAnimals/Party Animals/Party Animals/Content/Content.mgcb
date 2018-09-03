@@ -980,3 +980,9 @@
 /processorParam:TextureFormat=Color
 /build:Graphics/road_4.png
 
+#begin SFX/boo.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SFX/boo.wav
+
