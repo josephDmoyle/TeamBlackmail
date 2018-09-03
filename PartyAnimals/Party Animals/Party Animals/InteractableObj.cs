@@ -80,7 +80,7 @@ namespace Party_Animals
                                 item.StopMovement();
                                 item.InSpot = true;
                                 Game1.putCount++;
-                                Game1.taskList.taskList[item.ID].ChangeTaskStatus(true);
+                                //Game1.taskList.taskList[item.ID].ChangeTaskStatus(true);
                                 _currentInteractID = item.ID;
                                 break;
                             }
@@ -107,7 +107,7 @@ namespace Party_Animals
                             item.InSpot = false;
                             Interacted = false;
                             Game1.putCount--;
-                            Game1.taskList.taskList[item.ID].ChangeTaskStatus(false);
+                            //Game1.taskList.taskList[item.ID].ChangeTaskStatus(false);
 
                             _currentInteractID = -1;
                         }

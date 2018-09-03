@@ -40,13 +40,14 @@ namespace Party_Animals
         /// <summary>
         /// How long the door is open until the cat is set
         /// </summary>
-        /// 
         private readonly TimeSpan DoorOpenToComeIn = TimeSpan.FromSeconds(2);
 
         /// <summary>
         /// How long until the cat arrives
         /// </summary>
         private readonly TimeSpan FirstLeg = TimeSpan.FromSeconds(4), SecondLeg = TimeSpan.FromSeconds(4);
+
+        private readonly TimeSpan FrameRate = TimeSpan.FromMilliseconds(100);
 
         GraphicsDeviceManager graphics;
 
@@ -55,7 +56,7 @@ namespace Party_Animals
         /// </summary>
         SpriteBatch spriteBatch;
 
-        private TimeSpan timeStartToOpenDoor, SceneStart, IntervalSpan;
+        private TimeSpan SceneStart, IntervalSpan, IntervalSpan2;
 
         private Dictionary<string, SoundEffect> sounds = new Dictionary<string, SoundEffect>();
 
@@ -79,7 +80,7 @@ namespace Party_Animals
 
         BGGraphic[] curtains;
 
-        public static TaskList taskList;
+        //public static TaskList taskList;
         public static int isDragging = -1;
 
         // UI
@@ -88,18 +89,15 @@ namespace Party_Animals
         List<Component> components;
         List<InteractableObj> interactObjs;
 
-        bool doorOpened;
-        bool doorOpening;
+        bool doorOpened, doorOpening, halfTime;
 
         #endregion
+
         #region Parameter_LoadingScene
-        List<Component> loadingSceneComponts;
-        BGGraphic loadingSceneBG;
+        List<BGGraphic> vans;
+        TimeSpan vanFrame;
         #endregion
-        #region Parameter_Scene2
-        TimeSpan scene2StartTime;
 
-        #endregion
         GameTime _gameTime;
         Random rd;
 
@@ -177,16 +175,38 @@ namespace Party_Animals
 
         void Load_0()
         {
+            musicPlayer = sounds["beginningSong"].CreateInstance();
+            if (playMusic)
+                musicPlayer.Play();
+
+            putCount = 0;
             SceneStart = new TimeSpan();
+            IntervalSpan2 = SceneStart + FrameRate;
+            BGGraphic van0 = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/van_0") }, new Rectangle(0, 0, 1280, 720))
+            {
+                RenderOrder = 2,
+                ID = 0
+            };
+            BGGraphic van1 = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/van_1") }, new Rectangle(0, 0, 1280, 720))
+            {
+                RenderOrder = 2,
+                ID = 1
+            };
+
+            components = new List<Component>()
+            {
+                van0, van1
+            };
+            vans = new List<BGGraphic>()
+            {
+                van0, van1
+            };
         }
 
         void Load_1()
         {
             #region Scene1_LoadContent
 
-            musicPlayer = sounds["beginningSong"].CreateInstance();
-            if (playMusic)
-                musicPlayer.Play();
             sounds["comeOn"].Play();
             // UIs
             #region Initialize parameters
@@ -215,6 +235,7 @@ namespace Party_Animals
                 name = "Bear"
                 },
             };
+            /*
             taskList = new TaskList(Content.Load<Texture2D>("Graphics/TaskList"), new Rectangle(29, 20, 147, 200), Content.Load<SpriteFont>("Font/font"))
             {
                 RenderOrder = 5,
@@ -225,6 +246,7 @@ namespace Party_Animals
                 taskList.taskList.Add(new Task("Hide " + animal.name, animal.ID));
             }
             taskList.taskList.Add(new Task("Turn off the\n         light", animals.Count));
+            */
             door = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/door_0"), Content.Load<Texture2D>("Graphics/door_1") }, new Rectangle(811, 130, 143, 230))
             {
                 RenderOrder = 0
@@ -309,7 +331,6 @@ namespace Party_Animals
                 rug,
                 lightOff,
                 spaceBar,
-                taskList,
                 confetti,
                 curtains[0],
                 curtains[1]
@@ -340,15 +361,37 @@ namespace Party_Animals
 
         void Load_2()
         {
-            loadingSceneBG = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/LoadingBackground") }, new Rectangle(0, 0, 1280, 720))
+            putCount = 0;
+            IntervalSpan2 = SceneStart + FrameRate;
+            BGGraphic van0 = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/van_0") }, new Rectangle(0, 0, 1280, 720))
             {
-                RenderOrder = 1,
+                RenderOrder = 2,
                 ID = 0
             };
-            loadingSceneComponts = new List<Component>()
+            BGGraphic van1 = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/van_1") }, new Rectangle(0, 0, 1280, 720))
             {
-                loadingSceneBG
+                RenderOrder = 2,
+                ID = 1
             };
+            BGGraphic van2 = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/van_2") }, new Rectangle(0, 0, 1280, 720))
+            {
+                RenderOrder = 2,
+                ID = 1
+            };
+            BGGraphic van3 = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/van_3") }, new Rectangle(0, 0, 1280, 720))
+            {
+                RenderOrder = 2,
+                ID = 1
+            };
+            components = new List<Component>()
+            {
+                van0, van1, van2, van3
+            };
+            vans = new List<BGGraphic>()
+            {
+                van0, van1, van2, van3
+            };
+
         }
 
         void Load_3()
@@ -386,6 +429,8 @@ namespace Party_Animals
                 holdPoint = new Point(58,92)
                 },
             };
+
+            /*
             taskList = new TaskList(Content.Load<Texture2D>("Graphics/TaskList"), new Rectangle(29, 20, 147, 200), Content.Load<SpriteFont>("Font/font"))
             {
                 RenderOrder = 5,
@@ -396,6 +441,7 @@ namespace Party_Animals
                 taskList.taskList.Add(new Task("Hide " + animal.name, animal.ID));
             }
             taskList.taskList.Add(new Task("Turn off the\n         light", animals.Count));
+            */
 
             var room = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/room") }, new Rectangle(0, 0, 1280, 720))
             {
@@ -465,7 +511,7 @@ namespace Party_Animals
             };
 
             cat.MoveTo(new Point(170, 142 - 219));
-            scene2StartTime = _gameTime.TotalGameTime;
+            SceneStart = _gameTime.TotalGameTime;
         }
 
 
@@ -477,7 +523,7 @@ namespace Party_Animals
         {
             if (!isLightOff)
             {
-                Game1.taskList.taskList[3].ChangeTaskStatus(true);
+                //Game1.taskList.taskList[3].ChangeTaskStatus(true);
 
                 Game1.supriser = Color.Black;
                 Game1.suprisee = Color.DarkGray;
@@ -487,7 +533,7 @@ namespace Party_Animals
             {
                 Game1.supriser = Color.White;
                 Game1.suprisee = Color.White;
-                Game1.taskList.taskList[3].ChangeTaskStatus(false);
+                //Game1.taskList.taskList[3].ChangeTaskStatus(false);
                 isLightOff = false;
             }
 
@@ -567,20 +613,29 @@ namespace Party_Animals
 
         void Update_0(GameTime gameTime)
         {
-            if (Keyboard.GetState().IsKeyDown(Keys.Space) && LevelFinish == false)
+            if (LevelFinish)
+            {
+                if (LevelFinish == true && gameTime.TotalGameTime > IntervalSpan)
+                {
+                    sounds["stab"].Play();
+                    SceneStart = gameTime.TotalGameTime;
+                    GameScene = 1;
+                    LevelFinish = false;
+                    Load_1();
+                }
+                else if (gameTime.TotalGameTime > IntervalSpan2)
+                {
+                    IntervalSpan2 = gameTime.TotalGameTime + FrameRate;
+                    vans[putCount].isVisible = false;
+                    putCount = (putCount + 1) % components.Count;
+                    vans[putCount].isVisible = true;
+                }
+            }
+            else if (Keyboard.GetState().IsKeyDown(Keys.Space) && LevelFinish == false)
             {
                 sounds["vanStart"].Play();
                 IntervalSpan = gameTime.TotalGameTime + sounds["vanStart"].Duration;
                 LevelFinish = true;
-            }
-            if(LevelFinish == true && gameTime.TotalGameTime > IntervalSpan)
-            {
-                sounds["stab"].Play();
-                SceneStart = gameTime.TotalGameTime;
-                GameScene = 1;
-                LevelFinish = false;
-                Load_1();
-
             }
         }
 
@@ -600,25 +655,28 @@ namespace Party_Animals
 
             if (!doorOpening)
             {
-                if (gameTime.TotalGameTime > SceneStart + FirstLeg)
+                
+                if (gameTime.TotalGameTime > SceneStart + FirstLeg && !halfTime)
                 {
                     cat.MoveTo(new Point(800 - 170, 0));
                     sounds["goGoGo"].Play();
+                    halfTime = true;
                 }
-
-                if (gameTime.TotalGameTime > SceneStart + FirstLeg + SecondLeg)
+                else if (gameTime.TotalGameTime > SceneStart + FirstLeg + SecondLeg)
                 {
                     // cout down finish
                     doorOpening = true;
                     gameState = 1;
                     OpenDoor(gameTime);
                     sounds["shush"].Play();
+                    halfTime = false;
                 }
+
             }
 
             if (!doorOpened && doorOpening)
             {
-                if (gameTime.TotalGameTime - timeStartToOpenDoor > DoorOpenToComeIn)
+                if (gameTime.TotalGameTime - IntervalSpan2 > DoorOpenToComeIn)
                 {
                     doorOpened = true;
                     spaceBar.isVisible = true;
@@ -685,6 +743,13 @@ namespace Party_Animals
 
         void Update_2(GameTime gameTime)
         {
+            if(gameTime.TotalGameTime > IntervalSpan2)
+            {
+                IntervalSpan2 = gameTime.TotalGameTime + FrameRate;
+                vans[putCount].isVisible = false;
+                putCount = (putCount + 1) % components.Count;
+                vans[putCount].isVisible = true;
+            }
 
             if (Keyboard.GetState().IsKeyDown(Keys.Space))
             {
@@ -708,26 +773,26 @@ namespace Party_Animals
 
             if (!doorOpening)
             {
-                if (gameTime.TotalGameTime > SceneStart + FirstLeg)
+                if (gameTime.TotalGameTime > SceneStart + FirstLeg && !halfTime)
                 {
                     cat.MoveTo(new Point(800 - 170, 0));
                     sounds["goGoGo"].Play();
+                    halfTime = true;
                 }
-
-                if (gameTime.TotalGameTime > SceneStart + FirstLeg + SecondLeg)
+                else if (gameTime.TotalGameTime > SceneStart + FirstLeg + SecondLeg)
                 {
                     // cout down finish
                     doorOpening = true;
                     gameState = 1;
                     OpenDoor(gameTime);
-
                     sounds["shush"].Play();
+                    halfTime = false;
                 }
             }
 
             if (!doorOpened && doorOpening)
             {
-                if (SceneStart - timeStartToOpenDoor > DoorOpenToComeIn)
+                if (SceneStart - IntervalSpan2 > DoorOpenToComeIn)
                 {
                     doorOpened = true;
                     spaceBar.isVisible = true;
@@ -827,7 +892,11 @@ namespace Party_Animals
 
         void Draw_0(GameTime gameTime)
         {
-
+            components.Sort((x, y) => x.RenderOrder.CompareTo(y.RenderOrder));
+            foreach (var item in components)
+            {
+                item.Draw(gameTime, spriteBatch);
+            }
         }
 
         void Draw_1(GameTime gameTime)
@@ -842,8 +911,8 @@ namespace Party_Animals
         void Draw_2(GameTime gameTime)
         {
 
-            loadingSceneComponts.Sort((x, y) => x.RenderOrder.CompareTo(y.RenderOrder));
-            foreach (var item in loadingSceneComponts)
+            components.Sort((x, y) => x.RenderOrder.CompareTo(y.RenderOrder));
+            foreach (var item in components)
             {
                 item.Draw(gameTime, spriteBatch);
             }
@@ -871,13 +940,11 @@ namespace Party_Animals
 
         }
 
-
-
         private void OpenDoor(GameTime gameTime)
         {
             door.SetIMG(1);
             cat.DisplayingID = 0;
-            timeStartToOpenDoor = SceneStart;
+            IntervalSpan2 = SceneStart;
             doorOpening = true;
 
         }
