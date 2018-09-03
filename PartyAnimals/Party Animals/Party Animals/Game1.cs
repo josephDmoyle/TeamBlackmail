@@ -94,8 +94,8 @@ namespace Party_Animals
         #endregion
 
         #region Parameter_LoadingScene
-        BGGraphic van;
-        TimeSpan vanFrame;
+        BGGraphic van, road;
+        TimeSpan vanFrame, goFrame;
         #endregion
 
         GameTime _gameTime;
@@ -179,20 +179,23 @@ namespace Party_Animals
             if (playMusic)
                 musicPlayer.Play();
             SceneStart = new TimeSpan();
-            IntervalSpan2 = SceneStart + FrameRate;
+            vanFrame = SceneStart + FrameRate;
+            road = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/road_0") }, new Rectangle(0, 0, 1280, 720))
+            {
+                RenderOrder = 2
+            };
             van = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/van_0"), Content.Load<Texture2D>("Graphics/van_1")}, new Rectangle(0, 0, 1280, 720))
             {
-                RenderOrder = 2,
+                RenderOrder = 3,
                 ID = 0
             };
             spaceBar = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/space") }, new Rectangle(1079, 564, 165, 132))
             {
-                RenderOrder = 4,
+                RenderOrder = 4
             };
-
             components = new List<Component>()
             {
-                van, spaceBar
+                van, road, spaceBar
             };
         }
 
@@ -354,10 +357,14 @@ namespace Party_Animals
 
         void Load_2()
         {
-            IntervalSpan2 = SceneStart + FrameRate;
+            vanFrame = SceneStart + FrameRate;
+            road = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/road_0"), Content.Load<Texture2D>("Graphics/road_1"), Content.Load<Texture2D>("Graphics/road_2"), Content.Load<Texture2D>("Graphics/road_3"), Content.Load<Texture2D>("Graphics/road_4"), }, new Rectangle(0, 0, 1280, 720))
+            {
+                RenderOrder = 2
+            };
             van = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/van_0"), Content.Load<Texture2D>("Graphics/van_2"), Content.Load<Texture2D>("Graphics/van_3"), Content.Load<Texture2D>("Graphics/van_4") }, new Rectangle(0, 0, 1280, 720))
             {
-                RenderOrder = 2,
+                RenderOrder = 3,
                 ID = 0
             };
             spaceBar = new BGGraphic(new Texture2D[] { Content.Load<Texture2D>("Graphics/space") }, new Rectangle(1079, 564, 165, 132))
@@ -366,7 +373,7 @@ namespace Party_Animals
             };
             components = new List<Component>()
             {
-                van, spaceBar
+                van, road, spaceBar
             };
         }
 
@@ -591,7 +598,7 @@ namespace Party_Animals
         {
             if (LevelFinish)
             {
-                if (LevelFinish == true && gameTime.TotalGameTime > IntervalSpan)
+                if (LevelFinish == true && gameTime.TotalGameTime > goFrame)
                 {
                     sounds["stab"].Play();
                     SceneStart = gameTime.TotalGameTime;
@@ -599,9 +606,9 @@ namespace Party_Animals
                     LevelFinish = false;
                     Load_1();
                 }
-                else if (gameTime.TotalGameTime > IntervalSpan2)
+                else if (gameTime.TotalGameTime > vanFrame)
                 {
-                    IntervalSpan2 = gameTime.TotalGameTime + FrameRate;
+                    vanFrame = gameTime.TotalGameTime + FrameRate;
                     van.NextIMG();
                 }
             }
@@ -609,7 +616,7 @@ namespace Party_Animals
             {
                 sounds["vanStart"].Play();
                 spaceBar.isVisible = false;
-                IntervalSpan = gameTime.TotalGameTime + sounds["vanStart"].Duration;
+                goFrame = gameTime.TotalGameTime + sounds["vanStart"].Duration;
                 LevelFinish = true;
             }
         }
@@ -670,16 +677,6 @@ namespace Party_Animals
                 gameState = 2;
                 Game1.supriser = Color.White;
                 Game1.suprisee = Color.White;
-
-                if (playMusic)
-                {
-                    musicPlayer.Pause();
-                    musicPlayer = sounds["supriseSong"].CreateInstance();
-                    musicPlayer.Play();
-
-                }
-
-
                 CheckResult_Scene1();
             }
 
@@ -718,14 +715,16 @@ namespace Party_Animals
 
         void Update_2(GameTime gameTime)
         {
-            if(gameTime.TotalGameTime > IntervalSpan2)
+            if(gameTime.TotalGameTime > vanFrame)
             {
-                IntervalSpan2 = gameTime.TotalGameTime + FrameRate;
+                vanFrame = gameTime.TotalGameTime + FrameRate;
                 van.NextIMG();
+                road.NextIMG();
             }
 
             if (Keyboard.GetState().IsKeyDown(Keys.Space))
             {
+                sounds["stab"].Play();
                 spaceBar.isVisible = false;
                 GameScene = 3;
                 Load_3();
@@ -783,13 +782,6 @@ namespace Party_Animals
                 gameState = 2;
                 Game1.supriser = Color.White;
                 Game1.suprisee = Color.White;
-
-                if (playMusic)
-                {
-                    musicPlayer.Pause();
-                    musicPlayer = sounds["supriseSong"].CreateInstance();
-                    musicPlayer.Play();
-                }
 
 
                 //  CheckResult_Scene2();
