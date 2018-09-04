@@ -21,7 +21,7 @@ namespace The_Party_Animals
         public bool isVisible;
         public bool InSpot;
 
-        private bool pressed;
+        private bool pressed, attached, hovering, clicking;
 
         public ObjInBody(Texture2D texture, Rectangle rectangle)
         {
@@ -33,40 +33,46 @@ namespace The_Party_Animals
         {
             if (!InSpot)
             {
-                if (Game1.currentMouseState.LeftButton == ButtonState.Pressed && Rectangle.Contains(new Point(Game1.currentMouseState.X, Game1.currentMouseState.Y)))
-                {
-                    pressed = true;
-
-                }
-                if (pressed)
+                if (clicking && Game1.gameState == 0)
                 {
                     Rectangle = new Rectangle(Game1.currentMouseState.X - Rectangle.Width / 2, Game1.currentMouseState.Y - Rectangle.Height / 2, Rectangle.Width, Rectangle.Height);
                 }
-                if (Game1.currentMouseState.LeftButton == ButtonState.Released)
-                    pressed = false;
             }
 
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
+            Color color = Game1.supriser;
+            if (hovering)
+                color = Color.Gray; ;
             if (isVisible)
-                spriteBatch.Draw(_texture, Rectangle, Game1.supriser);
+                spriteBatch.Draw(_texture, Rectangle, color);
+            hovering = false;
         }
 
         public override void Click()
         {
-            throw new NotImplementedException();
+            if (!attached)
+            {
+                clicking = true;
+
+            }
         }
 
         public override void Unclick()
         {
-            throw new NotImplementedException();
+            clicking = false;
         }
 
-        public override void Hover()
+        public override bool Hover(Rectangle mouseRect)
         {
-            throw new NotImplementedException();
+            if (mouseRect.Intersects(Rectangle) && !attached)
+            {
+                hovering = true;
+                return true;
+            }
+            return false;
         }
     }
 }

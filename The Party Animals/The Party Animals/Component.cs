@@ -17,6 +17,6 @@ namespace The_Party_Animals
         public abstract void Draw(GameTime gameTime, SpriteBatch spriteBatch);
         public abstract void Click();
         public abstract void Unclick();
-        public abstract void Hover();
+        public abstract bool Hover(Rectangle mouseRect);
     }
 }

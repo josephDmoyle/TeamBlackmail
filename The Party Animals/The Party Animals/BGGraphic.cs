@@ -15,7 +15,7 @@ namespace The_Party_Animals
         // fields
         private Rectangle _rectangle;
         private Texture2D[] _texture;
-        private bool moving = false;
+        private bool moving = false, hovering = false, clicking = false;
         private Point _destination;
 
         public bool isVisible, suprisee;
@@ -25,8 +25,6 @@ namespace The_Party_Animals
 
         public Point PivotPoint;
         public bool Interacted;
-
-        public Interaction _interaction;
 
         public EventHandler<IntEventArgs> OnPress;
 
@@ -55,48 +53,48 @@ namespace The_Party_Animals
                 {
                     _rectangle.X = _destination.X;
                     _rectangle.Y = _destination.Y;
-                    // moving done
                     moving = false;
                 }
             }
 
             Rectangle mouseRectangle = new Rectangle(Game1.currentMouseState.X, Game1.currentMouseState.Y, 1, 1);
-
-
-            if (mouseRectangle.Intersects(Rectangle) && Game1.gameState == 0)
-            {
-
-                if (Game1.currentMouseState.LeftButton == ButtonState.Released && Game1.previousMouseState.LeftButton == ButtonState.Pressed)
-                {
-                    OnPress?.Invoke(this, new IntEventArgs(ID));
-                }
-            }
-
-
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             color = suprisee ? Game1.suprisee : Game1.supriser;
+            if (hovering)
+            {
+                color = Color.Gray;
+            }
             color = new Color(color, alpha);
 
             if (isVisible)
                 spriteBatch.Draw(_texture[DisplayingID], _rectangle, color);
+            hovering = false;
         }
 
         public override void Click()
         {
-            throw new NotImplementedException();
+            NextIMG();
         }
 
         public override void Unclick()
         {
-            throw new NotImplementedException();
         }
 
-        public override void Hover()
+        public override bool Hover(Rectangle mouseRect)
         {
-            throw new NotImplementedException();
+            if (mouseRect.Intersects(Rectangle))
+            {
+                hovering = true;
+                return true;
+            }
+            else
+            {
+                hovering = false;
+                return false;
+            }
         }
 
         public void NextIMG()
@@ -125,7 +123,6 @@ namespace The_Party_Animals
         {
             moving = true;
             _destination = new Point(_rectangle.X, _rectangle.Y) + direction;
-
         }
 
     }

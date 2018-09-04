@@ -98,8 +98,9 @@ namespace The_Party_Animals
 
         GameTime _gameTime;
         Random rd;
-        List<InteractableObj> interactableObjs2;
-        ObjInBody[] horns;
+        List<ObjInBody> horns = new List<ObjInBody>();
+
+        Component temp = null, clicked = null;
 
         public Game1()
         {
@@ -296,11 +297,6 @@ namespace The_Party_Animals
                 RenderOrder = 8,
                 isVisible = false
             };
-
-            foreach (var item in curtains)
-            {
-                item.OnPress += OnPressCurtain;
-            }
             #endregion
 
             components = new List<Component>()
@@ -440,10 +436,10 @@ namespace The_Party_Animals
                 RenderOrder = 5,
                 ID = 2,
                 holdPoint = new Point(49,61)
-                },
+                }
             };
 
-            horns = new ObjInBody[]{
+            horns = new List<ObjInBody>{
                 new ObjInBody(Content.Load<Texture2D>("Graphics/Horn_0"), new Rectangle(100, 600, 50, 50))
             {
                 RenderOrder = 6,
@@ -473,12 +469,6 @@ namespace The_Party_Animals
                 isVisible = false
             };
 
-            foreach (Dragable animal in animals)
-            {
-                components.Add(animal);
-                for (int i = 0; i < horns.Length; i++)
-                    animal.objInBodies.Add(horns[i]);
-            }
 
             components = new List<Component>()
             {
@@ -493,32 +483,29 @@ namespace The_Party_Animals
                 sofa2
             };
 
+            foreach (Dragable animal in animals)
+            {
+                components.Add(animal);
+                for (int i = 0; i < horns.Count; i++)
+                    animal.objInBodies.Add(horns[i]);
+            }
+
+
             foreach (BGGraphic curt in curtains)
                 components.Add(curt);
             foreach (ObjInBody horn in horns)
                 components.Add(horn);
 
-            interactableObjs2 = new List<InteractableObj>()
+            interactObjs = new List<InteractableObj>()
             {
                 lounge, rug2, sofa2
             };
 
-            cat.MoveTo(new Point(170, 142 - 219));
+            components.Sort((x, y) => x.RenderOrder.CompareTo(y.RenderOrder));
+
         }
 
         #region Scene1_EventMethods
-
-        private void OnPressCurtain(object sender, IntEventArgs e)
-        {
-            if (curtains[e.ID - 20].DisplayingID == 0)
-            {
-                curtains[e.ID - 20].DisplayingID = 1;
-            }
-            else
-            {
-                curtains[e.ID - 20].DisplayingID = 0;
-            }
-        }
 
         private void DragItem_Press(object sender, IntEventArgs e)
         {
@@ -616,11 +603,11 @@ namespace The_Party_Animals
             previousMouseState = currentMouseState;
             currentMouseState = Mouse.GetState();
 
-            UpdateMouse();
 
             if(gameState == 0)
             {
-                if(gameTime.TotalGameTime < SceneStart + FirstLeg && swapper)
+                UpdateMouse();
+                if (gameTime.TotalGameTime < SceneStart + FirstLeg && swapper)
                 {
                     sounds["comeOn"].Play();
                     cat.MoveTo(new Point(170, 142 - 219));
@@ -634,6 +621,7 @@ namespace The_Party_Animals
                 }
                 else if (gameTime.TotalGameTime > SceneStart + FirstLeg + SecondLeg && swapper)
                 {
+                    cat.SetIMG(0);
                     sounds["shush"].Play();
                     OpenDoor(gameTime);
                     swapper = false;
@@ -646,25 +634,25 @@ namespace The_Party_Animals
                 if (gameTime.TotalGameTime > SceneStart + FirstLeg + SecondLeg + DoorOpenToComeIn && !swapper)
                 {
                     spaceBar.isVisible = true;
-                    foreach (var item in animals)
+                    foreach (Dragable animal in animals)
                     {
-                        item.StopMovement();
+                        animal.StopMovement();
                     }
                     swapper = true;
                 }
-                else if (Keyboard.GetState().IsKeyDown(Keys.Space)&& swapper)
+                else if (Keyboard.GetState().IsKeyDown(Keys.Space) && swapper)
                 {
                     gameState = 2;
                     Game1.supriser = Color.White;
                     Game1.suprisee = Color.White;
                     CheckResult_Scene1();
-                    foreach (var item in animals)
+                    foreach (Dragable animal in animals)
                     {
-                        if (item.InSpot)
+                        if (animal.InSpot)
                         {
-                            item.DisplayingID = 1;
+                            animal.DisplayingID = 1;
                         }
-                        item.isVisible = true;
+                        animal.isVisible = true;
                     }
                     foreach (var item in interactObjs)
                     {
@@ -715,10 +703,10 @@ namespace The_Party_Animals
             previousMouseState = currentMouseState;
             currentMouseState = Mouse.GetState();
 
-            UpdateMouse();
 
             if (gameState == 0)
             {
+                UpdateMouse();
                 if (gameTime.TotalGameTime < SceneStart + FirstLeg && swapper)
                 {
                     sounds["comeOn"].Play();
@@ -733,10 +721,12 @@ namespace The_Party_Animals
                 }
                 else if (gameTime.TotalGameTime > SceneStart + FirstLeg + SecondLeg && swapper)
                 {
+                    cat.SetIMG(0);
                     sounds["shush"].Play();
                     OpenDoor(gameTime);
                     swapper = false;
                     gameState = 1;
+
                 }
             }
 
@@ -829,7 +819,6 @@ namespace The_Party_Animals
 
         void Draw_1(GameTime gameTime)
         {
-            components.Sort((x, y) => x.RenderOrder.CompareTo(y.RenderOrder));
             foreach (var item in components)
             {
                 item.Draw(gameTime, spriteBatch);
@@ -845,7 +834,6 @@ namespace The_Party_Animals
 
         void Draw_3(GameTime gameTime)
         {
-            components.Sort((x, y) => x.RenderOrder.CompareTo(y.RenderOrder));
             foreach (var item in components)
             {
                 item.Draw(gameTime, spriteBatch);
@@ -860,22 +848,108 @@ namespace The_Party_Animals
 
         void UpdateMouse()
         {
+            Rectangle mouseRect = new Rectangle((int)mousePosition.X, (int)mousePosition.Y, 1, 1);
+
+            if(temp != null)
+                if (!temp.Hover(mouseRect))
+                    temp = null;
+
+            foreach (BGGraphic curt in curtains)
+                if (curt.Hover(mouseRect))
+                {
+                    temp = curt;
+                    break;
+                }
+
+            foreach (InteractableObj spot in interactObjs)
+            {
+                if (spot.Hover(mouseRect))
+                {
+                    temp = spot;
+                    break;
+                }
+            }
+
+            if (lightSwitch.Hover(mouseRect))
+                temp = lightSwitch;
+
+            foreach (Dragable animal in animals)
+                if (animal.Hover(mouseRect))
+                {
+                    temp = animal;
+                    break;
+                }
+
+            foreach (ObjInBody horn in horns)
+                if (horn.Hover(mouseRect))
+                {
+                    temp = horn;
+                    break;
+                }
+
+
             if (currentMouseState.LeftButton == ButtonState.Pressed && previousMouseState.LeftButton == ButtonState.Released)
             {
-                for (int i = components.Count - 1; i > -1; i++)
+                if(temp != null)
                 {
-
+                    temp.Click();
+                    clicked = temp;
                 }
             }
             else if(currentMouseState.LeftButton == ButtonState.Released && previousMouseState.LeftButton == ButtonState.Pressed)
             {
-
+                if(clicked != null)
+                {
+                    if (animals.Contains(clicked))
+                    {
+                        bool given = false;
+                        foreach(InteractableObj obj in interactObjs)
+                        {
+                            if (obj.Hover(mouseRect) && !obj.full)
+                            {
+                                ((Dragable)clicked).isVisible = false;
+                                obj.Unclick();
+                                putCount++;
+                                clicked.Unclick();
+                                given = true;
+                            }
+                        }
+                        if (!given)
+                            clicked.Unclick();
+                    }
+                    else if (horns.Contains(clicked))
+                    {
+                        bool given = false;
+                        foreach(Dragable animal in animals)
+                        {
+                            if(animal.Hover(mouseRect) && animal.interacted == false)
+                            {
+                                animal.interacted = true;
+                                animal.objinbody = (ObjInBody)clicked;
+                                clicked.Unclick();
+                                given = true;
+                            }
+                        }
+                        if (!given)
+                            clicked.Unclick();
+                    }
+                    else if (!interactObjs.Contains(clicked))
+                    {
+                        clicked.Unclick();
+                    }
+                    clicked = null;
+                    temp = null;
+                }
             }
         }
 
         void CheckResult_Scene1()
         {
             spaceBar.isVisible = false;
+
+            foreach (InteractableObj spot in interactObjs)
+                spot.full = false;
+
 
             if (putCount == 3 && !lightOn)
             {
@@ -894,8 +968,9 @@ namespace The_Party_Animals
         {
             spaceBar.isVisible = false;
 
-            foreach (InteractableObj spot in interactableObjs2)
-                spot.SetIMG(0);
+            foreach (InteractableObj spot in interactObjs)
+                spot.full = false;
+
             foreach (ObjInBody horn in horns)
                 horn.isVisible = true;
 

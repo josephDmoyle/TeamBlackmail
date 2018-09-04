@@ -15,7 +15,7 @@ namespace The_Party_Animals
     {
         private Texture2D[] _texture;
         private Point _pivotPoint;
-        private List<Dragable> _dragables;
+        private List<Dragable> _dragables = new List<Dragable>();
         private int _currentInteractID = -1;
         private bool suprisee = false;
         private Rectangle _rectangle;
@@ -26,14 +26,13 @@ namespace The_Party_Animals
         public int ID { get; set; }
         public Rectangle Rectangle { get { return _rectangle; } }
 
-
         public bool Interacted;
         public float alpha = 1;
 
+        public bool hovering, full;
 
         public InteractableObj(Texture2D[] textures, Rectangle rect, Point pivot, List<Dragable> list)
         {
-            _dragables = list;
             _texture = textures;
             _rectangle = rect;
             _pivotPoint = pivot;
@@ -113,24 +112,35 @@ namespace The_Party_Animals
         {
             Color color = suprisee ? Game1.suprisee : Game1.supriser;
             color = new Color(color, alpha);
+            if (full)
+                DisplayingID = 2;
+            else if (hovering)
+                DisplayingID = 1;
+            else
+                DisplayingID = 0;
 
             if (isVisible)
                 spriteBatch.Draw(_texture[DisplayingID], _rectangle, color);
+            hovering = false;
         }
 
         public override void Click()
         {
-            throw new NotImplementedException();
         }
 
         public override void Unclick()
         {
-            throw new NotImplementedException();
+            full = true;
         }
 
-        public override void Hover()
+        public override bool Hover(Rectangle mouseRect)
         {
-            throw new NotImplementedException();
+            if (mouseRect.Intersects(Rectangle))
+            {
+                hovering = true;
+                return true;
+            }
+            return false;
         }
 
         public void NextIMG()
