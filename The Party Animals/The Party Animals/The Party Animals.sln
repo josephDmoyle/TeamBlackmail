@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2003
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "The Party Animals", "The Party Animals.csproj", "{9EDEA7BA-4694-4B02-BF13-7E5B5059E0BB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9EDEA7BA-4694-4B02-BF13-7E5B5059E0BB}.Debug|x86.ActiveCfg = Debug|x86
+		{9EDEA7BA-4694-4B02-BF13-7E5B5059E0BB}.Debug|x86.Build.0 = Debug|x86
+		{9EDEA7BA-4694-4B02-BF13-7E5B5059E0BB}.Release|x86.ActiveCfg = Release|x86
+		{9EDEA7BA-4694-4B02-BF13-7E5B5059E0BB}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {68EB44DD-A4CC-47D6-BDA8-A4F18D13E796}
+	EndGlobalSection
+EndGlobal
